@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="images/raa.png" width="160" alt="RAA Logo">
-</p>
-
 <h1 align="center">RAA — Reverse Android Anything</h1>
 
 <p align="center">
