@@ -1,0 +1,116 @@
+# ==========================================
+# RAA (Reverse Android Anything) - .gitignore
+# ==========================================
+
+# --- Python Bytecode & Compilation ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# --- Distribution & Packaging ---
+dist/
+build/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+*.whl
+
+# --- Virtual Environments ---
+.venv/
+venv/
+ENV/
+env/
+
+# --- Tool Caches & Coverage ---
+.pip-cache/
+.uv-cache/
+.pytest-tmp/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+.nox/
+.hypothesis/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+htmlcov/
+
+# --- RAA Runtime State & Local Databases ---
+.raa-workspace/
+.raa/
+.tmp/
+tmp/
+temp/
+test_ws/
+test_workspace/
+*_ws/
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+*.sqlite3-journal
+
+# --- Logs & Telemetry ---
+*.log
+*.out
+*.audit
+
+# --- Enterprise Backups & Detached Signatures ---
+backups/
+*.raa.bundle.tar.gz
+*.bundle.tar.gz
+*.sig
+*.bak
+
+# --- Keys, Certificates & Local Secrets ---
+.env
+.env.local
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+
+# --- Scratch & Debug Scripts ---
+debug_*.py
+check_*.py
+temp_*.py
+*.tmp
+*.swp
+*.swo
+*~
+
+# --- IDEs, Editors & Agents ---
+.idea/
+.vscode/
+.cursor/
+.claude/
+*.sublime-workspace
+*.sublime-project
+
+# --- Node / Web Packages (Reference apps & tooling) ---
+node_modules/
+.npm/
+.yarn/
+
+# --- Reference Applications & Benchmarks ---
+docs/Refrence application/
+docs/Reference Application/
+docs/Refrence\ application/
+docs/Reference\ Application/
+[Rr]ef*application/
+
+# --- OS Specific Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini

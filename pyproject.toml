@@ -1,0 +1,138 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "raa"
+version = "2.0.0"
+description = "RAA - Reverse Android Anything: agent-native Android application intelligence platform"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "RAA contributors" }]
+keywords = [
+  "android",
+  "apk",
+  "reverse-engineering",
+  "mcp",
+  "agents",
+  "security",
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Security",
+  "Topic :: Software Development :: Disassemblers",
+]
+dependencies = [
+  "mcp>=2.3,<3",
+  "pydantic>=2.10,<3",
+  "pydantic-settings>=2.5,<3",
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.30,<1",
+  "typer>=0.12,<1",
+  "rich>=13.7,<16",
+  "httpx>=0.27,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0,<10",
+  "pytest-asyncio>=0.24,<2",
+  "ruff>=0.6,<1",
+  "mypy>=1.11,<3",
+  "hatchling>=1.27",
+  "editables>=0.5",
+]
+
+[project.scripts]
+raa = "raa.cli.main:app"
+
+[project.urls]
+Documentation = "https://github.com/example/raa"
+Issues = "https://github.com/example/raa/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/raa"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"skills" = "raa/resources/skills"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src",
+  "/tests",
+  "/skills",
+  "/docs",
+  "/README.md",
+  "/pyproject.toml",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+extend-exclude = [".venv", ".pytest-tmp", ".raa-workspace"]
+
+[tool.ruff.lint]
+select = [
+  "E",
+  "F",
+  "W",
+  "I",
+  "UP",
+  "B",
+  "SIM",
+  "RUF",
+  "S",
+  "ASYNC",
+]
+ignore = [
+  "S101", # asserts are expected in tests
+  "S603", # subprocess calls are centralized in engine adapters
+  "S607", # partial executable paths are resolved through explicit manifests
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "S105", "S106", "S108", "ASYNC240"]
+"src/raa/api/app.py" = ["B008"]
+"src/raa/cli/**/*.py" = ["B008"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["raa"]
+
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+packages = ["raa"]
+strict = true
+warn_unreachable = true
+show_error_codes = true
+pretty = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["mcp.*"]
+follow_untyped_imports = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra -q --basetemp=.pytest-tmp"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = [
+  "ignore::DeprecationWarning:starlette.*",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["raa"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
