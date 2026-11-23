@@ -31,8 +31,11 @@ def generate_tests_from_evidence(
 ) -> TestGenerationReport:
     """Generate executable test scripts from observed API flows or UI screen graphs."""
     test_id = f"test_{uuid.uuid4().hex[:10]}"
+    valid_frameworks = {f.value for f in TestFramework}
     resolved_framework = (
-        TestFramework(framework.lower()) if framework in TestFramework else TestFramework.PYTEST
+        TestFramework(framework.lower())
+        if framework.lower() in valid_frameworks
+        else TestFramework.PYTEST
     )
     entrypoints: list[str] = []
 

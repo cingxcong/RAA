@@ -155,9 +155,10 @@ class RebuildService:
         out_name = f"patched_{artifact_id}_{operation}.apk"
         dst_path = self.get_rebuild_dir(project_id) / out_name
 
+        valid_ops = {op.value for op in PatchOperation}
         op_enum = (
             PatchOperation(operation.lower())
-            if operation in PatchOperation
+            if operation.lower() in valid_ops
             else PatchOperation.SET_DEBUGGABLE
         )
         result = plan_and_apply_patch(

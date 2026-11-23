@@ -416,7 +416,7 @@ class EngineService:
         for status in statuses:
             if engine_id and status.spec.id != engine_id:
                 continue
-            verified = status.installed or status.spec.integration == "python-library"
+            verified = status.installed or status.spec.integration in {"library", "python-library"}
             raw = f"{status.spec.id}:{status.spec.tier}:{status.spec.license}"
             results.append(
                 {
