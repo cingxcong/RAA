@@ -1,0 +1,31 @@
+name: "Setup Python and Environment"
+description: "Configures Python environment with caching and dependencies for RAA"
+inputs:
+  python-version:
+    description: "Python version to set up"
+    required: false
+    default: "3.11"
+  install-dev:
+    description: "Whether to install editable package with [dev] extras"
+    required: false
+    default: "true"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@a254f5ce60d093e328dd67114886fa8688118999 # v5.4.0
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: "pip"
+
+    - name: Upgrade pip and install build dependencies
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip setuptools wheel hatchling
+
+    - name: Install dependencies
+      if: ${{ inputs.install-dev == 'true' }}
+      shell: bash
+      run: |
+        python -m pip install -e ".[dev]"

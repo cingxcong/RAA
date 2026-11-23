@@ -1,0 +1,156 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - feature
+      - 'bugfix/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-format:
+    name: lint-and-format
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: "3.11"
+          install-dev: "true"
+
+      - name: Run Ruff Format Check
+        run: |
+          python -m ruff format --check src tests
+
+      - name: Run Ruff Linter
+        run: |
+          python -m ruff check src tests
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: "3.11"
+          install-dev: "false"
+
+      - name: Build wheel and sdist
+        run: |
+          python -m pip install build
+          python -m build
+
+      - name: Validate build artifacts
+        run: |
+          python -m pip install twine
+          python -m twine check dist/*
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: raa-dist-packages
+          path: dist/
+          retention-days: 7
+
+  unit-tests:
+    name: unit-tests
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.11", "3.12"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: ${{ matrix.python-version }}
+          install-dev: "true"
+
+      - name: Run Unit Tests
+        run: |
+          python -m pytest tests/test_analysis_flow.py \
+                           tests/test_api.py \
+                           tests/test_cli.py \
+                           tests/test_containers.py \
+                           tests/test_dex.py \
+                           tests/test_inspection.py \
+                           tests/test_manifest.py \
+                           tests/test_reports.py \
+                           tests/test_resources.py \
+                           tests/test_runtime.py \
+                           tests/test_workspace.py \
+                           --junitxml=reports/unit-test-results-${{ matrix.python-version }}.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: unit-test-results-${{ matrix.python-version }}
+          path: reports/
+          retention-days: 7
+
+  integration-tests:
+    name: integration-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: "3.11"
+          install-dev: "true"
+
+      - name: Run Full Integration & Phase E2E Tests
+        run: |
+          python -m pytest tests/test_production_e2e.py \
+                           tests/test_phase2.py \
+                           tests/test_phase3.py \
+                           tests/test_phase4.py \
+                           tests/test_phase5.py \
+                           tests/test_phase6.py \
+                           tests/test_phase7.py \
+                           tests/test_phase8.py \
+                           tests/test_phase9.py \
+                           tests/test_phase10.py \
+                           tests/test_phase11.py \
+                           tests/test_phase12.py \
+                           tests/test_phase13*.py \
+                           tests/test_phase14.py \
+                           tests/test_pre_phase11.py \
+                           --junitxml=reports/integration-test-results.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: integration-test-results
+          path: reports/
+          retention-days: 7

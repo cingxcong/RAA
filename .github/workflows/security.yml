@@ -1,0 +1,73 @@
+name: Security
+
+on:
+  push:
+    branches:
+      - main
+      - feature
+      - 'bugfix/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  secret-detection:
+    name: secret-detection
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks Secret Detection
+        uses: gitleaks/gitleaks-action@e76faea362ec4a87adbc9be20d20d4f20ecb28ec # v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dependency-audit:
+    name: dependency-audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: "3.11"
+          install-dev: "false"
+
+      - name: Run pip-audit
+        run: |
+          python -m pip install pip-audit
+          python -m pip-audit .
+
+  static-security-analysis:
+    name: security-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Run Semgrep SAST
+        uses: semgrep/semgrep-action@713ef5752dd83b4f4f22c1564802905655384237 # v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/python
+        env:
+          SEMGREP_RULES: p/security-audit p/secrets p/python

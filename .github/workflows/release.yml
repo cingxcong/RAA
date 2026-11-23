@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g. v2.0.0)'
+        required: true
+        default: 'v2.0.0'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  pre-release-check:
+    name: pre-release-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: "3.11"
+          install-dev: "true"
+
+      - name: Run Full Production Test Suite
+        run: |
+          python -m pytest tests/test_production_e2e.py tests/test_mcp.py
+
+  build-and-release:
+    name: build-and-release
+    needs: pre-release-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: "3.11"
+          install-dev: "true"
+
+      - name: Build Distribution Packages
+        run: |
+          python -m pip install build twine
+          python -m build
+          python -m twine check dist/*
+
+      - name: Generate Checksums
+        run: |
+          cd dist
+          sha256sum * > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Generate SBOM (CycloneDX & SPDX)
+        run: |
+          mkdir -p sbom
+          raa admin sbom --format cyclonedx > sbom/cyclonedx.json || echo "{}" > sbom/cyclonedx.json
+          raa admin sbom --format spdx > sbom/spdx.json || echo "{}" > sbom/spdx.json
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@c95fe1489396fe8a9ec874582f8a84c5646a88ab # v2.2.1
+        with:
+          files: |
+            dist/*
+            dist/SHA256SUMS
+            sbom/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
