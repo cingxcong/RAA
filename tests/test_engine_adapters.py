@@ -142,11 +142,19 @@ class FakeEngineEnvironment:
     def install(self, name: str, body: str) -> Path:
         script = self.scripts_dir / f"{name}.py"
         script.write_text(textwrap.dedent(body), encoding="utf-8")
-        launcher = self.bin_dir / f"{name}.bat"
-        launcher.write_text(
-            f'@echo off\r\n"{sys.executable}" "{script}" %*\r\n',
-            encoding="utf-8",
-        )
+        if sys.platform == "win32":
+            launcher = self.bin_dir / f"{name}.bat"
+            launcher.write_text(
+                f'@echo off\r\n"{sys.executable}" "{script}" %*\r\n',
+                encoding="utf-8",
+            )
+        else:
+            launcher = self.bin_dir / name
+            launcher.write_text(
+                f'#!/bin/sh\nexec "{sys.executable}" "{script}" "$@"\n',
+                encoding="utf-8",
+            )
+            launcher.chmod(0o755)
         return launcher
 
 

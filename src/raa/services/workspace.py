@@ -130,7 +130,8 @@ class Workspace:
 def sanitize_filename(name: str) -> str:
     """Return a single safe path component."""
 
-    candidate = Path(name).name.strip()
+    clean_name = name.replace("\\", "/")
+    candidate = Path(clean_name).name.strip()
     candidate = _UNSAFE_FILENAME.sub("_", candidate)
     candidate = candidate.strip(" .")
     if not candidate:

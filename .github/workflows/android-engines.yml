@@ -1,0 +1,61 @@
+name: Android Engines
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  android-engine-tests:
+    name: android-engine-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Java
+        uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: "3.11"
+          install-dev: "true"
+
+      - name: Install System Engine Binaries (Apktool & JADX)
+        run: |
+          sudo apt-get update -y || true
+          sudo apt-get install -y --no-install-recommends apktool jadx || true
+          which apktool || echo "Apktool not in system apt, using adapters/mocked tests"
+          which jadx || echo "JADX not in system apt, using adapters/mocked tests"
+
+      - name: Run Android Engine & Framework Integration Tests
+        run: |
+          mkdir -p reports
+          python -m pytest tests/test_engines.py \
+                           tests/test_engine_adapters.py \
+                           tests/test_frameworks.py \
+                           --junitxml=reports/android-engine-test-results.xml
+
+      - name: Upload engine test report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: android-engine-test-results
+          path: reports/
+          retention-days: 7

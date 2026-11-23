@@ -1,0 +1,48 @@
+name: MCP Validation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  mcp-tests:
+    name: mcp-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: "3.11"
+          install-dev: "true"
+
+      - name: Run MCP Server & Protocol Tests
+        run: |
+          python -m pytest tests/test_mcp.py \
+                           tests/test_skills.py \
+                           tests/test_production_e2e.py \
+                           -k "mcp or tool or profile or skills" \
+                           --junitxml=reports/mcp-test-results.xml
+
+      - name: Upload MCP test report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mcp-test-results
+          path: reports/
+          retention-days: 7

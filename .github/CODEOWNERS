@@ -1,0 +1,16 @@
+# CODEOWNERS for RAA
+
+# Default owners for everything
+* @uditrajput
+
+# Workflows and CI/CD Pipeline
+/.github/ @uditrajput
+
+# Core Security, Sandbox and Engine Adapters
+/src/raa/policy/ @uditrajput
+/src/raa/services/security/ @uditrajput
+/src/raa/services/engine_adapters.py @uditrajput
+
+# MCP Registry and Capabilities
+/src/raa/registry/ @uditrajput
+/src/raa/mcp/ @uditrajput

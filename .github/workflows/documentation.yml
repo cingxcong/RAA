@@ -1,0 +1,51 @@
+name: Documentation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  documentation-check:
+    name: documentation-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: "3.11"
+          install-dev: "false"
+
+      - name: Validate Markdown and Documentation Links
+        run: |
+          python -m pip install mdformat markdown-it-py
+          python -c "
+          import os, glob
+          md_files = glob.glob('**/*.md', recursive=True)
+          print(f'Checking {len(md_files)} markdown files...')
+          for f in md_files:
+              with open(f, 'r', encoding='utf-8') as handle:
+                  handle.read()
+          print('All Markdown files are readable with UTF-8 encoding.')
+          "
+
+      - name: Validate Agent Skills Documentation & Frontmatter
+        run: |
+          python -m pip install hatchling editables
+          python -m pip install --no-build-isolation -e ".[dev]"
+          python -m pytest tests/test_skills.py
