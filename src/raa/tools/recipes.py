@@ -84,13 +84,31 @@ async def _recipe_get_run(ctx: ToolContext, args: RecipeGetRunInput) -> ToolOutc
 async def _skill_list(ctx: ToolContext, args: EmptyInput) -> ToolOutcome:
     del args
     skills = ctx.runtime.skills.discover()
-    return ToolOutcome(data={"count": len(skills), "skills": [s.summary() for s in skills]})
+    active_profile = ctx.runtime.settings.profile
+    profile_tools = {t.name for t in ctx.runtime.registry.for_profile(active_profile)}
+
+    summaries = []
+    for s in skills:
+        summary = s.summary()
+        # Annotate tool availability based on the active runtime profile
+        summary["tools"] = list(s.tools)
+        summary["active_profile"] = active_profile
+        summary["available_tools"] = [t for t in s.tools if t in profile_tools]
+        summary["unavailable_tools"] = [t for t in s.tools if t not in profile_tools]
+        summaries.append(summary)
+
+    return ToolOutcome(data={"count": len(skills), "skills": summaries})
 
 
 async def _skill_get(ctx: ToolContext, args: SkillGetInput) -> ToolOutcome:
     skill = ctx.runtime.skills.get(args.skill_id)
     summary = skill.summary()
     summary["content"] = skill.content
+    active_profile = ctx.runtime.settings.profile
+    profile_tools = {t.name for t in ctx.runtime.registry.for_profile(active_profile)}
+    summary["active_profile"] = active_profile
+    summary["available_tools"] = [t for t in skill.tools if t in profile_tools]
+    summary["unavailable_tools"] = [t for t in skill.tools if t not in profile_tools]
     return ToolOutcome(data=summary)
 
 

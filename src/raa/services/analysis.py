@@ -447,6 +447,14 @@ class AnalysisService:
         elif dex_error:
             limitations.append(dex_error)
 
+        # Transparency banner for engine availability
+        if not self.settings.engine_execution_enabled:
+            limitations.append(
+                "Engine execution is currently disabled (engine_execution_enabled=false). "
+                "Analysis is metadata/DEX-index only; external engines (JADX, Ghidra, Apktool) "
+                "are not invoked."
+            )
+
         summary: dict[str, object] = {
             "dex_count": len(inspection.dex_files),
             "native_library_count": len(inspection.native_libraries),
