@@ -1048,15 +1048,32 @@ async def _source_get_method(ctx: ToolContext, args: SourceMethodInput) -> ToolO
         artifact = ctx.runtime.artifacts.get_or_raise(report.project_id, report.artifact_id)
         path = ctx.runtime.artifacts.path_for(artifact)
         max_bytes = ctx.runtime.settings.engine_max_file_bytes
-        adapter = JadxAdapter(ctx.runtime.engine_runner, ctx.runtime.workspace)
-        source = adapter.decompile_method(
-            path,
-            args.class_name,
-            args.method_name,
-            offset=args.source_offset,
-            limit=min(args.source_limit, max_bytes),
-            max_bytes=max_bytes,
-        )
+        try:
+            adapter = JadxAdapter(ctx.runtime.engine_runner, ctx.runtime.workspace)
+            source = adapter.decompile_method(
+                path,
+                args.class_name,
+                args.method_name,
+                offset=args.source_offset,
+                limit=min(args.source_limit, max_bytes),
+                max_bytes=max_bytes,
+            )
+        except Exception as exc:
+            # Fallback when external decompiler engine is not installed or unavailable
+            source = {
+                "engine": "dalvik_disassembler_fallback",
+                "class_name": args.class_name,
+                "method_name": args.method_name,
+                "text": (
+                    f"// External decompiler unavailable ({exc}).\n"
+                    f"// Method bytecode registered with {len(methods)} overload(s).\n"
+                ),
+                "available": False,
+                "hint": (
+                    "Install JADX or enable engine_execution_enabled in settings for "
+                    "full decompiled Java bodies."
+                ),
+            }
 
     summary = index.summary()
     warnings = _dex_warnings(index)

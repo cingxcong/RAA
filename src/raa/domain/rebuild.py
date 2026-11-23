@@ -22,6 +22,8 @@ class PatchOperation(StrEnum):
     SET_ALLOW_BACKUP = "set_allow_backup"
     INJECT_FRIDA_GADGET = "inject_frida_gadget"
     CUSTOM_SMALI = "custom_smali"
+    PATCH_DEX_STRINGS = "patch_dex_strings"
+    PATCH_RESOURCE_STRINGS = "patch_resource_strings"
 
 
 class TestGenerationReport(BaseModel):

@@ -189,6 +189,7 @@ class Runtime:
             "scopes": sorted(ALL_SCOPES),
             "default_project_scopes": list(DEFAULT_PROJECT_SCOPES),
             "admin_enabled": self.settings.admin_enabled,
+            "allowed_input_roots": [str(p) for p in self.settings.allowed_input_roots],
             "engines": self.engines.summary(),
             "workspace": str(self.workspace.root),
         }
@@ -310,13 +311,20 @@ class Runtime:
             ) from exc
 
     def _spec_or_raise(self, name: str) -> ToolSpec:
-        if not self.registry.has(name):
+        # Strip common external caller / client prefixes such as 'raa.' or 'tools.raa.'
+        normalized_name = name
+        for prefix in ("tools.raa.", "tools.", "raa.", "raa:"):
+            if normalized_name.startswith(prefix):
+                normalized_name = normalized_name[len(prefix) :]
+                break
+
+        if not self.registry.has(normalized_name):
             raise NotFoundError(
                 f"Unknown tool: {name}",
                 hint="Call tools/list or capabilities_get to discover tool names.",
                 details={"tool": name},
             )
-        return self.registry.get(name)
+        return self.registry.get(normalized_name)
 
     @staticmethod
     def _check_profile(spec: ToolSpec, profile: ProfileName) -> None:
