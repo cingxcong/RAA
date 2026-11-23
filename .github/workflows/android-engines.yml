@@ -39,12 +39,14 @@ jobs:
 
       - name: Install System Engine Binaries (Apktool & JADX)
         run: |
-          sudo apt-get update && sudo apt-get install -y apktool jadx || true
+          sudo apt-get update -y || true
+          sudo apt-get install -y --no-install-recommends apktool jadx || true
           which apktool || echo "Apktool not in system apt, using adapters/mocked tests"
           which jadx || echo "JADX not in system apt, using adapters/mocked tests"
 
       - name: Run Android Engine & Framework Integration Tests
         run: |
+          mkdir -p reports
           python -m pytest tests/test_engines.py \
                            tests/test_engine_adapters.py \
                            tests/test_frameworks.py \

@@ -91,6 +91,7 @@ jobs:
 
       - name: Run Unit Tests
         run: |
+          mkdir -p reports
           python -m pytest tests/test_analysis_flow.py \
                            tests/test_api.py \
                            tests/test_cli.py \
@@ -128,6 +129,7 @@ jobs:
 
       - name: Run Full Integration & Phase E2E Tests
         run: |
+          mkdir -p reports
           python -m pytest tests/test_production_e2e.py \
                            tests/test_phase2.py \
                            tests/test_phase3.py \

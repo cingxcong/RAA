@@ -28,4 +28,4 @@ runs:
       if: ${{ inputs.install-dev == 'true' }}
       shell: bash
       run: |
-        python -m pip install -e ".[dev]"
+        python -m pip install --no-build-isolation -e ".[dev]"
