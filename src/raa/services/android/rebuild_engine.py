@@ -192,7 +192,8 @@ def patch_dex_bytes_strings(dex_bytes: bytes, replacements: dict[str, str]) -> b
         struct.pack_into("<I", dex, string_ids_off + i * 4, new_off)
 
     struct.pack_into("<I", dex, 32, len(dex))
-    sig = hashlib.sha1(dex[32:]).digest()  # noqa: S324 - Required by Dalvik DEX specification
+    # nosemgrep: python.lang.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1
+    sig = hashlib.sha1(dex[32:], usedforsecurity=False).digest()
     dex[12:32] = sig
     csum = zlib.adler32(dex[12:]) & 0xFFFFFFFF
     struct.pack_into("<I", dex, 8, csum)
