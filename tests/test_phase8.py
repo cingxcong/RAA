@@ -68,7 +68,8 @@ def _make_stub_dex() -> bytes:
         struct.pack_into("<I", raw, off + 24, 0)
 
     # Recalculate SHA-1 (bytes 32..EOF stored at 12..32)
-    sig = hashlib.sha1(raw[32:]).digest()  # noqa: S324
+    # nosemgrep: python.lang.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1
+    sig = hashlib.sha1(raw[32:], usedforsecurity=False).digest()
     raw[12:32] = sig
 
     # Recalculate Adler32 (bytes 12..EOF stored at 8..12)

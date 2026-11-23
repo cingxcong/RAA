@@ -412,6 +412,7 @@ def build_dex(
         struct.pack_into("<I", output, base + 28, 0)  # static_values_off
 
     output[data_start:] = data
+    # nosemgrep: python.lang.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1
     signature = hashlib.sha1(output[0x20:], usedforsecurity=False).digest()
     output[0x0C:0x20] = signature
     checksum = zlib.adler32(output[0x0C:]) & 0xFFFFFFFF

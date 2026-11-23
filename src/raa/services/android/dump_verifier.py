@@ -113,7 +113,8 @@ def verify_dex_dump(file_path: Path) -> UnpackVerificationReport:
         )
 
     # 2. SHA-1 signature validation (SHA-1 from offset 32 to EOF)
-    actual_sha1 = hashlib.sha1(dex_bytes[32:]).digest()  # noqa: S324
+    # nosemgrep: python.lang.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1
+    actual_sha1 = hashlib.sha1(dex_bytes[32:], usedforsecurity=False).digest()
     signature_valid = actual_sha1 == expected_sha1
     if not signature_valid:
         issues.append("SHA-1 signature mismatch in DEX header.")

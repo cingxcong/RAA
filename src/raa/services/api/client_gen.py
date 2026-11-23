@@ -167,6 +167,7 @@ def generate_python_client(
     if compiles:
         try:
             scope: dict[str, Any] = {}
+            # nosemgrep: python.lang.security.audit.exec-detected
             exec(client_code, scope)  # noqa: S102
             cls = scope.get("APIClient")
             if cls:

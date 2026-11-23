@@ -493,6 +493,7 @@ def parse_dex(
         )
     declared_checksum = struct.unpack_from("<I", data, 0x08)[0]
     checksum_valid = (zlib.adler32(data[0x0C:file_size]) & 0xFFFFFFFF) == declared_checksum
+    # nosemgrep: python.lang.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1
     signature_valid = (
         hashlib.sha1(data[0x20:file_size], usedforsecurity=False).digest() == data[0x0C:0x20]
     )
