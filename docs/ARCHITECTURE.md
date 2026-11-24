@@ -5,9 +5,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Current_Release-v2.0.0_Production-success?style=flat-square" alt="Current Release: v2.0.0 Production">
-  <img src="https://img.shields.io/badge/Total_Tools-244_Implemented-blue?style=flat-square" alt="Total Tools: 244 Implemented">
-  <img src="https://img.shields.io/badge/Tests-437_Passing-brightgreen?style=flat-square" alt="Tests: 437 Passing">
+  <img src="https://img.shields.io/badge/Current_Release-v3.0.0_Production-success?style=flat-square" alt="Current Release: v2.0.0 Production">
+  <img src="https://img.shields.io/badge/Total_Tools-322_Implemented-blue?style=flat-square" alt="Total Tools: 244 Implemented">
+  <img src="https://img.shields.io/badge/Tests-526_Passing-brightgreen?style=flat-square" alt="Tests: 437 Passing">
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/Protocol-2026--07--28-informational?style=flat-square" alt="Protocol: 2026-07-28">
@@ -32,46 +32,61 @@ This document details the software architecture, runtime topology, data flow, co
 
 ```mermaid
 flowchart TD
+    classDef surf fill:#0D47A1,stroke:#1976D2,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef core fill:#1A237E,stroke:#3F51B5,stroke-width:2px,color:#FFFFFF;
+    classDef serv fill:#004D40,stroke:#00897B,stroke-width:2px,color:#FFFFFF;
+    classDef v3serv fill:#880E4F,stroke:#D81B60,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef eng fill:#4A148C,stroke:#8E24AA,stroke-width:2px,color:#FFFFFF;
+    classDef stor fill:#263238,stroke:#546E7A,stroke-width:2px,color:#FFFFFF;
+
     subgraph Surfaces["1. Client & Agent Surfaces"]
-        MCP["MCP Server (stdio & Streamable HTTP)"]
-        REST["FastAPI REST Surface (/v1/*)"]
-        CLI["Typer CLI (raa ...)"]
-        SDK["Python SDK / Scripts"]
+        MCP["🤖 MCP Server (stdio & Streamable HTTP)"]:::surf
+        REST["⚡ FastAPI REST Surface (/v1/*)"]:::surf
+        CLI["💻 Typer CLI (311 Commands)"]:::surf
+        SDK["🐍 Python SDK / Library"]:::surf
     end
 
     subgraph RuntimeCore["2. Runtime & Policy Invariants"]
-        Runtime["Runtime.invoke()"]
-        Registry["Capability Registry (244 Tools)"]
-        Policy["Policy Engine (Fail-Closed Scopes)"]
-        Audit["Audit Service (SHA-256 Hash Chain)"]
-        Tenancy["Tenancy & Quota Service"]
+        Runtime["Runtime.invoke()"]:::core
+        Registry["Capability Registry (322 Tools & 8 Profiles)"]:::core
+        Policy["Policy Engine (Fail-Closed Scopes)"]:::core
+        Audit["Audit Service (SHA-256 Hash Chain)"]:::core
+        Tenancy["Tenancy & Quota Service"]:::core
     end
 
     subgraph DomainServices["3. Core Domain & Reversing Services"]
-        Analysis["Analysis Service (DEX, Manifest, Resources)"]
-        UI["UI Service (Hierarchy, Compose, Visual Diff)"]
-        API["API Service (OpenAPI 3.1 & Postman)"]
-        Frameworks["Framework Adapters (Flutter, RN, Unity, .NET)"]
-        Native["Native Service (ELF, JNI, Symbols)"]
-        Dynamic["Dynamic Service (ADB Leases, Frida, Storage)"]
-        Rebuild["Rebuild Service (Patch, Sign, Verify)"]
-        Security["Security Service (YARA, Capa, Quark, SBOM)"]
-        Agents["Agent Orchestration & Coverage Tracker"]
+        Analysis["Analysis Service (DEX, Manifest, Resources)"]:::serv
+        UI["UI Service (Hierarchy, Compose, Visual Diff)"]:::serv
+        API["API Service (OpenAPI 3.1 & Postman)"]:::serv
+        Frameworks["Framework Adapters (Flutter, RN, Unity, .NET)"]:::serv
+        Native["Native Service (ELF, JNI, Symbols)"]:::serv
+        Dynamic["Dynamic Service (ADB Leases, Frida, Storage)"]:::serv
+        Rebuild["Rebuild Service (Patch, RFC v1/v2/v3 Sign, Verify)"]:::serv
+        Security["Security Service (YARA, Capa, Quark, SBOM)"]:::serv
+        Agents["Agent Orchestration & Coverage Tracker"]:::serv
+        
+        %% v3.0 Evolutionary Services
+        Swarm["🤖 Swarm Governance & Memory (Paperclip / Ruflo)"]:::v3serv
+        Cognitive["🧠 Cognitive Audit & Dual-Context (ADK / IAP Intel)"]:::v3serv
+        AdvBinary["🔬 Advanced Binary (Kuna Rust / RetDec LLVM / Mach-O)"]:::v3serv
+        LivingCanvas["🎨 Living Canvas UI (Google Stitch / Apple HIG)"]:::v3serv
+        EnterpriseMesh["🏢 Enterprise Mesh (7-CLI Gateway / WASM)"]:::v3serv
+        OffensiveSec["⚔️ Offensive Operations (Yaklang / Computer-Use GUI)"]:::v3serv
     end
 
     subgraph Engines["4. Engine Adapters & Sidecars"]
-        JADX["JADX Decompiler"]
-        Apktool["Apktool Decoder"]
-        Ghidra["Ghidra Headless SRE"]
-        Rizin["Rizin Disassembler"]
-        Frida["Frida Instrumentation"]
-        ADB["ADB Device Bridge"]
+        JADX["JADX Decompiler"]:::eng
+        Apktool["Apktool Decoder"]:::eng
+        Ghidra["Ghidra Headless SRE"]:::eng
+        Rizin["Rizin Disassembler"]:::eng
+        Frida["Frida Instrumentation"]:::eng
+        ADB["ADB Device Bridge"]:::eng
     end
 
     subgraph Storage["5. Storage & Persistence"]
-        DB[("SQLite 3 (WAL Mode)")]
-        Workspace[("Local Workspace Storage (.raa-workspace)")]
-        AuditLog[("Tamper-Evident audit.jsonl")]
+        DB[("SQLite 3 (WAL Mode)")]:::stor
+        Workspace[("Local Workspace Storage (.raa-workspace)")]:::stor
+        AuditLog[("Tamper-Evident audit.jsonl")]:::stor
     end
 
     Surfaces --> Runtime

@@ -8,11 +8,14 @@ and capture rendered webview screenshots.
 from __future__ import annotations
 
 import json
+import logging
 import urllib.request
 from pathlib import Path
 from typing import Any
 
 from raa.domain.ui import WebviewInspectionReport
+
+logger = logging.getLogger(__name__)
 
 
 def inspect_webview_cdp(
@@ -31,9 +34,9 @@ def inspect_webview_cdp(
         with urllib.request.urlopen(req, timeout=2.0) as resp:  # noqa: S310
             data = resp.read()
             targets = json.loads(data)
-    except Exception:  # noqa: S110
+    except Exception as err:
         # Graceful fallback: synthesize structured webview model
-        pass
+        logger.debug("CDP endpoint unreachable, using fallback model: %s", err)
 
     if targets:
         active_target = targets[0]

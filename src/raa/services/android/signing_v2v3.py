@@ -335,7 +335,7 @@ def verify_apk_v2v3_signatures(apk_bytes: bytes) -> dict[str, Any]:
                 if len(val) < 8:
                     all_verified = False
                     continue
-                _signers_len = struct.unpack("<I", val[:4])[0]
+                _ = struct.unpack("<I", val[:4])[0]
                 signer_entry_len = struct.unpack("<I", val[4:8])[0]
                 signer_data = val[8 : 8 + signer_entry_len]
 
@@ -348,7 +348,7 @@ def verify_apk_v2v3_signatures(apk_bytes: bytes) -> dict[str, Any]:
                 d_block = signed_data[4 : 4 + d_len]
                 d_entry_len = struct.unpack("<I", d_block[:4])[0]
                 d_entry = d_block[4 : 4 + d_entry_len]
-                _d_alg, d_sz = struct.unpack("<II", d_entry[:8])
+                _, d_sz = struct.unpack("<II", d_entry[:8])
                 claimed_digest = d_entry[8 : 8 + d_sz]
 
                 if claimed_digest != expected_root_digest:
@@ -366,11 +366,14 @@ def verify_apk_v2v3_signatures(apk_bytes: bytes) -> dict[str, Any]:
 
                 s_entry_len = struct.unpack("<I", sigs_block[:4])[0]
                 s_entry = sigs_block[4 : 4 + s_entry_len]
-                _s_alg, s_sz = struct.unpack("<II", s_entry[:8])
+                _, s_sz = struct.unpack("<II", s_entry[:8])
                 sig_bytes = s_entry[8 : 8 + s_sz]
 
                 pub = load_der_public_key(pub_bytes)
-                pub.verify(sig_bytes, signed_data, padding.PKCS1v15(), hashes.SHA256())
+                if isinstance(pub, rsa.RSAPublicKey):
+                    pub.verify(sig_bytes, signed_data, padding.PKCS1v15(), hashes.SHA256())
+                else:
+                    all_verified = False
             except Exception:
                 all_verified = False
 

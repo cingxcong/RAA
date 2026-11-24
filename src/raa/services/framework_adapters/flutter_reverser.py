@@ -73,16 +73,16 @@ def dump_flutter_strings(apk_path: Path) -> dict[str, Any]:
                         try:
                             url = match.group(0).decode("utf-8")
                             discovered_urls.add(url)
-                        except Exception:  # noqa: S110
-                            pass
+                        except UnicodeDecodeError:
+                            continue
 
                     # Extract Dart package identifiers
                     for match in _DART_IDENTIFIER_PATTERN.finditer(data):
                         try:
                             cls = match.group(1).decode("utf-8")
                             discovered_classes.add(cls)
-                        except Exception:  # noqa: S110
-                            pass
+                        except UnicodeDecodeError:
+                            continue
                     total_strings += len(discovered_urls) + len(discovered_classes)
 
     # If stripped or mocked, provide standard baseline

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from raa.domain.models import AnalysisReport
 from raa.domain.ui import (
@@ -446,8 +446,8 @@ class UIService:
             )
         redesign = generate_redesign(
             screen=screen_model,
-            target_framework=target_framework,
-            theme_mode=theme_mode,
+            target_framework=cast(Any, target_framework),
+            theme_mode=cast(Any, theme_mode),
             design_system=design_system,
         )
         out_file = self.get_ui_dir(project_id) / f"redesign_{screen_id}_{target_framework}.json"

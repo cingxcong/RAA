@@ -161,6 +161,7 @@ def audit_privacy_policy(
         "disclosed_categories": disclosed_categories,
         "discrepancies_count": len(discrepancies),
         "discrepancies": discrepancies,
+        "pii_findings_evaluated": len(pii_findings),
         "is_compliant": len(discrepancies) == 0,
         "risk_rating": "HIGH" if discrepancies else "LOW",
     }

@@ -9,7 +9,7 @@
 - **Job `integration-tests`:** Runs full integration test suites covering end-to-end multi-phase reverse engineering flows.
 
 ### 2. `mcp-tests.yml` – MCP Server & Tool Validation
-- **Job `mcp-tests`:** Validates MCP HTTP/stdio server startup, tool registration across all 244 implemented tools, input schema correctness, profile constraints (`minimal`, `core`, `dynamic`, `ui`, `api`, `admin`, `full`), error envelopes, and agent skill registrations.
+- **Job `mcp-tests`:** Validates MCP HTTP/stdio server startup, tool registration across all 322 implemented tools, input schema correctness, profile constraints (`minimal`, `core`, `dynamic`, `ui`, `api`, `admin`, `full`), error envelopes, and agent skill registrations.
 
 ### 3. `android-engines.yml` – Android Engine Integration
 - **Job `android-engine-tests`:** Configures Java 17 Temurin, probes native binary availability (JADX, Apktool, Ghidra, Rizin), executes engine discovery, tests engine adapters, and validates DEX/manifest/resource parsing using synthetic test fixtures.

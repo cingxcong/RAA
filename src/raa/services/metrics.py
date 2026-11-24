@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import os
 import sys
 import threading
@@ -14,6 +15,8 @@ from raa.services.workspace import Workspace
 from raa.storage.database import Database
 from raa.utils.time import utc_now
 from raa.version import PROTOCOL_VERSION, __version__
+
+logger = logging.getLogger(__name__)
 
 
 class MetricsService:
@@ -52,9 +55,9 @@ class MetricsService:
                         workspace_bytes += p.stat().st_size
                         file_count += 1
                     except OSError:
-                        pass
-        except OSError:
-            pass
+                        continue
+        except OSError as err:
+            logger.debug("Metrics workspace scan skipped: %s", err)
 
         # Audit stats
         audit_integrity = self.audit.verify_integrity()

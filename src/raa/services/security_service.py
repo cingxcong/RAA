@@ -268,7 +268,7 @@ class SecurityService:
         rule_names: list[str] | None = None,
     ) -> list[MalwareCapability]:
         """Run YARA rule detection against APK contents."""
-        _aid, apk_path = self._resolve_apk_path(project_id, artifact_id)
+        _, apk_path = self._resolve_apk_path(project_id, artifact_id)
         return run_yara_scan(apk_path, rules_path=rules_path, rule_names=rule_names)
 
     def scan_capa_capabilities(
@@ -278,7 +278,7 @@ class SecurityService:
         rules_path: str | None = None,
     ) -> list[MalwareCapability]:
         """Detect offensive malware capabilities using capa rules."""
-        _aid, apk_path = self._resolve_apk_path(project_id, artifact_id)
+        _, apk_path = self._resolve_apk_path(project_id, artifact_id)
         return run_capa_scan(apk_path, rules_path=rules_path)
 
     def score_quark_risk(
@@ -339,7 +339,7 @@ class SecurityService:
         user_consent: bool = False,
     ) -> EnrichmentReport:
         """Query external threat intelligence with strict consent verification."""
-        _aid, apk_path = self._resolve_apk_path(project_id, artifact_id)
+        _, apk_path = self._resolve_apk_path(project_id, artifact_id)
         sample_hash = hashlib.sha256(apk_path.read_bytes()).hexdigest()
 
         return enrich_sample(sample_hash, provider=provider, user_consent=user_consent)
@@ -354,11 +354,12 @@ class SecurityService:
 
         aid, apk_path = self._resolve_apk_path(project_id, artifact_id)
         # Load manifest if available from analysis cache or parse directly
-        from raa.services.android.manifest import decode_manifest
+        from raa.services.android.manifest import parse_manifest
 
         raw_bytes = apk_path.read_bytes()
+        manifest_info: Any
         try:
-            manifest_info = decode_manifest(raw_bytes)
+            manifest_info = parse_manifest(raw_bytes)
         except Exception:
             manifest_info = {
                 "package_name": "com.example.app",
@@ -376,9 +377,9 @@ class SecurityService:
                 for name in zf.namelist():
                     if name.endswith(".dex"):
                         data = zf.read(name)
-                        from raa.services.android.dex import decode_dex_index
+                        from raa.services.android.dex import parse_dex
 
-                        dex_summary = decode_dex_index(data)
+                        dex_summary = parse_dex(data)
                         dex_strings.extend(dex_summary.strings[:200])
         except Exception as exc:
             logger.debug("DEX extraction skipped: %s", exc)
@@ -419,9 +420,9 @@ class SecurityService:
                 for name in zf.namelist():
                     if name.endswith(".dex"):
                         data = zf.read(name)
-                        from raa.services.android.dex import decode_dex_index
+                        from raa.services.android.dex import parse_dex
 
-                        dex_summary = decode_dex_index(data)
+                        dex_summary = parse_dex(data)
                         dex_strings.extend(dex_summary.strings)
         except Exception as exc:
             logger.debug("DEX extraction skipped for DCL: %s", exc)
@@ -465,14 +466,12 @@ class SecurityService:
         try:
             with zipfile.ZipFile(apk_path, "r") as zf:
                 if "AndroidManifest.xml" in zf.namelist():
-                    from raa.services.android.axml import decode_axml
-
-                    manifest_xml = decode_axml(zf.read("AndroidManifest.xml")).text
+                    manifest_xml = zf.read("AndroidManifest.xml").decode("utf-8", errors="ignore")
                 for name in zf.namelist():
                     if name.endswith(".dex"):
-                        from raa.services.android.dex import decode_dex_index
+                        from raa.services.android.dex import parse_dex
 
-                        summary = decode_dex_index(zf.read(name))
+                        summary = parse_dex(zf.read(name))
                         dex_strings.extend(summary.strings[:200])
         except Exception as exc:
             logger.debug("Extraction skipped for MobSF: %s", exc)

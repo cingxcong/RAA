@@ -100,7 +100,7 @@ def test_multidex_index(tmp_path: Path) -> None:
     assert summary.field_count == 3
     assert summary.multi_dex is True
     assert not index.errors
-    assert "https://api.example.com/v1" in index.files[1].strings
+    assert any(s == "https://api.example.com/v1" for s in index.files[1].strings)
 
 
 def test_nested_dex_is_ignored(tmp_path: Path) -> None:

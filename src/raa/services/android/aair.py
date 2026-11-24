@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 from typing import TYPE_CHECKING, Any
+from urllib.parse import urlsplit
 
 from raa.domain.aair import (
     AAIREdge,
@@ -50,17 +51,25 @@ _CREATE_TABLE_PATTERN = re.compile(
     re.IGNORECASE | re.DOTALL,
 )
 
-_IGNORED_URL_PREFIXES = (
-    "http://schemas.android.com/",
-    "https://schemas.android.com/",
-    "http://schemas.xmlsoap.org/",
-    "https://schemas.xmlsoap.org/",
-    "http://www.w3.org/",
-    "https://www.w3.org/",
-    "http://xmlpull.org/",
-    "http://www.apache.org/",
-    "https://www.apache.org/",
+_IGNORED_HOSTS = frozenset(
+    {
+        "schemas.android.com",
+        "schemas.xmlsoap.org",
+        "www.w3.org",
+        "xmlpull.org",
+        "www.apache.org",
+    }
 )
+
+
+def _is_ignored_endpoint(url_str: str) -> bool:
+    try:
+        host = urlsplit(url_str).netloc.lower()
+        if not host:
+            return False
+        return host in _IGNORED_HOSTS or any(host.endswith("." + h) for h in _IGNORED_HOSTS)
+    except Exception:
+        return False
 
 
 def _parse_columns(columns_raw: str) -> list[dict[str, Any]]:
@@ -475,7 +484,7 @@ def build_aair_graph(
             for s in dex_f.strings:
                 stripped = s.strip()
                 if _URL_PATTERN.match(stripped):
-                    if not any(stripped.startswith(p) for p in _IGNORED_URL_PREFIXES):
+                    if not _is_ignored_endpoint(stripped):
                         candidate_urls.add(stripped)
                 elif _API_PATH_PATTERN.match(stripped):
                     candidate_paths.add(stripped)
@@ -483,9 +492,7 @@ def build_aair_graph(
     # Also include strings from string_to_methods
     for s in string_to_methods:
         stripped = s.strip()
-        if _URL_PATTERN.match(stripped) and not any(
-            stripped.startswith(p) for p in _IGNORED_URL_PREFIXES
-        ):
+        if _URL_PATTERN.match(stripped) and not _is_ignored_endpoint(stripped):
             candidate_urls.add(stripped)
         elif _API_PATH_PATTERN.match(stripped):
             candidate_paths.add(stripped)

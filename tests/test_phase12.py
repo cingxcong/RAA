@@ -318,8 +318,10 @@ def test_ipc_taint_scanners() -> None:
     assert pi_findings[0]["rule_id"] == "IPC_MUTABLE_PENDING_INTENT"
 
     vuln_aidl_code = [
-        "class MyStub extends Stub { onTransact() { "
-        "String pkg = intent.getStringExtra('package'); } }"
+        (
+            "class MyStub extends Stub { onTransact() { "
+            "String pkg = intent.getStringExtra('package'); } }"
+        )
     ]
     aidl_findings = scan_aidl_caller_auth(vuln_aidl_code)
     assert len(aidl_findings) == 1

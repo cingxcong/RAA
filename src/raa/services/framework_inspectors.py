@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import json
 import struct
 from pathlib import Path
@@ -162,26 +163,22 @@ def inspect_flutter_assets(
             is_manifest = True
             asset_type = "manifest"
             if rel_name == "AssetManifest.json":
-                try:
+                with contextlib.suppress(Exception):
                     content = read_archive_member(apk_path, name, max_bytes=1024 * 1024)
                     parsed = json.loads(content.decode("utf-8", errors="replace"))
                     if isinstance(parsed, dict):
                         manifest_entries.extend(list(parsed.keys())[:200])
-                except Exception:  # noqa: S110
-                    pass
         elif rel_name == "FontManifest.json":
             has_font_manifest = True
             is_manifest = True
             asset_type = "manifest"
-            try:
+            with contextlib.suppress(Exception):
                 content = read_archive_member(apk_path, name, max_bytes=1024 * 1024)
                 fonts = json.loads(content.decode("utf-8", errors="replace"))
                 if isinstance(fonts, list):
                     for entry in fonts:
                         if isinstance(entry, dict) and "family" in entry:
                             font_families.append(str(entry["family"]))
-            except Exception:  # noqa: S110
-                pass
         elif any(rel_name.endswith(ext) for ext in {".png", ".jpg", ".jpeg", ".webp", ".svg"}):
             asset_type = "image"
         elif any(rel_name.endswith(ext) for ext in {".ttf", ".otf", ".woff"}):
@@ -441,14 +438,12 @@ def list_dotnet_assemblies(
             # Check for PE / CIL header
             is_pe = False
             is_cil = False
-            try:
+            with contextlib.suppress(Exception):
                 header = read_archive_member(apk_path, name, max_bytes=512)
                 if header.startswith(_PE_MAGIC):
                     is_pe = True
                 if _CLI_METADATA_MAGIC in header:
                     is_cil = True
-            except Exception:  # noqa: S110
-                pass
 
             assemblies.append(
                 DotnetAssembly(

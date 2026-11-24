@@ -64,9 +64,9 @@ def audit_play_protect_compliance(
         services = [
             {"name": c.name, "foreground_service_type": getattr(c, "foreground_service_type", None)}
             for c in manifest_info.components
-            if c.component_type == "service"
+            if str(getattr(c, "component_type", getattr(c, "kind", ""))).lower().endswith("service")
         ]
-    elif isinstance(manifest_info, dict):
+    else:
         package_name = manifest_info.get("package") or manifest_info.get("package_name", "unknown")
         raw_perms = manifest_info.get("permissions") or manifest_info.get(
             "requested_permissions", []
@@ -74,18 +74,6 @@ def audit_play_protect_compliance(
         permissions = {p if isinstance(p, str) else getattr(p, "name", str(p)) for p in raw_perms}
         target_sdk = manifest_info.get("target_sdk", 34)
         services = manifest_info.get("services", [])
-    else:
-        package_name = getattr(
-            manifest_info, "package_name", getattr(manifest_info, "package", "unknown")
-        )
-        raw_perms = getattr(
-            manifest_info,
-            "permissions",
-            getattr(manifest_info, "requested_permissions", []),
-        )
-        permissions = {p if isinstance(p, str) else getattr(p, "name", str(p)) for p in raw_perms}
-        target_sdk = getattr(manifest_info, "target_sdk", 34)
-        services = getattr(manifest_info, "services", getattr(manifest_info, "components", []))
 
     dex_classes = dex_classes or []
     dex_strings = dex_strings or []

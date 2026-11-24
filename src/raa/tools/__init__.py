@@ -12,20 +12,26 @@ from raa.registry.models import CapabilityRegistry
 def build_registry() -> CapabilityRegistry:
     from raa.tools import (
         admin,
+        advanced_binary,
         analysis,
         api,
         artifacts,
+        cognitive,
         diff,
         dynamic,
+        enterprise,
         evidence,
         frameworks,
         graph,
         native,
+        offensive,
         platform,
         rebuild,
         recipes,
         security,
+        swarm,
         ui,
+        ui_reconstruction,
         unpacking,
     )
 
@@ -47,6 +53,12 @@ def build_registry() -> CapabilityRegistry:
         diff,
         security,
         rebuild,
+        swarm,
+        cognitive,
+        advanced_binary,
+        ui_reconstruction,
+        enterprise,
+        offensive,
     ):
         module.register(registry)
     return registry

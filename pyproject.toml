@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "raa"
-version = "2.0.0"
+version = "3.0.0"
 description = "RAA - Reverse Android Anything: agent-native Android application intelligence platform"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -92,6 +92,7 @@ select = [
   "ASYNC",
 ]
 ignore = [
+  "E501", # Line length handled by ruff format
   "S101", # asserts are expected in tests
   "S603", # subprocess calls are centralized in engine adapters
   "S607", # partial executable paths are resolved through explicit manifests

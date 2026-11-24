@@ -47,8 +47,8 @@ def dump_il2cpp_metadata(apk_path: Path, output_dir: Path | None = None) -> dict
                                 if len(candidate) < 20 and candidate.startswith("20"):
                                     unity_version = f"Unity {candidate}"
                                     break
-                            except Exception:  # noqa: S110
-                                pass
+                            except (UnicodeDecodeError, ValueError):
+                                continue
 
     if unity_version == "Unknown":
         unity_version = "Unity 2022.3.10f1"

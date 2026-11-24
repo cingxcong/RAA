@@ -5,9 +5,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Current_Release-v2.0.0_Production-success?style=flat-square" alt="Current Release: v2.0.0 Production">
-  <img src="https://img.shields.io/badge/Total_Tools-244_Implemented-blue?style=flat-square" alt="Total Tools: 244 Implemented">
-  <img src="https://img.shields.io/badge/Tests-437_Passing-brightgreen?style=flat-square" alt="Tests: 437 Passing">
+  <img src="https://img.shields.io/badge/Current_Release-v3.0.0_Production-success?style=flat-square" alt="Current Release: v2.0.0 Production">
+  <img src="https://img.shields.io/badge/Total_Tools-322_Implemented-blue?style=flat-square" alt="Total Tools: 244 Implemented">
+  <img src="https://img.shields.io/badge/Tests-526_Passing-brightgreen?style=flat-square" alt="Tests: 437 Passing">
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/Protocol-2026--07--28-informational?style=flat-square" alt="Protocol: 2026-07-28">
@@ -24,13 +24,14 @@ RAA enforces a strict data provenance hierarchy to prevent AI hallucinations and
 
 ```mermaid
 flowchart TD
-    Raw["Raw Container Bytes (APK, DEX, AXML, ELF, ARSC)"] --> Obs["Level 1: Observations (Authority: OBSERVED_BYTECODE)"]
-    Obs --> Der["Level 2: Derivations (Authority: DERIVED_AST / DERIVED_METRIC)"]
-    Der --> Inf["Level 3: Inferences (Authority: ANALYST_INFERENCE / AI_PREDICTION)"]
-    
-    style Obs fill:#2E7D32,stroke:#1B5E20,color:#fff
-    style Der fill:#0277BD,stroke:#01579B,color:#fff
-    style Inf fill:#E65100,stroke:#BF360C,color:#fff
+    classDef raw fill:#0D1B2A,stroke:#415A77,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef obs fill:#004D40,stroke:#00E676,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef der fill:#01579B,stroke:#00B0FF,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef inf fill:#E65100,stroke:#FF9100,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+
+    Raw["📦 Raw Container Bytes (APK, DEX, AXML, ELF, ARSC)"]:::raw --> Obs["🔍 Level 1: Observations (Authority: OBSERVED_BYTECODE)"]:::obs
+    Obs --> Der["⚙️ Level 2: Derivations (Authority: DERIVED_AST / DERIVED_METRIC)"]:::der
+    Der --> Inf["🤖 Level 3: Inferences (Authority: ANALYST_INFERENCE / AI_PREDICTION)"]:::inf
 ```
 
 ### Authority Levels
@@ -57,20 +58,22 @@ RAA's security model is **fail-closed**: access is denied unless an operation is
 ### Scope Taxonomy
 
 ```mermaid
-graph TD
-    Safe["Safe Baseline Scopes (Default)"] --> PR["project.read"]
-    Safe --> SR["static.read"]
-    Safe --> EW["export.write"]
+flowchart TD
+    classDef safe fill:#004D40,stroke:#00E676,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef safenode fill:#0D47A1,stroke:#1E88E5,stroke-width:1px,color:#FFFFFF;
+    classDef priv fill:#880E4F,stroke:#FF1744,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef privnode fill:#311B92,stroke:#7C4DFF,stroke-width:1px,color:#FFFFFF;
+
+    Safe["🛡️ Safe Baseline Scopes (Default)"]:::safe --> PR["project.read"]:::safenode
+    Safe --> SR["static.read"]:::safenode
+    Safe --> EW["export.write"]:::safenode
     
-    Priv["Privileged Scopes (Opt-in Required)"] --> PW["project.write"]
-    Priv --> DD["dynamic.device"]
-    Priv --> DH["dynamic.hook"]
-    Priv --> AP["android.patch"]
-    Priv --> AS["android.sign"]
-    Priv --> AI["android.install"]
-    
-    style Safe fill:#1E88E5,color:#fff
-    style Priv fill:#D81B60,color:#fff
+    Priv["⚠️ Privileged Scopes (Opt-in Explicit Grant)"]:::priv --> PW["project.write"]:::privnode
+    Priv --> DD["dynamic.device"]:::privnode
+    Priv --> DH["dynamic.hook"]:::privnode
+    Priv --> AP["android.patch"]:::privnode
+    Priv --> AS["android.sign"]:::privnode
+    Priv --> AI["android.install"]:::privnode
 ```
 
 1. **`project.read`:** Read project metadata, artifacts, and summary reports.

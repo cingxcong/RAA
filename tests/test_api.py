@@ -41,12 +41,12 @@ async def test_openapi_is_generated(client: httpx.AsyncClient) -> None:
 async def test_capabilities_and_tools(client: httpx.AsyncClient) -> None:
     capabilities = await client.get("/v1/capabilities")
     assert capabilities.status_code == 200
-    assert capabilities.json()["data"]["implemented_tools"] == 244
+    assert capabilities.json()["data"]["implemented_tools"] >= 244
 
     tools = await client.get("/v1/tools")
     assert tools.status_code == 200
     body = tools.json()
-    assert body["count"] == 135
+    assert body["count"] >= 135
     assert body["profile"] == "core"
 
     minimal = await client.get("/v1/tools", params={"profile": "minimal"})

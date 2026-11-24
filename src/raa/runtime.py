@@ -33,18 +33,22 @@ from raa.registry.models import (
 )
 from raa.registry.profiles import ALL_PROFILES
 from raa.services.aair import AAIRService
+from raa.services.advanced_binary import AdvancedBinaryService
 from raa.services.agents.coverage_tracker import CoverageTracker
 from raa.services.analysis import AnalysisService
 from raa.services.api_service import ApiService
 from raa.services.artifacts import ArtifactService
 from raa.services.audit import AuditService
 from raa.services.backup import BackupService
+from raa.services.cognitive import CognitiveAuditService
 from raa.services.diff_service import DiffService
 from raa.services.dynamic import DynamicService
 from raa.services.engine_runner import EngineRunner
 from raa.services.engines import EngineService
+from raa.services.enterprise import EnterpriseIntegrationService
 from raa.services.evidence import EvidenceService
 from raa.services.metrics import MetricsService
+from raa.services.offensive import OffensiveSecurityService
 from raa.services.projects import ProjectService
 from raa.services.rebuild_service import RebuildService
 from raa.services.recipes import RecipeService
@@ -52,8 +56,10 @@ from raa.services.sbom import SbomService
 from raa.services.security_service import SecurityService
 from raa.services.signing import SigningService
 from raa.services.skills import SkillService
+from raa.services.swarm import SwarmService
 from raa.services.tenancy import TenancyService
 from raa.services.ui import UIService
+from raa.services.ui_reconstruction import UIReconstructionService
 from raa.services.unpacking_service import UnpackingService
 from raa.services.workspace import Workspace
 from raa.storage.database import Database
@@ -160,6 +166,12 @@ class Runtime:
             artifacts=self.artifacts,
         )
         self.tenancy = TenancyService()
+        self.swarm = SwarmService(self.workspace.root)
+        self.cognitive = CognitiveAuditService(self.workspace.root)
+        self.advanced_binary = AdvancedBinaryService(self.workspace.root)
+        self.ui_reconstruction = UIReconstructionService(self.workspace.root)
+        self.enterprise = EnterpriseIntegrationService(self.workspace.root)
+        self.offensive = OffensiveSecurityService(self.workspace.root)
         self.metrics = MetricsService(
             workspace=self.workspace,
             database=self.database,
@@ -303,11 +315,12 @@ class Runtime:
                 started=started,
                 error_code="internal_error",
             )
-            logger.exception("Unhandled tool failure", extra={"tool": name})
+            sanitized_tool = name.replace("\r", "_").replace("\n", "_")
+            logger.exception("Unhandled tool failure for %s", sanitized_tool)
             raise InternalError(
                 "The tool failed unexpectedly.",
                 hint="Check the server log with the request id.",
-                details={"tool": name, "request_id": request_id},
+                details={"tool": sanitized_tool, "request_id": request_id},
             ) from exc
 
     def _spec_or_raise(self, name: str) -> ToolSpec:

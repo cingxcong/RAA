@@ -8,9 +8,10 @@ Inspired by jshookmcp.
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 if TYPE_CHECKING:
+    from raa.config import ProfileName
     from raa.registry.models import CapabilityRegistry
 
 
@@ -22,7 +23,7 @@ def search_tools(
     limit: int = 20,
 ) -> dict[str, Any]:
     """Search registered capabilities by query string, profile, and family."""
-    all_tools = registry.for_profile(profile) if profile else registry.all()
+    all_tools = registry.for_profile(cast("ProfileName", profile)) if profile else registry.all()
 
     tokens = [t.lower() for t in re.findall(r"\w+", query) if len(t) >= 2]
     if not tokens:

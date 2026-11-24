@@ -56,7 +56,7 @@ def test_service_burp_bridge() -> None:
     assert res["status"] == "configured"
     assert res["bridge_port"] == 8999
     assert res["exported_tools"] == ["api_bypass_403_test", "wasm_decompile"]
-    assert "http://127.0.0.1:8999/mcp" in res["mcp_endpoint"]
+    assert res["mcp_endpoint"] == "http://127.0.0.1:8999/mcp"
     assert "Montoya" in res["extension_script"]
 
 

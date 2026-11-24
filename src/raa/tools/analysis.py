@@ -372,8 +372,10 @@ async def _analysis_start(ctx: ToolContext, args: AnalysisStartInput) -> ToolOut
     return ToolOutcome(
         data=job,
         warnings=[
-            "analysis_start is asynchronous. Poll analysis_get_status until the "
-            "job reaches a terminal state."
+            (
+                "analysis_start is asynchronous. Poll analysis_get_status until the "
+                "job reaches a terminal state."
+            )
         ],
     )
 
@@ -556,8 +558,10 @@ async def _android_get_exported_surface(ctx: ToolContext, args: JobInput) -> Too
             "deep_links": [link.model_dump(mode="json") for link in manifest.deep_links],
             "deep_link_count": len(manifest.deep_links),
             "limitations": [
-                "Exported status reflects manifest declarations; runtime reachability "
-                "and permission enforcement are not verified.",
+                (
+                    "Exported status reflects manifest declarations; runtime reachability "
+                    "and permission enforcement are not verified."
+                ),
             ],
         },
         evidence_ids=report.evidence_ids,
@@ -723,7 +727,6 @@ async def _android_get_resource(
             "Either resource_id or name must be provided.",
             hint="Specify --resource-id or --name.",
         )
-        lookup = args.name + (f" ({args.type})" if args.type else "")
 
     if args.config is not None:
         variants = [entry for entry in variants if entry.config == args.config]
@@ -1350,8 +1353,10 @@ async def _packer_detect(ctx: ToolContext, args: PackerDetectInput) -> ToolOutco
         evidence_ids.extend(report.evidence_ids)
 
     warnings = [
-        "Packer detection is a heuristic/signature scan in this build. Confirm with "
-        "APKiD or an authorized dump."
+        (
+            "Packer detection is a heuristic/signature scan in this build. Confirm with "
+            "APKiD or an authorized dump."
+        )
     ]
     apkid_result = None
 
@@ -1487,7 +1492,7 @@ async def _source_rename_symbol(ctx: ToolContext, args: SourceRenameSymbolInput)
     reg = getattr(ctx.runtime, "_symbol_registry", None)
     if reg is None:
         reg = SymbolRenameRegistry()
-        ctx.runtime._symbol_registry = reg  # type: ignore[attr-defined]
+        ctx.runtime._symbol_registry = reg
 
     reg.add_mapping(args.symbol_type, args.original_name, args.renamed_name)
     data = reg.to_dict()

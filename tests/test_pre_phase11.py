@@ -169,7 +169,7 @@ async def test_framework_reversing_adapters_tools(runtime: Runtime, tmp_path: Pa
     )
     assert strings_res.data["total_strings"] > 0
     assert len(strings_res.data["api_endpoints"]) > 0
-    assert any("https://" in s for s in strings_res.data["api_endpoints"])
+    assert any(s.find("https://") >= 0 for s in strings_res.data["api_endpoints"])
 
     # 3. unity_dump_metadata
     unity_res = await runtime.invoke(

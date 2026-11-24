@@ -203,7 +203,7 @@ async def _rebuild_elf_align_16kb(ctx: ToolContext, args: ElfAlign16KbInput) -> 
     if args.patch and audit_result["non_compliant_libraries"] > 0:
         import zipfile
 
-        patched_data = bytearray()
+        patched_data: bytes = b""
         with zipfile.ZipFile(apk_path, "r") as src_zf:
             bio = io.BytesIO()
             with zipfile.ZipFile(bio, "w") as dst_zf:

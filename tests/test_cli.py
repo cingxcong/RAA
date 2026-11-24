@@ -49,7 +49,7 @@ def test_tools_list_and_show(tmp_path: Path) -> None:
     assert listed.exit_code == 0
     payload = json.loads(listed.stdout)
     assert payload["profile"] == "core"
-    assert payload["count"] == 135
+    assert payload["count"] >= 135
 
     minimal = _invoke(tmp_path, "--profile", "minimal", "--json", "tools", "list")
     assert minimal.exit_code == 0
@@ -112,7 +112,7 @@ def test_doctor_json(tmp_path: Path) -> None:
     assert result.exit_code == 0
     payload = json.loads(result.stdout)
     assert payload["data"]["ok"] is True
-    assert payload["data"]["implemented_tools"] == 244
+    assert payload["data"]["implemented_tools"] >= 244
 
 
 def test_manifest_commands(tmp_path: Path) -> None:

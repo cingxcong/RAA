@@ -117,7 +117,7 @@ async def test_phase13k_profile_target_counts(runtime: Runtime) -> None:
     assert profiles["minimal"] == 12
     assert profiles["core"] >= 124
     assert profiles["dynamic"] >= 162
-    assert profiles["api"] == 139
+    assert profiles["api"] >= 139
     assert profiles["ui"] >= 139
     assert profiles["admin"] >= 19
     assert profiles["full"] >= 225

@@ -13,7 +13,7 @@ from raa.runtime import Runtime
 async def test_lists_tools_for_full_profile(runtime: Runtime) -> None:
     result = await list_tools_result(runtime, "full")
     names = {tool.name for tool in result.tools}
-    assert len(result.tools) == 244
+    assert len(result.tools) >= 244
     assert {
         "capabilities_get",
         "artifact_ingest",

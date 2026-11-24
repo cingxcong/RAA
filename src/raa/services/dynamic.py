@@ -443,6 +443,19 @@ class DynamicService:
             subnet_filter=subnet_filter,
         )
 
+    def dissect_ble(
+        self,
+        raw_services_or_uuids: list[str] | dict[str, Any] | str,
+        device_name: str = "Unknown BLE Peripheral",
+    ) -> dict[str, Any]:
+        """Dissect Bluetooth Low Energy (BLE) GATT services, characteristics, and telemetry."""
+        from raa.services.android.iot_sniffer import dissect_ble_peripheral
+
+        return dissect_ble_peripheral(
+            raw_services_or_uuids=raw_services_or_uuids,
+            device_name=device_name,
+        )
+
     def start_wireguard(
         self,
         target_package: str = "com.example.app",

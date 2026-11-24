@@ -79,6 +79,30 @@ platform_app = typer.Typer(
     help="Universal platform expansion: iOS, HarmonyOS, PRoot, and Warp block sessions.",
     no_args_is_help=True,
 )
+swarm_app = typer.Typer(
+    help="Multi-agent swarm governance, token budgeting, blackboard, and LoopX state persistence.",
+    no_args_is_help=True,
+)
+cognitive_app = typer.Typer(
+    help="Dual-context adversarial audit, Google ADK workflows, IAP monetization & exploit payoff economics.",
+    no_args_is_help=True,
+)
+binary_app = typer.Typer(
+    help="Native Ghidra/RetDec decompilers, Malimite Apple reversing, GDB/MI, and device lockscreen controls.",
+    no_args_is_help=True,
+)
+canvas_app = typer.Typer(
+    help="Autonomous UI reconstruction, Google Stitch, Apple HIG, Liquid Glass, Clean Architecture, and Sodu CI/CD.",
+    no_args_is_help=True,
+)
+enterprise_app = typer.Typer(
+    help="Enterprise MCP mesh (Postman, GitHub, Playwright, Apify), 7-CLI gateway, Nacos, WASM & mutation guardrails.",
+    no_args_is_help=True,
+)
+offensive_app = typer.Typer(
+    help="Offensive security operations, Yaklang playbooks, GUI computer-use & v3 benchmarks.",
+    no_args_is_help=True,
+)
 
 app.add_typer(project_app, name="project")
 app.add_typer(artifact_app, name="artifact")
@@ -106,6 +130,12 @@ app.add_typer(rebuild_app, name="rebuild")
 app.add_typer(admin_app, name="admin")
 app.add_typer(ai_app, name="ai")
 app.add_typer(platform_app, name="platform")
+app.add_typer(swarm_app, name="swarm")
+app.add_typer(cognitive_app, name="cognitive")
+app.add_typer(binary_app, name="binary")
+app.add_typer(canvas_app, name="canvas")
+app.add_typer(enterprise_app, name="enterprise")
+app.add_typer(offensive_app, name="offensive")
 
 console = Console()
 
@@ -5789,6 +5819,1318 @@ def platform_cross_compare_cmd(
         args["harmony_hap_path"] = harmony
     payload = asyncio.run(_invoke(_runtime(state), "platform_cross_target_compare", args))
     _emit(state, payload, title="Cross-Platform Android, iOS & HarmonyOS Target Compare")
+
+
+# --- Phase 15: Swarm CLI Commands ---
+
+
+@swarm_app.command("govern")
+def swarm_govern_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    name: str = typer.Option("RAA Swarm", "--name", "-n", help="Swarm name."),
+    lead_role: str = typer.Option(
+        "swarm_director_agent", "--lead", "-l", help="Lead coordinator role ID."
+    ),
+) -> None:
+    """Configure multi-agent swarm hierarchy and roles."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "swarm_name": name,
+        "lead_role": lead_role,
+    }
+    payload = asyncio.run(
+        _invoke(_runtime(state, "swarm"), "swarm_org_govern", args, profile="swarm")
+    )
+    _emit(state, payload, title="Swarm Governance Configuration")
+
+
+@swarm_app.command("budget")
+def swarm_budget_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    tokens: int = typer.Option(0, "--tokens", "-t", help="Tokens consumed."),
+    cost: float = typer.Option(0.0, "--cost", "-c", help="Cost in USD."),
+    subagent: str | None = typer.Option(None, "--subagent", "-s", help="Subagent name."),
+    token_cap: int | None = typer.Option(None, "--token-cap", help="Set token ceiling."),
+    cost_cap: float | None = typer.Option(None, "--cost-cap", help="Set cost ceiling in USD."),
+) -> None:
+    """Track token spend and enforce budget ceilings."""
+    state = _state(ctx)
+    args: dict[str, Any] = {
+        "project_id": project_id,
+        "tokens": tokens,
+        "cost_usd": cost,
+    }
+    if subagent:
+        args["subagent_name"] = subagent
+    if token_cap is not None:
+        args["set_token_cap"] = token_cap
+    if cost_cap is not None:
+        args["set_cost_cap_usd"] = cost_cap
+    payload = asyncio.run(
+        _invoke(_runtime(state, "swarm"), "swarm_budget_meter", args, profile="swarm")
+    )
+    _emit(state, payload, title="Swarm Budget Metering")
+
+
+@swarm_app.command("spawn-deerflow")
+def swarm_spawn_deerflow_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    goal: str = typer.Option(..., "--goal", "-g", help="Mission goal for deep research."),
+    agent_name: str = typer.Option("deerflow_researcher", "--agent", "-a", help="Agent name."),
+    max_depth: int = typer.Option(3, "--depth", "-d", help="Max recursive exploration depth."),
+) -> None:
+    """Spawn a long-horizon Deer-Flow research subagent."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "mission_goal": goal,
+        "agent_name": agent_name,
+        "max_depth": max_depth,
+    }
+    payload = asyncio.run(
+        _invoke(_runtime(state, "swarm"), "subagent_deerflow_spawn", args, profile="swarm")
+    )
+    _emit(state, payload, title="Deer-Flow Long-Horizon Subagent Spawn")
+
+
+@swarm_app.command("sop")
+def swarm_sop_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    sop_name: str = typer.Option("framework_audit", "--sop", "-s", help="SOP template name."),
+    target: str = typer.Option(..., "--target", "-t", help="Target APK or package entity."),
+) -> None:
+    """Execute standardized multi-role reverse-engineering SOP."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "sop_name": sop_name,
+        "target_entity": target,
+    }
+    payload = asyncio.run(
+        _invoke(_runtime(state, "swarm"), "sop_pipeline_execute", args, profile="swarm")
+    )
+    _emit(state, payload, title="MetaGPT SOP Pipeline Execution")
+
+
+@swarm_app.command("blackboard-post")
+def swarm_blackboard_post_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    topic: str = typer.Option(..., "--topic", help="Topic channel (e.g. crypto, network)."),
+    author: str = typer.Option(..., "--author", help="Author agent name."),
+    hypothesis: str = typer.Option(..., "--hypothesis", help="Hypothesis or finding."),
+    confidence: float = typer.Option(0.7, "--confidence", help="Confidence score 0.0-1.0."),
+) -> None:
+    """Post hypothesis or evidence to the shared swarm blackboard."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "topic": topic,
+        "author": author,
+        "hypothesis": hypothesis,
+        "confidence": confidence,
+    }
+    payload = asyncio.run(
+        _invoke(_runtime(state, "swarm"), "swarm_blackboard_post", args, profile="swarm")
+    )
+    _emit(state, payload, title="Swarm Blackboard Post")
+
+
+@swarm_app.command("blackboard-read")
+def swarm_blackboard_read_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    topic: str | None = typer.Option(None, "--topic", help="Optional topic filter."),
+    author: str | None = typer.Option(None, "--author", help="Optional author filter."),
+) -> None:
+    """Read findings and hypotheses from the shared swarm blackboard."""
+    state = _state(ctx)
+    args: dict[str, Any] = {"project_id": project_id}
+    if topic:
+        args["topic"] = topic
+    if author:
+        args["author"] = author
+    payload = asyncio.run(
+        _invoke(_runtime(state, "swarm"), "swarm_blackboard_read", args, profile="swarm")
+    )
+    _emit(state, payload, title="Swarm Blackboard Entries")
+
+
+@swarm_app.command("edict-gate")
+def swarm_edict_gate_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    action: str = typer.Option(..., "--action", "-a", help="Action type proposed."),
+    summary: str = typer.Option(..., "--summary", "-s", help="Drafted changes and justification."),
+    risk: str = typer.Option(
+        "medium", "--risk", "-r", help="Assessed risk: low, medium, high, critical."
+    ),
+    bypass: bool = typer.Option(False, "--bypass", help="Request bypass."),
+) -> None:
+    """Evaluate Tri-Chamber Edict review and veto gates."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "action_type": action,
+        "draft_summary": summary,
+        "risk_level": risk,
+        "bypass_requested": bypass,
+    }
+    payload = asyncio.run(
+        _invoke(_runtime(state, "swarm"), "swarm_edict_gate_evaluate", args, profile="swarm")
+    )
+    _emit(state, payload, title="Edict Tri-Chamber Governance Evaluation")
+
+
+@swarm_app.command("loopx")
+def swarm_loopx_cmd(
+    ctx: typer.Context,
+    action: str = typer.Option(
+        ...,
+        "--action",
+        "-a",
+        help="Action: create, status, enqueue_attention, step, checkpoint, list.",
+    ),
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    goal_id: str | None = typer.Option(None, "--goal-id", help="Goal ID."),
+    title: str = typer.Option("", "--title", help="Goal title."),
+    attention: str | None = typer.Option(None, "--attention", help="Attention queue item."),
+) -> None:
+    """Control 24/7 long-horizon reversing goals via LoopX control plane."""
+    state = _state(ctx)
+    args: dict[str, Any] = {
+        "action": action,
+        "project_id": project_id,
+    }
+    if goal_id:
+        args["goal_id"] = goal_id
+    if title:
+        args["title"] = title
+    if attention:
+        args["attention_item"] = attention
+    payload = asyncio.run(
+        _invoke(_runtime(state, "swarm"), "loopx_goal_control_plane", args, profile="swarm")
+    )
+    _emit(state, payload, title="LoopX Goal Control Plane")
+
+
+# --- Phase 16: Cognitive, Adversarial & Exploit Economics CLI Commands ---
+
+
+@cognitive_app.command("elephant-draft")
+def cognitive_elephant_draft_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    target: str = typer.Option(..., "--target", "-t", help="Target component or class."),
+    overview: str = typer.Option(
+        "Full architecture overview", "--overview", "-o", help="Architecture overview."
+    ),
+    codebase: str = typer.Option(
+        "Decompiled classes and manifest context", "--codebase", "-c", help="Codebase context."
+    ),
+) -> None:
+    """Draft full-context reversing specification using Elephant agent."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "target_component": target,
+        "architecture_overview": overview,
+        "codebase_context": codebase,
+        "claims": [
+            {"claim_id": "claim_01", "claim_text": f"Component {target} handles sensitive crypto."}
+        ],
+    }
+    payload = asyncio.run(_invoke(_runtime(state), "audit_elephant_draft_spec", args))
+    _emit(state, payload, title="Elephant Full-Context Reversing Specification")
+
+
+@cognitive_app.command("goldfish-review")
+def cognitive_goldfish_review_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    claim_id: str = typer.Option(..., "--claim-id", help="Claim identifier."),
+    claim_text: str = typer.Option(..., "--claim-text", help="Claim text to review."),
+    evidence: list[str] = typer.Option(
+        [], "--evidence", "-e", help="Isolated empirical evidence snippets."
+    ),
+) -> None:
+    """Execute zero-context adversarial audit on proposed findings."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "claim_id": claim_id,
+        "claim_text": claim_text,
+        "isolated_evidence": evidence,
+    }
+    payload = asyncio.run(_invoke(_runtime(state), "audit_goldfish_adversarial_review", args))
+    _emit(state, payload, title="Goldfish Zero-Context Adversarial Review")
+
+
+@cognitive_app.command("adk-workflow")
+def cognitive_adk_workflow_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    name: str = typer.Option("adk_pipeline", "--name", "-n", help="ADK workflow name."),
+) -> None:
+    """Execute Google ADK Python state machine workflow with OpenTelemetry tracing."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "workflow_name": name,
+    }
+    payload = asyncio.run(_invoke(_runtime(state), "adk_workflow_run", args))
+    _emit(state, payload, title="Google ADK Workflow Execution")
+
+
+@cognitive_app.command("strategy-select")
+def cognitive_strategy_select_cmd(
+    ctx: typer.Context,
+    target: str = typer.Option(..., "--target", "-t", help="Target APK or component."),
+    obfuscation: str = typer.Option(
+        "low", "--obfuscation", help="none, low, medium, high, packed."
+    ),
+    crypto: bool = typer.Option(False, "--crypto", help="Whether target has native JNI crypto."),
+    loc: int = typer.Option(1000, "--loc", help="Estimated lines of code."),
+) -> None:
+    """Select optimal cognitive reasoning paradigm (Fast ReAct, Plan-Solve, Debate)."""
+    state = _state(ctx)
+    args = {
+        "target": target,
+        "obfuscation_level": obfuscation,
+        "has_native_crypto": crypto,
+        "lines_of_code": loc,
+    }
+    payload = asyncio.run(_invoke(_runtime(state), "reasoning_strategy_select", args))
+    _emit(state, payload, title="Cognitive Reasoning Strategy Decision")
+
+
+@cognitive_app.command("iap-audit")
+def cognitive_iap_audit_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+) -> None:
+    """Audit In-App Purchase and monetization workflows for client-side bypasses."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "declared_permissions": ["com.android.vending.BILLING"],
+        "decompiled_classes": ["com.target.billing.BillingManager"],
+        "string_constants": ["onPurchasesUpdated", "verifyReceiptLocally"],
+    }
+    payload = asyncio.run(
+        _invoke(_runtime(state, "api"), "fin_iap_billing_audit", args, profile="api")
+    )
+    _emit(state, payload, title="IAP & Monetization Vulnerability Audit")
+
+
+@cognitive_app.command("exploit-payoff")
+def cognitive_exploit_payoff_cmd(
+    ctx: typer.Context,
+    vuln_id: str = typer.Option(..., "--vuln-id", help="Vulnerability ID."),
+    title: str = typer.Option(..., "--title", help="Vulnerability title."),
+    severity: str = typer.Option("high", "--severity", help="low, medium, high, critical."),
+    skill: str = typer.Option("intermediate", "--skill", help="Attacker skill required."),
+    asset: str = typer.Option("payment_bypass", "--asset", help="Exploit asset type."),
+) -> None:
+    """Simulate quantitative exploit economics matrix via QuantDinger."""
+    state = _state(ctx)
+    args = {
+        "vulnerability_id": vuln_id,
+        "vulnerability_title": title,
+        "severity": severity,
+        "attacker_skill_required": skill,
+        "exploit_asset_type": asset,
+    }
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "exploit_payoff_simulate", args, profile="admin")
+    )
+    _emit(state, payload, title="QuantDinger Exploit Payoff Simulation")
+
+
+@cognitive_app.command("exec-briefing")
+def cognitive_exec_briefing_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    app_name: str = typer.Option("Target Mobile App", "--name", "-n", help="Application name."),
+) -> None:
+    """Synthesize board-level executive risk summary and compliance impact."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "app_name": app_name,
+        "vulnerabilities": [
+            {"severity": "critical", "title": "Client-Side Billing Bypass"},
+            {"severity": "high", "title": "Hardcoded Cryptographic Master Key"},
+        ],
+    }
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "exec_briefing_synthesize", args, profile="admin")
+    )
+    _emit(state, payload, title="Executive Cyber Risk Briefing")
+
+
+@cognitive_app.command("whitepaper")
+def cognitive_whitepaper_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    title: str = typer.Option(..., "--title", help="Research paper title."),
+) -> None:
+    """Synthesize academic-grade vulnerability research whitepaper via Dr. Claw."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "paper_title": title,
+        "vulnerability_mechanisms": [
+            "Control flow obfuscation flattening",
+            "Weak IV reuse in CBC cipher",
+        ],
+    }
+    payload = asyncio.run(
+        _invoke(
+            _runtime(state, "admin"), "sec_research_whitepaper_synthesize", args, profile="admin"
+        )
+    )
+    _emit(state, payload, title="Academic Research Whitepaper & CVE Disclosure")
+
+
+@cognitive_app.command("haystack")
+def cognitive_haystack_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    query: str = typer.Option(..., "--query", "-q", help="Search query."),
+) -> None:
+    """Query decompiled code repositories using Haystack hybrid RAG search."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "query": query,
+    }
+    payload = asyncio.run(_invoke(_runtime(state), "rag_haystack_query", args))
+    _emit(state, payload, title="Haystack Decompiled Code Search")
+
+
+# --- Phase 17: Next-Gen Binary Decompilation, Advanced Apple Analysis & Hardware CLI Commands ---
+
+
+@binary_app.command("kuna-decompile")
+def binary_kuna_decompile_cmd(
+    ctx: typer.Context,
+    library: str = typer.Option(
+        ..., "--lib", "-l", help="Native library filename (e.g. libcrypto.so)."
+    ),
+    arch: str = typer.Option("arm64-v8a", "--arch", "-a", help="Target architecture."),
+    symbol: str | None = typer.Option(None, "--symbol", "-s", help="Symbol filter."),
+) -> None:
+    """Decompile native binary via Kuna fast Rust decompiler."""
+    state = _state(ctx)
+    args = {
+        "library_name": library,
+        "target_arch": arch,
+    }
+    if symbol:
+        args["symbol_filter"] = symbol
+    payload = asyncio.run(_invoke(_runtime(state), "kuna_rust_decompile", args))
+    _emit(state, payload, title="Kuna Rust Native Decompilation")
+
+
+@binary_app.command("retdec-decompile")
+def binary_retdec_decompile_cmd(
+    ctx: typer.Context,
+    library: str = typer.Option(..., "--lib", "-l", help="Native library filename."),
+    arch: str = typer.Option("arm64-v8a", "--arch", "-a", help="Target architecture."),
+) -> None:
+    """Decompile native binary via RetDec LLVM decompilation backend."""
+    state = _state(ctx)
+    args = {
+        "library_name": library,
+        "target_arch": arch,
+    }
+    payload = asyncio.run(_invoke(_runtime(state), "retdec_native_decompile", args))
+    _emit(state, payload, title="RetDec LLVM Native Decompilation")
+
+
+@binary_app.command("macho-demangle")
+def binary_macho_demangle_cmd(
+    ctx: typer.Context,
+    path: str = typer.Option(..., "--path", "-p", help="Path to Mach-O binary in IPA Payload."),
+) -> None:
+    """Demangle Swift/ObjC symbols and parse Mach-O headers via Malimite."""
+    state = _state(ctx)
+    args = {"binary_path": path}
+    payload = asyncio.run(_invoke(_runtime(state), "malimite_macho_demangle", args))
+    _emit(state, payload, title="Malimite Mach-O Symbol Demangling & Header Inspection")
+
+
+@binary_app.command("swift-sections")
+def binary_swift_sections_cmd(
+    ctx: typer.Context,
+    path: str = typer.Option(..., "--path", "-p", help="Path to Mach-O binary."),
+) -> None:
+    """Parse Mach-O Swift reflection sections and metadata."""
+    state = _state(ctx)
+    args = {"binary_path": path}
+    payload = asyncio.run(_invoke(_runtime(state), "macho_swift_section_parse", args))
+    _emit(state, payload, title="Mach-O Swift Reflection Section Parsing")
+
+
+@binary_app.command("objc-reconstruct")
+def binary_objc_reconstruct_cmd(
+    ctx: typer.Context,
+    path: str = typer.Option(..., "--path", "-p", help="Path to Mach-O binary."),
+) -> None:
+    """Reconstruct Objective-C class interfaces and class-dump headers."""
+    state = _state(ctx)
+    args = {"binary_path": path}
+    payload = asyncio.run(_invoke(_runtime(state), "objc_helper_macho_reconstruct", args))
+    _emit(state, payload, title="Objective-C Interface Reconstruction")
+
+
+@binary_app.command("gdb-session")
+def binary_gdb_session_cmd(
+    ctx: typer.Context,
+    action: str = typer.Option(
+        "start", "--action", help="start, command, breakpoint, registers, stop."
+    ),
+    target: str = typer.Option(..., "--target", "-t", help="Path to target binary."),
+    session_id: str | None = typer.Option(None, "--session-id", help="Active session ID."),
+    command: str | None = typer.Option(None, "--command", "-c", help="GDB/MI command."),
+    breakpoint: str | None = typer.Option(
+        None, "--breakpoint", "-b", help="Symbol or hex address."
+    ),
+) -> None:
+    """Automate native GDB/MI interactive debugging session."""
+    state = _state(ctx)
+    args: dict[str, Any] = {
+        "action": action,
+        "target_binary": target,
+    }
+    if session_id:
+        args["session_id"] = session_id
+    if command:
+        args["command_str"] = command
+    if breakpoint:
+        args["breakpoint_location"] = breakpoint
+    payload = asyncio.run(
+        _invoke(_runtime(state, "dynamic"), "native_gdb_mi_session", args, profile="dynamic")
+    )
+    _emit(state, payload, title="GDB/MI Debugger Session")
+
+
+@binary_app.command("objdump-dwarf")
+def binary_objdump_dwarf_cmd(
+    ctx: typer.Context,
+    target: str = typer.Option(..., "--target", "-t", help="Path to native ELF or Mach-O library."),
+    symbol: str | None = typer.Option(None, "--symbol", "-s", help="Target symbol to disassemble."),
+) -> None:
+    """Inspect native disassembly and DWARF debug line numbers via llvm-objdump."""
+    state = _state(ctx)
+    args: dict[str, Any] = {"target_file": target}
+    if symbol:
+        args["target_symbol"] = symbol
+    payload = asyncio.run(_invoke(_runtime(state), "native_objdump_dwarf_inspect", args))
+    _emit(state, payload, title="Native Objdump & DWARF Inspection")
+
+
+@binary_app.command("rizin-bridge")
+def binary_rizin_bridge_cmd(
+    ctx: typer.Context,
+    target: str = typer.Option(..., "--target", "-t", help="Path to native library."),
+) -> None:
+    """Bridge Rizin / Cutter headless for CFG graph extraction and radare2 analysis."""
+    state = _state(ctx)
+    args = {"target_file": target}
+    payload = asyncio.run(_invoke(_runtime(state), "engine_rizin_cutter_bridge", args))
+    _emit(state, payload, title="Rizin / Cutter Headless Analysis Bridge")
+
+
+@binary_app.command("ghidra-bridge")
+def binary_ghidra_bridge_cmd(
+    ctx: typer.Context,
+    target: str = typer.Option(..., "--target", "-t", help="Path to native library."),
+    script: str = typer.Option(
+        "DecompileHeadless.java", "--script", "-s", help="Ghidra analysis script."
+    ),
+) -> None:
+    """Run Ghidra headless decompiler bridge with Java analysis scripts."""
+    state = _state(ctx)
+    args = {"target_file": target, "analysis_script": script}
+    payload = asyncio.run(_invoke(_runtime(state), "engine_ghidra_headless_bridge", args))
+    _emit(state, payload, title="Ghidra Headless Decompiler Bridge")
+
+
+@binary_app.command("iot-extract")
+def binary_iot_extract_cmd(
+    ctx: typer.Context,
+    apk: str = typer.Option(..., "--apk", help="Path to companion APK."),
+) -> None:
+    """Extract embedded IoT firmware partitions, OTA blobs, and BLE keys from APK."""
+    state = _state(ctx)
+    args = {"apk_path": apk}
+    payload = asyncio.run(_invoke(_runtime(state), "iot_firmware_partition_extract", args))
+    _emit(state, payload, title="IoT Firmware Partition Extraction")
+
+
+@binary_app.command("lock-bypass")
+def binary_lock_bypass_cmd(
+    ctx: typer.Context,
+    device: str = typer.Option(..., "--device", "-d", help="ADB device serial."),
+) -> None:
+    """Bypass lockscreen via ADB gesture/keyguard clearing."""
+    state = _state(ctx)
+    args = {"device_id": device}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "dynamic"), "device_lock_bypass_adb", args, profile="dynamic")
+    )
+    _emit(state, payload, title="ADB Lockscreen Keyguard Bypass")
+
+
+@binary_app.command("lock-bruteforce")
+def binary_lock_bruteforce_cmd(
+    ctx: typer.Context,
+    device: str = typer.Option(..., "--device", "-d", help="ADB device serial."),
+    digits: int = typer.Option(4, "--digits", help="PIN length (4-6 digits)."),
+) -> None:
+    """Perform dictionary/brute-force ADB lockscreen PIN test."""
+    state = _state(ctx)
+    args = {"device_id": device, "max_digits": digits}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "dynamic"), "device_lock_bruteforce_adb", args, profile="dynamic")
+    )
+    _emit(state, payload, title="ADB Lockscreen PIN Brute-force")
+
+
+@binary_app.command("ducky-payload")
+def binary_ducky_payload_cmd(
+    ctx: typer.Context,
+    pin: str = typer.Option("1234", "--pin", help="Target PIN for HID injection."),
+) -> None:
+    """Generate USB Rubber Ducky / BadUSB keystroke injection scripts for lockscreens."""
+    state = _state(ctx)
+    args = {"target_pin": pin}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "dynamic"), "device_hid_ducky_payload_gen", args, profile="dynamic")
+    )
+    _emit(state, payload, title="USB Rubber Ducky HID Keystroke Payload")
+
+
+@binary_app.command("gatekeeper-clear")
+def binary_gatekeeper_clear_cmd(
+    ctx: typer.Context,
+    device: str = typer.Option(..., "--device", "-d", help="ADB device serial."),
+) -> None:
+    """Clear Android Gatekeeper/Locksettings credentials (root ADB required)."""
+    state = _state(ctx)
+    args = {"device_id": device}
+    payload = asyncio.run(
+        _invoke(
+            _runtime(state, "dynamic"),
+            "device_gatekeeper_credential_clear",
+            args,
+            profile="dynamic",
+        )
+    )
+    _emit(state, payload, title="Gatekeeper Locksettings Credential Clear")
+
+
+@binary_app.command("xposed-hook")
+def binary_xposed_hook_cmd(
+    ctx: typer.Context,
+    device: str = typer.Option(..., "--device", "-d", help="ADB device serial."),
+) -> None:
+    """Inject LSPosed / Xposed runtime hook to bypass KeyguardManager isDeviceLocked."""
+    state = _state(ctx)
+    args = {"device_id": device}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "dynamic"), "xposed_unlock_hook_inject", args, profile="dynamic")
+    )
+    _emit(state, payload, title="LSPosed/Xposed Keyguard Unlock Hook Injection")
+
+
+@binary_app.command("nanobot-daemon")
+def binary_nanobot_daemon_cmd(
+    ctx: typer.Context,
+    action: str = typer.Option("status", "--action", help="start, stop, status, schedule_cron."),
+    cron: str | None = typer.Option(None, "--cron", help="Cron schedule expression."),
+    job: str | None = typer.Option(None, "--job", help="Job identifier."),
+) -> None:
+    """Manage ultra-lightweight autonomous Nanobot background cron tasks."""
+    state = _state(ctx)
+    args: dict[str, Any] = {"action": action}
+    if cron:
+        args["cron_expression"] = cron
+    if job:
+        args["job_name"] = job
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "nanobot_daemon_ctl", args, profile="admin")
+    )
+    _emit(state, payload, title="Nanobot Autonomous Background Daemon")
+
+
+@binary_app.command("nanobot-notify")
+def binary_nanobot_notify_cmd(
+    ctx: typer.Context,
+    channel: str = typer.Option("telegram", "--channel", help="telegram, slack, discord."),
+    title: str = typer.Option(..., "--title", help="Alert title."),
+    message: str = typer.Option(..., "--message", "-m", help="Alert message body."),
+    severity: str = typer.Option("HIGH", "--severity", help="Severity level."),
+) -> None:
+    """Dispatch real-time chat alert notifications via Nanobot integrations."""
+    state = _state(ctx)
+    args = {
+        "channel": channel,
+        "title": title,
+        "message": message,
+        "severity": severity,
+    }
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "nanobot_notify_dispatch", args, profile="admin")
+    )
+    _emit(state, payload, title="Nanobot Real-Time Chat Alert Dispatch")
+
+
+@binary_app.command("lastbook")
+def binary_lastbook_cmd(
+    ctx: typer.Context,
+    query: str = typer.Option(..., "--query", "-q", help="Search query."),
+    category: str = typer.Option(
+        "mastg",
+        "--category",
+        "-c",
+        help="mastg, permissions, opcodes_arm64, opcodes_dalvik, cve_dict.",
+    ),
+) -> None:
+    """Query Lastbook air-gapped offline reversing cheat-sheets and specifications."""
+    state = _state(ctx)
+    args = {
+        "query": query,
+        "category": category,
+    }
+    payload = asyncio.run(_invoke(_runtime(state), "airgap_lastbook_query", args))
+    _emit(state, payload, title="Lastbook Air-Gapped Offline Knowledge Base")
+
+
+# --- Phase 18: Autonomous UI Reconstruction, Living Canvas & Cross-Platform Re-Engineering CLI Commands ---
+
+
+@canvas_app.command("stitch-modernize")
+def canvas_stitch_modernize_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    layout_xml: str = typer.Option(
+        "<LinearLayout></LinearLayout>", "--layout", "-l", help="XML layout snippet."
+    ),
+    framework: str = typer.Option(
+        "jetpack_compose", "--framework", "-f", help="jetpack_compose, react_native, flutter."
+    ),
+) -> None:
+    """Modernize legacy Android XML layout into modern Compose/React Native via Google Stitch."""
+    state = _state(ctx)
+    args = {
+        "project_id": project_id,
+        "layout_xml": layout_xml,
+        "target_framework": framework,
+    }
+    payload = asyncio.run(_invoke(_runtime(state), "stitch_ui_modernize", args))
+    _emit(state, payload, title="Google Stitch UI Modernization")
+
+
+@canvas_app.command("stitch-spec")
+def canvas_stitch_spec_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    theme: str = typer.Option("MaterialTheme", "--theme", "-t", help="Theme name."),
+) -> None:
+    """Export DESIGN.md design token and component catalog specifications."""
+    state = _state(ctx)
+    args = {"project_id": project_id, "theme_name": theme}
+    payload = asyncio.run(_invoke(_runtime(state), "stitch_design_spec_export", args))
+    _emit(state, payload, title="Google Stitch DESIGN.md Token Specification")
+
+
+@canvas_app.command("hig-audit")
+def canvas_hig_audit_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    view: str = typer.Option(
+        "MainScreen", "--view", "-v", help="Target view or screen identifier."
+    ),
+) -> None:
+    """Audit mobile UI layout against Apple Human Interface Guidelines."""
+    state = _state(ctx)
+    args = {"project_id": project_id, "target_view": view}
+    payload = asyncio.run(_invoke(_runtime(state), "hig_doctor_compliance_audit", args))
+    _emit(state, payload, title="Apple HIG Doctor Compliance Audit")
+
+
+@canvas_app.command("liquid-glass")
+def canvas_liquid_glass_cmd(
+    ctx: typer.Context,
+    name: str = typer.Option("GlassCard", "--name", "-n", help="Widget name."),
+    framework: str = typer.Option("flutter", "--framework", "-f", help="flutter or swiftui."),
+) -> None:
+    """Synthesize modern Liquid Glass widget with authentic fragment shader blurs."""
+    state = _state(ctx)
+    args = {"widget_name": name, "framework": framework}
+    payload = asyncio.run(_invoke(_runtime(state), "ui_liquid_glass_widget_gen", args))
+    _emit(state, payload, title="Liquid Glass Shader Widget Generator")
+
+
+@canvas_app.command("bento-grid")
+def canvas_bento_grid_cmd(
+    ctx: typer.Context,
+    title: str = typer.Option("App Audit Overview", "--title", "-t", help="Bento grid title."),
+) -> None:
+    """Render Apple-inspired Bento Grid presentation cards for audit metrics."""
+    state = _state(ctx)
+    args = {"grid_title": title, "metrics": {"security_score": "A", "exported_components": 3}}
+    payload = asyncio.run(_invoke(_runtime(state), "ui_bento_grid_summary_render", args))
+    _emit(state, payload, title="Apple Bento Grid Dashboard Presentation")
+
+
+@canvas_app.command("clean-lint")
+def canvas_clean_lint_cmd(
+    ctx: typer.Context,
+    file_path: str = typer.Option(..., "--file", "-f", help="Target file path."),
+    code: str = typer.Option("class MainActivity {}", "--code", "-c", help="Source code snippet."),
+) -> None:
+    """Refactor and lint decompiled code against Clean Architecture & DDD principles."""
+    state = _state(ctx)
+    args = {"file_path": file_path, "source_code": code}
+    payload = asyncio.run(_invoke(_runtime(state), "reconstruct_clean_arch_lint", args))
+    _emit(state, payload, title="Clean Architecture & DDD Refactoring Linter")
+
+
+@canvas_app.command("clean-spec")
+def canvas_clean_spec_cmd(
+    ctx: typer.Context,
+    module: str = typer.Option(..., "--module", "-m", help="Module or component name."),
+    context: str = typer.Option(
+        "Auth subsystem context", "--context", "-c", help="Decompiled context."
+    ),
+) -> None:
+    """Synthesize clean-room non-infringing functional specifications."""
+    state = _state(ctx)
+    args = {"module_name": module, "decompiled_context": context}
+    payload = asyncio.run(_invoke(_runtime(state), "clean_room_spec_extract", args))
+    _emit(state, payload, title="Clean-Room Functional Specification")
+
+
+@canvas_app.command("viewport-match")
+def canvas_viewport_match_cmd(
+    ctx: typer.Context,
+    screen: str = typer.Option(..., "--screen", "-s", help="Screen name to validate."),
+) -> None:
+    """Validate reconstructed layouts across phone, foldable, and tablet viewports."""
+    state = _state(ctx)
+    args = {"screen_name": screen}
+    payload = asyncio.run(_invoke(_runtime(state), "ui_multi_viewport_match", args))
+    _emit(state, payload, title="Multi-Viewport Semantic AST Layout Matcher")
+
+
+@canvas_app.command("tokens-extract")
+def canvas_tokens_extract_cmd(
+    ctx: typer.Context,
+    apk: str = typer.Option(..., "--apk", help="Path to APK file."),
+) -> None:
+    """Extract design palettes, typography scales, and spacing tokens into tokens.json."""
+    state = _state(ctx)
+    args = {"apk_path": apk}
+    payload = asyncio.run(_invoke(_runtime(state), "assets_palette_typography_extract", args))
+    _emit(state, payload, title="Design Token & Typography Extractor")
+
+
+@canvas_app.command("unity-dump")
+def canvas_unity_dump_cmd(
+    ctx: typer.Context,
+    package: str = typer.Option(..., "--package", "-p", help="Target package name."),
+) -> None:
+    """Extract Unity serialized assets, AssetBundles, and C# scripts from game APK."""
+    state = _state(ctx)
+    args = {"package_name": package}
+    payload = asyncio.run(_invoke(_runtime(state), "game_unity_asset_dump", args))
+    _emit(state, payload, title="Unity Game Asset & Script Dumper")
+
+
+@canvas_app.command("godot-extract")
+def canvas_godot_extract_cmd(
+    ctx: typer.Context,
+    package: str = typer.Option(..., "--package", "-p", help="Target package name."),
+) -> None:
+    """Unpack embedded Godot .pck archives and GDScript sources."""
+    state = _state(ctx)
+    args = {"package_name": package}
+    payload = asyncio.run(_invoke(_runtime(state), "game_godot_pck_extract", args))
+    _emit(state, payload, title="Godot PCK Archive Extractor")
+
+
+@canvas_app.command("sqlite-forensics")
+def canvas_sqlite_forensics_cmd(
+    ctx: typer.Context,
+    db: str = typer.Option(..., "--db", "-d", help="Path to SQLite database file."),
+    key: str | None = typer.Option(None, "--key", "-k", help="Optional SQLCipher key."),
+) -> None:
+    """Forensically recover mobile SQLite tables, WAL journal records, and SQLCipher keys."""
+    state = _state(ctx)
+    args: dict[str, Any] = {"database_path": db}
+    if key:
+        args["encryption_key"] = key
+    payload = asyncio.run(_invoke(_runtime(state), "db_sqlite_forensic_extract", args))
+    _emit(state, payload, title="Mobile SQLite & SQLCipher Forensics")
+
+
+@canvas_app.command("docmd-compile")
+def canvas_docmd_compile_cmd(
+    ctx: typer.Context,
+    project_id: str = typer.Option(..., "--project-id", "-p", help="Target project ID."),
+    title: str = typer.Option("RAA Intelligence Portal", "--title", "-t", help="Portal title."),
+) -> None:
+    """Compile workspace docs into single-source static portal and llms.txt context file."""
+    state = _state(ctx)
+    args = {"project_id": project_id, "title": title}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "docmd_llms_txt_compile", args, profile="admin")
+    )
+    _emit(state, payload, title="docmd Portal & llms.txt Context Compiler")
+
+
+@canvas_app.command("skill-evolve")
+def canvas_skill_evolve_cmd(
+    ctx: typer.Context,
+    skill: str = typer.Option(..., "--skill", "-s", help="Skill name to evolve."),
+    feedback: list[str] = typer.Option(
+        [], "--feedback", "-f", help="User corrections and feedback."
+    ),
+) -> None:
+    """Analyze session corrections to propose automated self-evolution prompt diffs."""
+    state = _state(ctx)
+    args = {"skill_name": skill, "feedback_history": feedback}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "task_observer_skill_evolve", args, profile="admin")
+    )
+    _emit(state, payload, title="Task Observer Skill Self-Evolution Meta-Agent")
+
+
+@canvas_app.command("coworker-dot")
+def canvas_coworker_dot_cmd(
+    ctx: typer.Context,
+    action: str = typer.Option("connect", "--action", "-a", help="connect, status, disconnect."),
+) -> None:
+    """Manage WebRTC audio/video session with persistent reversing coworker (RAA Dot)."""
+    state = _state(ctx)
+    args = {"action": action}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "dynamic"), "dot_coworker_webrtc_session", args, profile="dynamic")
+    )
+    _emit(state, payload, title="RAA Dot Persistent Reversing Coworker")
+
+
+@canvas_app.command("ekko-pipeline")
+def canvas_ekko_pipeline_cmd(
+    ctx: typer.Context,
+    graph: str = typer.Option(..., "--graph", "-g", help="Visual node graph name."),
+) -> None:
+    """Execute visual node-based reversing workflow graphs from Ekko Studio."""
+    state = _state(ctx)
+    args = {"graph_name": graph}
+    payload = asyncio.run(_invoke(_runtime(state), "ekko_canvas_pipeline_run", args))
+    _emit(state, payload, title="Ekko Studio Visual Node Pipeline Runner")
+
+
+@canvas_app.command("tui-codewhale")
+def canvas_tui_codewhale_cmd(
+    ctx: typer.Context,
+    action: str = typer.Option("launch", "--action", "-a", help="launch, status, detach."),
+) -> None:
+    """Manage Codewhale high-performance terminal TUI session with subagent monitoring."""
+    state = _state(ctx)
+    args = {"action": action}
+    payload = asyncio.run(_invoke(_runtime(state), "tui_codewhale_session", args))
+    _emit(state, payload, title="Codewhale Terminal TUI Session")
+
+
+@canvas_app.command("receipt-sign")
+def canvas_receipt_sign_cmd(
+    ctx: typer.Context,
+    tool: str = typer.Option(..., "--tool", "-t", help="Tool name."),
+    input_data: str = typer.Option("{}", "--input", "-i", help="Input data string."),
+    output_data: str = typer.Option("{}", "--output", "-o", help="Output data string."),
+) -> None:
+    """Generate SHA-256 HMAC cryptographic execution receipt for audit compliance."""
+    state = _state(ctx)
+    args = {
+        "tool_name": tool,
+        "input_data": input_data,
+        "output_data": output_data,
+    }
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "receipt_cryptographic_sign", args, profile="admin")
+    )
+    _emit(state, payload, title="Cryptographic Execution Receipt Signer")
+
+
+@canvas_app.command("sodu-cicd")
+def canvas_sodu_cicd_cmd(
+    ctx: typer.Context,
+    apk: str = typer.Option(..., "--apk", help="Target APK path."),
+    recipe: str = typer.Option("patch_root_bypass", "--recipe", "-r", help="Patch recipe."),
+) -> None:
+    """Execute closed-loop decompile-patch-build-verify pipeline with automated rollback."""
+    state = _state(ctx)
+    args = {"target_apk": apk, "patch_recipe": recipe}
+    payload = asyncio.run(_invoke(_runtime(state), "sodu_cicd_pipeline_run", args))
+    _emit(state, payload, title="Sodu Closed-Loop Decompile-Patch-Build Pipeline")
+
+
+@canvas_app.command("gh-actions-gen")
+def canvas_gh_actions_gen_cmd(
+    ctx: typer.Context,
+    name: str = typer.Option("MobileApp", "--name", "-n", help="Application name."),
+) -> None:
+    """Generate GitHub Actions CI/CD workflow YAML for Android building and v2/v3 signing."""
+    state = _state(ctx)
+    args = {"app_name": name}
+    payload = asyncio.run(_invoke(_runtime(state), "gh_actions_build_android", args))
+    _emit(state, payload, title="GitHub Actions Rebuild & Sign Workflow Generator")
+
+
+# --- Phase 19: Enterprise MCP & Multi-Harness CLI Ecosystem CLI Commands ---
+
+
+@enterprise_app.command("postman-run")
+def enterprise_postman_run_cmd(
+    ctx: typer.Context,
+    collection: str = typer.Option(
+        ..., "--collection", "-c", help="Path to Postman collection JSON."
+    ),
+) -> None:
+    """Execute Postman API collection and assertions via Postman MCP."""
+    state = _state(ctx)
+    args = {"collection_path": collection}
+    payload = asyncio.run(_invoke(_runtime(state), "mcp_postman_collection_run", args))
+    _emit(state, payload, title="Postman MCP API Test Collection Runner")
+
+
+@enterprise_app.command("postman-assert")
+def enterprise_postman_assert_cmd(
+    ctx: typer.Context,
+    endpoint: str = typer.Option(..., "--endpoint", "-e", help="Endpoint URL to test."),
+    status: int = typer.Option(200, "--status", "-s", help="Expected HTTP status code."),
+) -> None:
+    """Validate API endpoint responses against expected security contracts."""
+    state = _state(ctx)
+    args = {"endpoint_url": endpoint, "expected_status": status}
+    payload = asyncio.run(_invoke(_runtime(state), "mcp_postman_test_assert", args))
+    _emit(state, payload, title="Postman Living Contract Assertion Tester")
+
+
+@enterprise_app.command("github-pr")
+def enterprise_github_pr_cmd(
+    ctx: typer.Context,
+    repo: str = typer.Option(..., "--repo", "-r", help="Repository (owner/repo)."),
+    title: str = typer.Option(..., "--title", "-t", help="PR title."),
+    head: str = typer.Option(..., "--head", "-h", help="Head feature branch."),
+    base: str = typer.Option("main", "--base", "-b", help="Base branch."),
+) -> None:
+    """Manage Git repositories and open Pull Requests via GitHub MCP."""
+    state = _state(ctx)
+    args = {"repo": repo, "title": title, "head_branch": head, "base_branch": base}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "mcp_github_pr_manage", args, profile="admin")
+    )
+    _emit(state, payload, title="GitHub MCP Pull Request Manager")
+
+
+@enterprise_app.command("playwright-webview")
+def enterprise_playwright_webview_cmd(
+    ctx: typer.Context,
+    url: str = typer.Option(..., "--url", "-u", help="Target WebView or companion URL."),
+) -> None:
+    """Control in-app WebViews and intercept OAuth tokens via Playwright MCP."""
+    state = _state(ctx)
+    args = {"target_url": url, "capture_oauth": True}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "dynamic"), "mcp_playwright_webview_test", args, profile="dynamic")
+    )
+    _emit(state, payload, title="Playwright MCP WebView & OAuth Tester")
+
+
+@enterprise_app.command("apify-scrape")
+def enterprise_apify_scrape_cmd(
+    ctx: typer.Context,
+    app_id: str = typer.Option(..., "--app-id", "-a", help="Target application package ID."),
+    store: str = typer.Option(
+        "google_play", "--store", "-s", help="google_play or apple_app_store."
+    ),
+) -> None:
+    """Scrape Google Play and App Store intelligence via Apify MCP."""
+    state = _state(ctx)
+    args = {"app_id": app_id, "store": store}
+    payload = asyncio.run(_invoke(_runtime(state), "mcp_apify_store_scrape", args))
+    _emit(state, payload, title="Apify MCP App Store Intelligence Scraper")
+
+
+@enterprise_app.command("cli-dispatch")
+def enterprise_cli_dispatch_cmd(
+    ctx: typer.Context,
+    harness: str = typer.Option(
+        "claude_code",
+        "--harness",
+        "-h",
+        help="claude_code, codex, gemini_cli, antigravity, deepseek_cli, minimax_cli, grok_build.",
+    ),
+    task: str = typer.Option(..., "--task", "-t", help="Task instruction string."),
+) -> None:
+    """Dispatch tasks to external coding CLIs via unified 7-CLI gateway."""
+    state = _state(ctx)
+    args = {"harness": harness, "task_instruction": task}
+    payload = asyncio.run(_invoke(_runtime(state), "cli_harness_dispatch", args))
+    _emit(state, payload, title="Universal Multi-Harness 7-CLI Gateway")
+
+
+@enterprise_app.command("omnigent-enforce")
+def enterprise_omnigent_enforce_cmd(
+    ctx: typer.Context,
+    agent_id: str = typer.Option(..., "--agent-id", "-a", help="Agent identifier."),
+    action: str = typer.Option(..., "--action", help="Action requested."),
+) -> None:
+    """Validate and enforce fail-closed security and budget policies via Omnigent."""
+    state = _state(ctx)
+    args = {"agent_id": agent_id, "requested_action": action}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "omnigent_meta_policy_enforce", args, profile="admin")
+    )
+    _emit(state, payload, title="Omnigent Meta-Policy & Boundary Enforcer")
+
+
+@enterprise_app.command("nacos-register")
+def enterprise_nacos_register_cmd(
+    ctx: typer.Context,
+    service: str = typer.Option("raa-mcp-service", "--service", "-s", help="Service name."),
+    tools: int = typer.Option(312, "--tools", "-t", help="Number of registered tools."),
+) -> None:
+    """Register RAA MCP tool capabilities into enterprise Nacos service registries."""
+    state = _state(ctx)
+    args = {"service_name": service, "tools_count": tools}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "spring_ai_nacos_register", args, profile="admin")
+    )
+    _emit(state, payload, title="Spring AI Nacos Service Discovery Registry")
+
+
+@enterprise_app.command("n8n-sync")
+def enterprise_n8n_sync_cmd(
+    ctx: typer.Context,
+    workflow: str = typer.Option(..., "--workflow", "-w", help="n8n workflow name."),
+    trigger: str = typer.Option(
+        "vulnerability_found", "--trigger", "-t", help="Trigger event name."
+    ),
+) -> None:
+    """Emit and synchronize n8n workflow definitions as code (n8nac)."""
+    state = _state(ctx)
+    args = {"workflow_name": workflow, "trigger_event": trigger}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "n8n_workflow_bridge_sync", args, profile="admin")
+    )
+    _emit(state, payload, title="Enterprise n8n Workflow Automation Bridge")
+
+
+@enterprise_app.command("wasm-sandbox")
+def enterprise_wasm_sandbox_cmd(
+    ctx: typer.Context,
+    plugin: str = typer.Option(..., "--plugin", "-p", help="WASM plugin name."),
+    hex_bytes: str = typer.Option("0061736d", "--bytes", "-b", help="Hex-encoded WASM bytes."),
+) -> None:
+    """Execute third-party inspection plugins inside isolated WASM sandbox."""
+    state = _state(ctx)
+    args = {"plugin_name": plugin, "plugin_bytes_hex": hex_bytes}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "engine_wasm_plugin_sandbox", args, profile="admin")
+    )
+    _emit(state, payload, title="WebAssembly (WASM) Sandboxed Tool Runtime")
+
+
+@enterprise_app.command("simd-entropy")
+def enterprise_simd_entropy_cmd(
+    ctx: typer.Context,
+    target: str = typer.Option(..., "--target", "-t", help="Target binary path."),
+) -> None:
+    """Scan raw binary sections for Shannon entropy heatmaps and packing via SIMD."""
+    state = _state(ctx)
+    args = {"target_binary": target}
+    payload = asyncio.run(_invoke(_runtime(state), "binary_byte_search_entropy", args))
+    _emit(state, payload, title="SIMD Byte Search & Entropy Analysis Engine")
+
+
+@enterprise_app.command("mutation-guard")
+def enterprise_mutation_guard_cmd(
+    ctx: typer.Context,
+    file_path: str = typer.Option(..., "--file", "-f", help="Target file path."),
+    pre_hex: str = typer.Option("414141", "--pre", help="Hex bytes before patch."),
+    post_hex: str = typer.Option("424242", "--post", help="Hex bytes after patch."),
+) -> None:
+    """Enforce pre/post mutation verification SHA-256 guardrails."""
+    state = _state(ctx)
+    args = {"file_path": file_path, "pre_data_hex": pre_hex, "post_data_hex": post_hex}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "forensic_mutation_digest_guard", args, profile="admin")
+    )
+    _emit(state, payload, title="Forensic Mutation Digest Guardrail")
+
+
+# --- Phase 20: Offensive Security Operations & Benchmarks CLI ---
+
+
+@offensive_app.command("yak-run")
+def offensive_yak_run_cmd(
+    ctx: typer.Context,
+    playbook: str = typer.Option(..., "--playbook", "-p", help="Yaklang playbook name."),
+    endpoint: str = typer.Option(..., "--endpoint", "-e", help="Target API endpoint URL."),
+) -> None:
+    """Execute automated penetration testing playbooks via Yaklang HackSkills."""
+    state = _state(ctx)
+    args = {"playbook_name": playbook, "target_endpoint": endpoint}
+    payload = asyncio.run(_invoke(_runtime(state), "hack_yak_skill_run", args))
+    _emit(state, payload, title="Yaklang HackSkills Offensive Penetration Playbook")
+
+
+@offensive_app.command("mutate-403")
+def offensive_mutate_403_cmd(
+    ctx: typer.Context,
+    url: str = typer.Option(..., "--url", "-u", help="401/403 restricted URL to mutate."),
+) -> None:
+    """Perform deep HTTP 401/403 access control bypass mutations."""
+    state = _state(ctx)
+    args = {"target_url": url}
+    payload = asyncio.run(_invoke(_runtime(state), "hack_403_deep_mutate", args))
+    _emit(state, payload, title="Deep HTTP 401/403 Access Control Bypass Mutator")
+
+
+@offensive_app.command("computer-use")
+def offensive_computer_use_cmd(
+    ctx: typer.Context,
+    app: str = typer.Option(
+        ..., "--app", "-a", help="Target application: ghidra, ida_pro, jadx_gui, burp_suite."
+    ),
+    task: str = typer.Option(..., "--task", "-t", help="Autonomous reversing task description."),
+) -> None:
+    """Operate desktop GUI reversing tools via autonomous OS computer-use."""
+    state = _state(ctx)
+    args = {"target_application": app, "task_description": task}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "dynamic"), "computer_use_gui_execute", args, profile="dynamic")
+    )
+    _emit(state, payload, title="Autonomous Computer-Use GUI Reversing Operator")
+
+
+@offensive_app.command("frontier-mode")
+def offensive_frontier_mode_cmd(
+    ctx: typer.Context,
+    mode: str = typer.Option(..., "--mode", "-m", help="Desired mode: react_fast or swarm_deep."),
+    reason: str = typer.Option(
+        "CLI invocation", "--reason", "-r", help="Justification for mode switch."
+    ),
+) -> None:
+    """Dynamically toggle between single-agent ReAct and multi-agent swarm paradigms."""
+    state = _state(ctx)
+    args = {"desired_mode": mode, "reason": reason}
+    payload = asyncio.run(_invoke(_runtime(state), "frontier_mode_switch", args))
+    _emit(state, payload, title="FrontierAgent Dual ReAct / Swarm Switcher")
+
+
+@offensive_app.command("gatekeeper-prompt")
+def offensive_gatekeeper_prompt_cmd(
+    ctx: typer.Context,
+    operation: str = typer.Option(..., "--operation", "-o", help="Operation name to inspect."),
+    preview: str = typer.Option(..., "--preview", "-p", help="Payload preview or diff."),
+) -> None:
+    """Generate OpenMausBot human-in-the-loop impact review and diff preview."""
+    state = _state(ctx)
+    args = {"operation_name": operation, "payload_preview": preview}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "mausbot_gatekeeper_prompt", args, profile="admin")
+    )
+    _emit(state, payload, title="OpenMausBot Safe Execution Gatekeeper & Diff Prompt")
+
+
+@offensive_app.command("exploit-verify")
+def offensive_exploit_verify_cmd(
+    ctx: typer.Context,
+    vuln_id: str = typer.Option(..., "--vuln-id", "-v", help="Vulnerability identifier."),
+    steps: list[str] = typer.Option([], "--step", "-s", help="Step in proposed exploit chain."),
+) -> None:
+    """Verify non-destructive exploit PoC chain and validate safety boundaries."""
+    state = _state(ctx)
+    args = {"vulnerability_id": vuln_id, "proposed_chain": steps}
+    payload = asyncio.run(_invoke(_runtime(state), "exploit_chain_verify", args))
+    _emit(state, payload, title="Non-Destructive Exploit PoC Chaining & Validator")
+
+
+@offensive_app.command("skillnet-eval")
+def offensive_skillnet_eval_cmd(
+    ctx: typer.Context,
+    suite: str = typer.Option(
+        "full_reverse_gym", "--suite", "-s", help="Evaluation benchmark suite name."
+    ),
+) -> None:
+    """Evaluate agent skill competencies across SkillNet benchmark gym."""
+    state = _state(ctx)
+    args = {"benchmark_suite": suite}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "skillnet_benchmark_eval", args, profile="admin")
+    )
+    _emit(state, payload, title="SkillNet Systematic Benchmark & Evaluation Gym")
+
+
+@offensive_app.command("skillpack")
+def offensive_skillpack_cmd(
+    ctx: typer.Context,
+    action: str = typer.Option(
+        "list", "--action", "-a", help="Action: package, validate, install, list."
+    ),
+    name: str = typer.Option("mobile_exploit_pack", "--name", "-n", help="SkillPack bundle name."),
+) -> None:
+    """Manage portable reverse engineering SkillPack distribution bundles."""
+    state = _state(ctx)
+    args = {"action": action, "skillpack_name": name}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "skillpack_bundle_manage", args, profile="admin")
+    )
+    _emit(state, payload, title="Portable Reversing SkillPack Packaging & Distribution")
+
+
+@offensive_app.command("tamper-seal")
+def offensive_tamper_seal_cmd(
+    ctx: typer.Context,
+    report: str = typer.Option(
+        ..., "--report", "-r", help="Audit report markdown or JSON content."
+    ),
+) -> None:
+    """Generate SHA-256 tamper seal and CycloneDX 1.5 SBOM manifest for audit report."""
+    state = _state(ctx)
+    args = {"report_content": report}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "audit_tamper_seal_v3", args, profile="admin")
+    )
+    _emit(state, payload, title="v3.0 Tamper-Evident Report Seal & Final Manifest")
+
+
+@offensive_app.command("benchmark-v3")
+def offensive_benchmark_v3_cmd(
+    ctx: typer.Context,
+    env: str = typer.Option("production", "--env", "-e", help="Target verification environment."),
+) -> None:
+    """Execute v3.0 production quality benchmark across all 322 tools."""
+    state = _state(ctx)
+    args = {"target_environment": env}
+    payload = asyncio.run(
+        _invoke(_runtime(state, "admin"), "v3_full_system_benchmark", args, profile="admin")
+    )
+    _emit(state, payload, title="v3.0 Full-System Benchmark & Production Quality Gate")
 
 
 async def _run_stdio(runtime: Runtime, profile: ProfileName) -> None:

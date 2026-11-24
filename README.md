@@ -1,7 +1,7 @@
 <h1 align="center">RAA — Reverse Android Anything</h1>
 
 <p align="center">
-  <strong>Agent-Native Multi-Platform Application Intelligence, Decompilation, UI Reconstruction & Security Engineering Platform</strong>
+  <strong>Autonomous Mobile Application Intelligence, Next-Gen Decompilation, Living Canvas UI Reconstruction & Offensive Security Operations Platform</strong>
 </p>
 
 <p align="center">
@@ -9,141 +9,187 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Current_Release-v2.0.0_Production-success?style=flat-square" alt="Current Release: v2.0.0 Production">
-  <img src="https://img.shields.io/badge/Total_Tools-244_Implemented-blue?style=flat-square" alt="Total Tools: 244 Implemented">
-  <img src="https://img.shields.io/badge/Tests-437_Passing-brightgreen?style=flat-square" alt="Tests: 437 Passing">
-</p>
-<p align="center">
-  <img src="https://img.shields.io/badge/Protocol-2026--07--28-informational?style=flat-square" alt="Protocol: 2026-07-28">
-  <img src="https://img.shields.io/badge/License-MIT-4c1?style=flat-square" alt="License: MIT">
+  <a href="RELEASES.md"><img src="https://img.shields.io/badge/Release-v3.0.0_Production-00c853?style=for-the-badge&logo=github&logoColor=white" alt="Release: v3.0.0 Production"></a>
+  <a href="docs/TOOLS_INTEGRATION_AND_TEST_SCENARIOS.md"><img src="https://img.shields.io/badge/Total_Tools-322_Implemented-2979ff?style=for-the-badge&logo=wakatime&logoColor=white" alt="Total Tools: 322 Implemented"></a>
+  <a href="docs/CLI_REFERENCE.md"><img src="https://img.shields.io/badge/CLI_Commands-311_Commands-ff6d00?style=for-the-badge&logo=gnubash&logoColor=white" alt="CLI Commands: 311 Commands"></a>
+  <a href="#-verification--quality-gates"><img src="https://img.shields.io/badge/Tests-526_Passing_100%25-00e676?style=for-the-badge&logo=pytest&logoColor=white" alt="Tests: 526 Passing"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-aa00ff?style=for-the-badge&logo=open-source-initiative&logoColor=white" alt="License: MIT"></a>
 </p>
 
 <p align="center">
-  <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-0.115-009688?style=flat&logo=fastapi&logoColor=white" alt="FastAPI"></a>
-  <a href="https://www.python.org"><img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white" alt="Python"></a>
-  <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-2.3-4A154B?style=flat&logo=anthropic&logoColor=white" alt="MCP"></a>
-  <a href="https://docs.pydantic.dev"><img src="https://img.shields.io/badge/Pydantic-2.10-E92063?style=flat&logo=pydantic&logoColor=white" alt="Pydantic"></a>
-  <a href="https://typer.tiangolo.com"><img src="https://img.shields.io/badge/Typer-0.12-2C3E50?style=flat&logo=gnubash&logoColor=white" alt="Typer"></a>
-  <a href="https://www.docker.com"><img src="https://img.shields.io/badge/Docker-Sandbox-2496ED?style=flat&logo=docker&logoColor=white" alt="Docker"></a>
+  <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI"></a>
+  <a href="https://www.python.org"><img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-Protocol_2026--07--28-4A154B?style=flat-square&logo=anthropic&logoColor=white" alt="MCP"></a>
+  <a href="https://docs.pydantic.dev"><img src="https://img.shields.io/badge/Pydantic-2.14-E92063?style=flat-square&logo=pydantic&logoColor=white" alt="Pydantic"></a>
+  <a href="https://typer.tiangolo.com"><img src="https://img.shields.io/badge/Typer-0.29-2C3E50?style=flat-square&logo=gnubash&logoColor=white" alt="Typer"></a>
+  <a href="https://www.docker.com"><img src="https://img.shields.io/badge/Docker-Sandbox-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker"></a>
+  <a href="https://www.sqlite.org"><img src="https://img.shields.io/badge/SQLite-3-003B57?style=flat-square&logo=sqlite&logoColor=white" alt="SQLite"></a>
+  <a href="https://developer.android.com"><img src="https://img.shields.io/badge/Android-16_Ready-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android"></a>
+  <a href="https://developer.apple.com/ios/"><img src="https://img.shields.io/badge/Apple_iOS-IPA_&_Mach--O-000000?style=flat-square&logo=apple&logoColor=white" alt="Apple iOS"></a>
+  <a href="https://developer.harmonyos.com"><img src="https://img.shields.io/badge/HarmonyOS-ArkTS_Panda-C7000B?style=flat-square&logo=huawei&logoColor=white" alt="HarmonyOS"></a>
 </p>
+
 <p align="center">
-  <a href="https://www.sqlite.org"><img src="https://img.shields.io/badge/SQLite-3-003B57?style=flat&logo=sqlite&logoColor=white" alt="SQLite"></a>
-  <a href="https://developer.android.com"><img src="https://img.shields.io/badge/Android-16_Ready-3DDC84?style=flat&logo=android&logoColor=white" alt="Android"></a>
-  <a href="https://developer.apple.com/ios/"><img src="https://img.shields.io/badge/Apple_iOS-IPA-000000?style=flat&logo=apple&logoColor=white" alt="Apple iOS"></a>
-  <a href="https://developer.harmonyos.com"><img src="https://img.shields.io/badge/HarmonyOS-ArkTS-C7000B?style=flat&logo=huawei&logoColor=white" alt="HarmonyOS"></a>
-  <a href="https://www.uvicorn.org"><img src="https://img.shields.io/badge/Uvicorn-0.30-499848?style=flat&logo=gunicorn&logoColor=white" alt="Uvicorn"></a>
+  <a href="#-overview"><strong>Overview</strong></a> •
+  <a href="#-core-capabilities"><strong>Core Capabilities</strong></a> •
+  <a href="#-tool-registry-322-implemented-tools"><strong>322 Tools</strong></a> •
+  <a href="#-specialized-ai-agents--skills"><strong>AI Agents & Skills</strong></a> •
+  <a href="#-installation--configuration"><strong>Quickstart</strong></a> •
+  <a href="#-frequently-asked-questions-qa"><strong>FAQ</strong></a> •
+  <a href="#-documentation--specifications"><strong>Documentation</strong></a>
+</p>
+
+<p align="center">
+  <a href="releases/RELEASE_v3.0.0.md"><img src="images/RAA_v3.0.0_release.png" alt="RAA v3.0.0 Production Release Banner" width="100%"></a>
 </p>
 
 ---
 
-## Overview
+## 🌟 Overview
 
-**RAA (Reverse Android Anything)** is a comprehensive, evidence-first Android reverse-engineering and application intelligence platform. It does not merely decompile APK files: it understands how an Android application is structured, how its Dalvik/native code executes, how its network APIs and databases interact, how its UI is composed, and how its original interface can be reconstructed and redesigned into modern frameworks.
+**RAA (Reverse Android Anything)** is an autonomous, evidence-first multi-platform application intelligence and offensive security platform. It goes far beyond conventional decompilation: RAA analyzes runtime execution paths, audits Dalvik/native/LLVM binary logic, maps cloud APIs and local datastores, deconstructs view hierarchies, and synthesizes clean, modern **Jetpack Compose** and **React Native** living interfaces.
 
-> [!CAUTION]
-> **LEGAL DISCLAIMER & LIMITATION OF LIABILITY — PLEASE READ BEFORE USE**
->
-> **The developers, creators, maintainers, and contributors of RAA accept NO legal responsibility or liability of any kind for any damages, legal actions, criminal or civil liabilities, service disruptions, or copyright/intellectual property infringements resulting from the use or misuse of this software.**
->
-> **The end-user is exclusively liable and bears 100% legal responsibility for all actions performed with RAA. You must independently verify and ensure full compliance with all applicable local, national, and international laws, regulations, terms of service, and authorization requirements before inspecting, decompiling, analyzing, modifying, or intercepting any application or device.**
+RAA ingests **APK**, **AAB** (Android App Bundle), **APKS**, **XAPK**, **IPA** (iOS), **HAP** (HarmonyOS), and raw binary shared libraries, inventories container contents, detects frameworks and commercial packers, extracts view hierarchies and API contracts, and produces mathematically verifiable, evidence-backed findings.
 
-RAA ingests **APK**, **AAB** (Android App Bundle), **APKS**, and **XAPK** archives, inventories their contents, detects frameworks and commercial packers, extracts view hierarchies and API contracts, and returns evidence-backed findings.
+### 🎯 Key Architectural Pillars
 
-It is architected as **one unified analysis core** exposed simultaneously across:
-- **Model Context Protocol (MCP):** Dynamic stdio and Streamable HTTP servers for AI coding agents (Claude Code, Cursor, Antigravity, VS Code, Codex).
-- **REST Surface:** High-throughput FastAPI application with production security headers and OpenAPI 3.1 specifications.
-- **Native CLI:** Command-line tool suite built with Typer and Rich for CI/CD automation and terminal analyst workflows.
-- **Python SDK:** Direct programmatic library API.
-- **Agent Skills:** 11 versioned prompt-based workflows in `skills/`.
+| Pillar | Capability | Description |
+| :--- | :--- | :--- |
+| 🤖 **Autonomous AI Agents** | **322 MCP Tools** | Native **Model Context Protocol** integration for Claude Code, Cursor, Antigravity, VS Code, and Codex. |
+| 🔍 **Next-Gen Decompilation** | **Multi-Engine Core** | Tier-1 integration with JADX, Ghidra, Kuna Rust, RetDec LLVM, and smali bytecode analysis. |
+| 🎨 **Living Canvas** | **UI Modernization** | Automated view hierarchy extraction, visual grounding, and semantic synthesis into Jetpack Compose and React Native. |
+| 🌐 **API Intelligence** | **Spec Synthesis** | Network AST analysis, dynamic traffic interception with PII scrubbing, OpenAPI 3.1 & Postman v2.1 generation. |
+| 🛠️ **Controlled Rebuild** | **RFC Signing** | Live bytecode patching, 16KB page alignment optimization, and RFC-compliant v1/v2/v3 cryptographic APK signing. |
+| 🛡️ **Zero-Trust Security** | **Tamper Verification** | Hash-chained append-only audit logs, fail-closed policy engine, and CycloneDX 1.5 cryptographic SBOM generation. |
 
 ---
 
-## Key Documentation
+## ⚡ Core Capabilities
 
-- 📚 **[Documentation Hub](docs/README.md):** Complete navigation guide and documentation index.
-- 🏛️ **[System Architecture](docs/ARCHITECTURE.md):** Architectural principles, subsystem topology, runtime flow, and multi-agent coordination.
-- 🎨 **[System Design & Specification](docs/DESIGN.md):** Evidence-first truth model, fail-closed policy, 8pt UI design system, and API studio design.
-- 🤖 **[Specialized Agents & Skills](docs/AGENTS_AND_SKILLS.md):** Multi-agent orchestration, specialized subagent fleet (41 roles), and 11 discoverable skills.
-- 🚀 **[Strategic Roadmap](docs/ROADMAP.md):** Upcoming feature highlights and planned capability milestones across future releases.
-- 🏢 **[Enterprise Deployment Guide](docs/DEPLOYMENT.md):** Production hardening, multi-tenancy quotas, air-gapped installation, and disaster recovery.
-- 🔒 **[Security Architecture & Threat Model](docs/SECURITY.md):** Threat model, fail-closed scopes, tamper-evident audit logs, and OWASP MASTG compliance.
-- 📦 **[Release History & Changelog](RELEASES.md):** Detailed version history and progression from Phase 1 to Phase 14 (v2.0.0 Production).
-
----
-
-## Core Capabilities
+The RAA engine operates as an end-to-end analytical pipeline, seamlessly transitioning from container ingestion to autonomous offensive intelligence:
 
 ```mermaid
-mindmap
-  root((RAA Engine))
-    Decompilation & Source
-      JADX Tier-1 Engine
-      Control-Flow Graphs
-      Method AST Recovery
-      Cross-Reference Tracing
-      Pure-Python Dalvik Disassembly
-    Hybrid Frameworks
-      Flutter TLS Unpinning
-      Dart AOT String Scraping
-      React Native Hermes Unpacking
-      Unity IL2CPP Metadata Dumping
-      .NET Xamarin Assembly Inspection
-    UI Extraction & Redesign
-      Runtime ADB Screen Capture
-      UIAutomator View Hierarchies
-      Chrome DevTools Protocol (CDP)
-      Jetpack Compose Code Gen
-      React Native Code Gen
-      Perceptual Visual Diffing
-    API Studio
-      Network Client Detection
-      URL Parameterization
-      OpenAPI 3.1 Spec Synthesis
-      Postman Collection v2.1 Export
-    Dynamic Instrumentation
-      Frida Script Injection
-      Frida Gadget ELF Patching
-      ADB Device Lease Manager
-      SQLite & Storage Dumping
-    Controlled Rebuild
-      Smali & Bytecode Patching
-      Network Security Bypass
-      Test APK Signing
-      Behavioral Verification
-    Enterprise Hardening
-      SHA-256 Hash-Chained Audit
-      Digital Signature Registry
-      CycloneDX & SPDX SBOM
-      Project Backup & Restore
-      Multi-Tenancy Quotas
+flowchart TB
+    subgraph S_INGEST["📥 1. Multi-Platform Container Ingestion"]
+        direction LR
+        I1["📱 Android APK • AAB • APKS • XAPK"]
+        I2["🍎 Apple iOS IPA & Mach-O 64"]
+        I3["🌸 HarmonyOS HAP & ArkTS Panda ABC"]
+        I4["📦 Native ELF .so & WebAssembly WASM"]
+    end
+
+    subgraph S_CORE["⚡ 2. Deep Reverse Engineering Core"]
+        direction LR
+        C1["🔍 JADX & Ghidra Tier-1 Engines"]
+        C2["🕸️ Control-Flow Graphs & AST Recovery"]
+        C3["🦀 Kuna Native Rust & RetDec LLVM"]
+        C4["⚙️ Dalvik Bytecode & Smali Disassembly"]
+    end
+
+    subgraph S_HYBRID["🧩 3. Hybrid Frameworks & Runtimes"]
+        direction LR
+        H1["💙 Flutter BoringSSL TLS & Dart Strings"]
+        H2["⚛️ React Native Hermes Bytecode v96"]
+        H3["🎮 Unity IL2CPP C# Metadata Prototypes"]
+        H4["🔷 .NET Xamarin Assembly Inspector"]
+    end
+
+    subgraph S_STUDIO["🎨 4. Living Canvas & API Studio"]
+        direction LR
+        U1["📸 Runtime ADB & UIAutomator Capture"]
+        U2["🧩 8pt M3 Jetpack Compose & React Native"]
+        A1["🌐 Network Client AST & Endpoint Discovery"]
+        A2["📜 OpenAPI 3.1 & Postman v2.1 Synthesis"]
+    end
+
+    subgraph S_DYN["🚀 5. Dynamic Fleet & Controlled Rebuild"]
+        direction LR
+        D1["💉 Frida Script Injection & Gadget ELF"]
+        D2["📡 Wireless ADB Fleet & BLE GATT Sniffer"]
+        R1["✍️ Bytecode Live Patching & 16KB Align"]
+        R2["🔏 RFC v1/v2/v3 Signing & Gatekeeper"]
+    end
+
+    subgraph S_OPS["🛡️ 6. Autonomous Swarms & Offensive Ops"]
+        direction LR
+        W1["🤖 41-Agent Mesh & Paperclip Token Budgets"]
+        W2["⚔️ Computer-Use GUI (Ghidra, IDA, Burp)"]
+        W3["🧪 Non-Destructive Exploit PoC Chaining"]
+        W4["🔐 CycloneDX 1.5 SBOM & Tamper Seal"]
+    end
+
+    S_INGEST ==> S_CORE
+    S_CORE ==> S_HYBRID
+    S_HYBRID ==> S_STUDIO
+    S_STUDIO ==> S_DYN
+    S_DYN ==> S_OPS
+
+    classDef ingest fill:#0A192F,stroke:#00B0FF,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef core fill:#002B20,stroke:#00E676,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef hybrid fill:#1A0033,stroke:#D500F9,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef studio fill:#3E1E00,stroke:#FF9100,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef dyn fill:#00331A,stroke:#00C853,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef ops fill:#33000F,stroke:#FF1744,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+
+    class I1,I2,I3,I4 ingest;
+    class C1,C2,C3,C4 core;
+    class H1,H2,H3,H4 hybrid;
+    class U1,U2,A1,A2 studio;
+    class D1,D2,R1,R2 dyn;
+    class W1,W2,W3,W4 ops;
 ```
 
+### 📊 Capabilities Matrix
+
+| Domain | Key Capabilities | Supported Technologies | Representative Tools |
+| :--- | :--- | :--- | :--- |
+| **🔍 Static Decompilation** | Multi-engine decompilation, AST recovery, call graphs, type reconstruction | JADX, Ghidra, Apktool, RetDec, Kuna Rust | `decompile_source`, `source_cfg_build`, `wasm_decompile` |
+| **🧩 Hybrid Runtimes** | TLS unpinning, bytecode disassembly, metadata prototyping | Flutter Dart AOT, React Native Hermes, Unity IL2CPP, .NET | `flutter_dump_strings`, `hermes_disassemble`, `il2cpp_dump_headers` |
+| **🎨 Living Canvas UI** | Runtime screen capture, AX-tree pruning, Compose & React generation | UIAutomator, Chrome DevTools (CDP), Material 3, Tailwind | `ui_tree_extract`, `ui_redesign_synthesize`, `ui_theme_extract` |
+| **🌐 API & Network** | Endpoint clustering, parameter mutation, 403 bypass, PII sanitization | OpenAPI 3.1, Postman v2.1, Burp Suite MCP, SafeLine WAF | `api_spec_synthesize`, `api_bypass_403_test`, `api_traffic_redact` |
+| **⚡ Dynamic Analysis** | Headless display fuzzing, script hooking, BLE sniffer, ADB fleet | Frida, Shizuku IPC, PRoot Linux, mDNS, UPnP, Scapy | `frida_script_inject`, `adb_fleet_discover`, `iot_sniff_traffic` |
+| **🛠️ Rebuild & Signing** | Live string/bytecode patching, 16KB page alignment, v1/v2/v3 signing | ZipAlign, apksigner, ELF page-align, Dalvik DexKit | `apk_patch_bytecode`, `elf_align_16kb`, `apk_sign_rfc` |
+| **🤖 Swarm Intelligence** | Multi-agent mesh coordination, token budgeting, blackboard state | Paperclip, Ruflo (41 roles), Deer-Flow, MetaGPT | `swarm_org_configure`, `swarm_blackboard_post`, `swarm_budget_set` |
+| **⚔️ Offensive Security** | Computer-use GUI agent, MASVS audit, non-destructive PoC validator | Desktop GUI (Ghidra/IDA/Burp), Yaklang, CrowdSec | `gui_computer_use_interact`, `security_audit_masvs`, `cve_chain_poc` |
+
 ---
 
-## Tool Registry (244 Implemented Tools)
+## 🛠️ Tool Registry (322 Implemented Tools)
 
-RAA organizes its 244 tools into 7 distinct capability profiles:
+RAA provides a structured registry of **322 tools** across **8 distinct capability profiles**, designed for flexible agent integration:
 
-| Profile | Tool Count | Primary Use Case |
+<p align="center">
+  <img src="https://img.shields.io/badge/Minimal-12_Tools-78909C?style=flat-square" alt="Minimal: 12">
+  <img src="https://img.shields.io/badge/Core-180_Tools-0288D1?style=flat-square" alt="Core: 180">
+  <img src="https://img.shields.io/badge/Dynamic-218_Tools-7B1FA2?style=flat-square" alt="Dynamic: 218">
+  <img src="https://img.shields.io/badge/API-180_Tools-E64A19?style=flat-square" alt="API: 180">
+  <img src="https://img.shields.io/badge/UI-180_Tools-FBC02D?style=flat-square" alt="UI: 180">
+  <img src="https://img.shields.io/badge/Admin-42_Tools-388E3C?style=flat-square" alt="Admin: 42">
+  <img src="https://img.shields.io/badge/Swarm-150_Tools-512DA8?style=flat-square" alt="Swarm: 150">
+  <img src="https://img.shields.io/badge/Full-322_Tools-D32F2F?style=flat-square" alt="Full: 322">
+</p>
+
+| Profile | Tool Count | Primary Use Case & Recommended Agents |
 | :--- | :---: | :--- |
-| **`minimal`** | **12** | Lightweight triage, manifest inspection, and basic artifact ingestion for small local LLMs. |
-| **`core`** | **135** | Default static analysis, on-device PRoot mobile workspace harness, search-first MCP capability index, WASM binary decompiler, on-device AI reverser, Exploit PoC validator, MASVS checklist copilot, developer email OSINT footprint, class search, resource decoding. |
-| **`dynamic`** | **169** | Core tools + Headless VirtualDisplay runner, multimodal mobile GUI agent crawler, visual grounding touch navigation, Burp Suite MCP bridge, P2P encrypted device tunnel, passive traffic inspector, and Wireless ADB fleet discoverer. |
-| **`api`** | **139** | Core tools + Cloud rotating gateway proxy, Burp Suite MCP bridge, passive traffic inspector with PII redaction, nomore403 bypass engine, CrowdSec CTI reputation check, SafeLine semantic WAF audit, and OpenAPI synthesis. |
-| **`ui`** | **140** | Core tools + Multimodal mobile GUI agent crawler, visual grounding touch navigation, Semantic Compose modernization, layout parity diff, Adaptive Icon Studio, banner generator, and AX-tree pruner. |
-| **`admin`** | **19** | Zero-trust remote MCP gateway configurator, Bug Bounty report & VRT formatter, engine verification, tamper-evident audit verification, SBOM generation, disaster recovery, and telemetry. |
-| **`full`** | **244** | Complete, unrestricted superset of all registered capabilities. |
+| **`minimal`** | **12** | Fast artifact ingestion, manifest triage, and high-level metadata extraction for local or lightweight LLMs. |
+| **`core`** | **180** | Static analysis, search-first MCP index, WASM decompiler, AI model reverser, MASVS checklist, and class search. |
+| **`dynamic`** | **218** | Core tools + VirtualDisplay runner, mobile GUI crawler, computer-use operator (Ghidra, IDA, Burp), and ADB fleet. |
+| **`api`** | **180** | Core tools + Burp Suite bridge, rotating proxy gateway, traffic inspector with PII scrubbing, and 403 deep mutator. |
+| **`ui`** | **180** | Core tools + Multimodal GUI crawler, Compose modernization, visual diff, Adaptive Icon Studio, and shaders. |
+| **`admin`** | **42** | Zero-trust MCP gateway configurator, Bug Bounty formatter, engine verification, CycloneDX SBOM, and benchmarks. |
+| **`swarm`** | **150** | Multi-agent collaborative swarm governance, token budgeting, blackboard coordination, and MetaGPT SOP pipelines. |
+| **`full`** | **322** | Complete, unrestricted superset of all registered capabilities for frontier reasoning agents. |
 
 ---
 
-## Specialized AI Agents & Skills
+## 🤖 Specialized AI Agents & Skills
 
-RAA coordinates 8 specialized AI agents via the **Coverage Tracker Service** (`agent_coverage_get`), supported by 11 discoverable skills in `skills/`:
+RAA coordinates a specialized fleet of AI agents via the **Coverage Tracker Service** (`agent_coverage_get`), supported by **36 discoverable skills** in `skills/`:
 
 ```
 skills/
-├── raa-apk-triage/          # Manifest, permissions, framework and entry activity triage
-├── raa-source-reconstruct/  # Decompilation, method call graphs, and AST recovery
+├── raa-apk-triage/          # Fast manifest, permissions, framework, and entry activity triage
+├── raa-source-reconstruct/  # Full decompilation, control-flow graphs, and AST recovery
 ├── raa-ui-redesign/         # View hierarchies, runtime capture, and 8pt Compose redesign
 ├── raa-api-discovery/       # Endpoint clustering, OpenAPI synthesis, and Postman export
 ├── raa-flutter-reversing/   # Flutter BoringSSL TLS unpinning and Dart string scraping
@@ -157,30 +203,39 @@ skills/
 
 ---
 
-## Installation & Configuration
+## 🚀 Installation & Configuration
 
-RAA can be deployed in seconds across any environment — from zero-install CLI execution to full IDE AI agent integration.
+> [!TIP]
+> **Looking for the complete step-by-step setup guide?**
+> Check out the comprehensive **[🚀 RAA Setup & Prerequisites Guide](docs/SETUP_GUIDE.md)** for detailed installation instructions across all operating systems, environment variables, full MCP client configs (Claude Code, Cursor, Antigravity, VS Code, Windsurf), and external engine installation matrices (JADX, Ghidra, Apktool, Frida, RetDec, Kuna Rust).
 
 ### Quick Decision Matrix
 
 ```mermaid
 flowchart TD
-    Start([🚀 Getting Started]) --> Choice{How do you want to use RAA?}
-    Choice -->|Instant / No Setup| Zero[⚡ uvx / pipx]
-    Choice -->|Active Development| Local[💻 Python venv / pip -e .]
-    Choice -->|AI Coding Agent / IDE| MCP[🤖 MCP Server Integration]
-    
-    Zero --> RunCli[Execute CLI commands instantly]
-    Local --> DevWork[Full codebase access & custom extensions]
-    MCP --> ClientType{Select Client}
-    
-    ClientType -->|Claude Desktop / Code| ClaudeCfg[Configure claude_desktop_config.json]
-    ClientType -->|Cursor / VS Code| IdeCfg[Configure .cursor/mcp.json or settings.json]
-    ClientType -->|Google Antigravity| AgCfg[Configure mcp_config.json]
-    ClientType -->|Windsurf / Zed / Codex| GenericCfg[Configure IDE MCP settings]
-```
+    classDef start fill:#1A237E,stroke:#3F51B5,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef choice fill:#E65100,stroke:#FF9100,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef zero fill:#004D40,stroke:#00E676,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef local fill:#01579B,stroke:#00B0FF,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef mcp fill:#4A148C,stroke:#D500F9,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef leaf fill:#263238,stroke:#78909C,stroke-width:1px,color:#ECEFF1;
+    classDef cfg fill:#1A0033,stroke:#8E24AA,stroke-width:1px,color:#ECEFF1;
 
----
+    Start(["🚀 Getting Started"]):::start --> Choice{"How do you want to use RAA?"}:::choice
+    
+    Choice -->|"⚡ Instant / No Setup"| Zero["⚡ uvx / pipx Zero-Install"]:::zero
+    Choice -->|"💻 Active Development"| Local["💻 Python venv / pip -e ."]:::local
+    Choice -->|"🤖 AI Coding Agent / IDE"| MCP["🤖 MCP Server Integration"]:::mcp
+    
+    Zero --> RunCli["Execute CLI commands instantly in seconds"]:::leaf
+    Local --> DevWork["Full codebase access, testing & custom extensions"]:::leaf
+    MCP --> ClientType{"Select AI Client"}:::choice
+    
+    ClientType -->|"Claude Desktop / Code"| ClaudeCfg["Configure claude_desktop_config.json"]:::cfg
+    ClientType -->|"Cursor / VS Code"| IdeCfg["Configure .cursor/mcp.json or settings.json"]:::cfg
+    ClientType -->|"Google Antigravity"| AgCfg["Configure mcp_config.json"]:::cfg
+    ClientType -->|"Windsurf / Zed / Codex"| GenericCfg["Configure IDE MCP settings"]:::cfg
+```
 
 ### 1. Installation Options
 
@@ -204,7 +259,7 @@ pipx run --spec . raa --help
 
 ```bash
 # 1. Clone repository & enter workspace
-git clone <repository-url>
+git clone https://github.com/uditrajput/RAA.git
 cd RAA
 
 # 2. Create and activate virtual environment
@@ -225,11 +280,12 @@ raa --version
 </details>
 
 <details>
-<summary><strong>📦 Option C: Global Tool Installation</strong></summary>
+<summary><strong>📦 Option C: Global System Tool Installation</strong></summary>
 
 ```bash
 # Install as a permanent isolated system tool
 uv tool install .
+
 # Or via pipx:
 pipx install .
 ```
@@ -256,7 +312,7 @@ cp .env.example .env
 | Variable | Default | Purpose & Description |
 | :--- | :---: | :--- |
 | `RAA_WORKSPACE` | `.raa-workspace` | Directory for SQLite DB, evidence, cached DEX, and artifacts. |
-| `RAA_PROFILE` | `core` | Active MCP profile (`minimal`, `core`, `dynamic`, `api`, `ui`, `admin`, `full`). |
+| `RAA_PROFILE` | `core` | Active MCP profile (`minimal`, `core`, `dynamic`, `api`, `ui`, `admin`, `swarm`, `full`). |
 | `RAA_LOG_LEVEL` | `INFO` | Logging verbosity (`DEBUG`, `INFO`, `WARNING`, `ERROR`). |
 | `RAA_LOG_JSON` | `false` | When `true`, outputs JSON logs for observability pipelines. |
 | `RAA_API_HOST` | `127.0.0.1` | Bind address for REST API and Streamable HTTP MCP server. |
@@ -273,31 +329,55 @@ cp .env.example .env
 RAA communicates with all major AI coding environments via the **Model Context Protocol (Protocol 2026-07-28)** using standard I/O (`stdio`) or Streamable HTTP (`SSE`).
 
 ```mermaid
-graph LR
-    subgraph Clients["Supported MCP Clients & IDEs"]
-        CD["Claude Desktop"]
-        CC["Claude Code"]
-        CUR["Cursor"]
-        VSC["VS Code / Codex"]
-        AGY["Google Antigravity"]
-        WIN["Windsurf / Zed"]
+flowchart LR
+    subgraph Clients["💻 Supported MCP Clients & AI IDEs"]
+        CD["🟣 Claude Desktop"]
+        CC["🟠 Claude Code"]
+        CUR["⚡ Cursor AI"]
+        VSC["🔷 VS Code / Codex"]
+        AGY["🪐 Google Antigravity"]
+        WIN["🌊 Windsurf & Zed"]
     end
 
-    subgraph RAA["RAA Core Engine"]
-        MCP_STDIO["stdio Transport (Local)"]
-        MCP_SSE["Streamable HTTP / SSE (Remote)"]
-        REG["244 Tools & 7 Profiles"]
+    subgraph Transport["🚀 Transport Layer (MCP 2026-07-28)"]
+        MCP_STDIO["⚡ Local stdio Transport<br/><b>Sub-millisecond IPC</b>"]
+        MCP_SSE["🌐 Remote Streamable HTTP / SSE<br/><b>Shared Team Server (Port 8765)</b>"]
     end
 
-    CD --> MCP_STDIO
-    CC --> MCP_STDIO
-    CUR --> MCP_STDIO
-    VSC --> MCP_STDIO
-    AGY --> MCP_STDIO
-    WIN --> MCP_STDIO
+    subgraph RAA["🛡️ RAA Analysis Engine Core"]
+        REG["⚡ 322 Implemented Tools<br/><b>8 Capability Profiles • 526 Passing Tests</b>"]
+    end
+
+    CD ==> MCP_STDIO
+    CC ==> MCP_STDIO
+    CUR ==> MCP_STDIO
+    VSC ==> MCP_STDIO
+    AGY ==> MCP_STDIO
+    WIN ==> MCP_STDIO
     
-    MCP_STDIO --> REG
-    MCP_SSE --> REG
+    MCP_STDIO ==> REG
+    MCP_SSE ==> REG
+
+    classDef cd fill:#2E1065,stroke:#A855F7,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef cc fill:#451A03,stroke:#F97316,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef cur fill:#0C4A6E,stroke:#38BDF8,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef vsc fill:#172554,stroke:#3B82F6,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef agy fill:#3B0764,stroke:#C084FC,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef win fill:#042F2E,stroke:#2DD4BF,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    
+    classDef stdio fill:#064E3B,stroke:#10B981,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef sse fill:#0F172A,stroke:#60A5FA,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef core fill:#1E1B4B,stroke:#6366F1,stroke-width:3px,color:#FFFFFF,font-weight:bold;
+
+    class CD cd;
+    class CC cc;
+    class CUR cur;
+    class VSC vsc;
+    class AGY agy;
+    class WIN win;
+    class MCP_STDIO stdio;
+    class MCP_SSE sse;
+    class REG core;
 ```
 
 #### Automated Setup (One-Click)
@@ -305,16 +385,9 @@ graph LR
 Generate configuration automatically for your preferred AI client:
 
 ```bash
-# Claude Desktop
 raa setup --agent claude-desktop
-
-# Cursor
 raa setup --agent cursor
-
-# Claude Code
 raa setup --agent claude-code
-
-# VS Code / Codex
 raa setup --agent vscode
 ```
 
@@ -432,18 +505,25 @@ Connect using standard SSE URL: `http://<server-ip>:8765/sse`
 ### 4. 🐳 When is Docker Required?
 
 > [!NOTE]
-> **Docker is 100% OPTIONAL for typical RAA workflows.** All 244 core static analysis, decompilation, UI reconstruction, and API synthesis tools run in pure Python without Docker.
+> **Docker is 100% OPTIONAL for typical RAA workflows.** All 322 core static analysis, decompilation, UI reconstruction, and API synthesis tools run in pure Python without Docker.
 
 ```mermaid
-graph TD
-    Op[Analysis Request] --> Type{Task Category}
-    Type -->|Static Analysis / DEX / AST| NoDock[✅ Pure Python Native — No Docker Required]
-    Type -->|UI Reconstruction / Compose| NoDock
-    Type -->|API Synthesis / Network AST| NoDock
-    Type -->|Physical Device ADB / Frida| NoDock
-    Type -->|Headless Cloud Android Emulator| Dock[🐳 Docker Required: redroid / budtmo]
-    Type -->|Untrusted Malware Sandboxing| Dock[🐳 Docker Required: Ephemeral Container]
-    Type -->|Multi-Tenant Cloud CI/CD Engine| Dock[🐳 Docker Required: Isolated Container Pool]
+flowchart TD
+    classDef req fill:#1E293B,stroke:#38BDF8,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef type fill:#312E81,stroke:#818CF8,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef nodock fill:#064E3B,stroke:#10B981,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef dock fill:#881337,stroke:#F43F5E,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+
+    Op["🔍 Analysis Request Received"]:::req --> Type{"Task Execution Category"}:::type
+
+    Type -->|"Static Bytecode / DEX / AST"| NoDock["✅ Pure Python Native — 100% Zero-Docker Required<br/><b>Instant local sub-second execution</b>"]:::nodock
+    Type -->|"UI Living Canvas / Compose / React"| NoDock
+    Type -->|"API Synthesis / Network AST Analysis"| NoDock
+    Type -->|"Physical Device ADB / Frida Scripting"| NoDock
+    
+    Type -->|"Headless Cloud Android VirtualDisplay"| Dock["🐳 Docker Required: redroid / budtmo<br/><b>Virtual Android emulator in headless cloud</b>"]:::dock
+    Type -->|"Untrusted Malware / Binary Detonation"| Dock["🐳 Docker Required: Ephemeral Linux Sandbox<br/><b>Isolated zero-residue quarantine environment</b>"]:::dock
+    Type -->|"Multi-Tenant Enterprise CI/CD Cluster"| Dock["🐳 Docker Required: Kubernetes Container Pool<br/><b>Strict tenant workspace isolation</b>"]:::dock
 ```
 
 Docker is **strictly required only** in the following 3 conditions:
@@ -471,38 +551,36 @@ raa serve mcp
 
 ---
 
-## Quick Start: CLI Workflows
+## 💻 Quick Start: CLI Workflows
 
 ```powershell
-# Ingest an APK and create a project
+# 1. Ingest an APK and create a project
 raa project create "My Analysis Project"
 raa artifact ingest prj_xxx /path/to/target.apk
 
-# Inspect Manifest & Decompile
+# 2. Inspect Manifest & Search Bytecode
 raa manifest inspect prj_xxx art_xxx
 raa source search prj_xxx "AuthToken"
 
-# Synthesize OpenAPI 3.1 Specification and Export Postman Collection
+# 3. Synthesize OpenAPI 3.1 Specification and Export Postman Collection
 raa api synthesize prj_xxx art_xxx
 raa api postman prj_xxx art_xxx --output ./postman_collection.json
 
-# Extract UI, Capture Runtime Screen & Generate Jetpack Compose Redesign
+# 4. Extract UI, Capture Runtime Screen & Generate Jetpack Compose Redesign
 raa ui tree prj_xxx art_xxx
 raa ui redesign prj_xxx screen_main --framework compose
 
-# Verify Tamper-Evident Audit Trail & Generate CycloneDX SBOM
+# 5. Verify Tamper-Evident Audit Trail & Generate CycloneDX SBOM
 raa admin audit-verify
 raa admin sbom --format cyclonedx
 
-# Backup Project for Disaster Recovery
+# 6. Backup Project for Disaster Recovery
 raa admin backup prj_xxx --output ./backup.raa.bundle.tar.gz
 ```
 
 ---
 
----
-
-## Frequently Asked Questions (Q&A)
+## ❓ Frequently Asked Questions (Q&A)
 
 <details>
 <summary><strong>1. Who is legally responsible for using RAA to analyze applications?</strong></summary>
@@ -527,7 +605,7 @@ RAA is a universal application reversing platform supporting:
 <summary><strong>3. How does RAA connect with AI Coding Agents (Claude Code, Cursor, Antigravity, VS Code)?</strong></summary>
 <br>
 
-RAA natively implements the **Model Context Protocol (MCP)** specification. You can run RAA as a local MCP server over standard input/output (`stdio`) or as a networked background server over Streamable HTTP (`FastMCP`). AI agents discover all 244 registered tools with their complete JSON Schema inputs and execute end-to-end reversing, security audits, and UI reconstruction autonomously.
+RAA natively implements the **Model Context Protocol (MCP)** specification. You can run RAA as a local MCP server over standard input/output (`stdio`) or as a networked background server over Streamable HTTP (`FastMCP`). AI agents discover all 322 registered tools with their complete JSON Schema inputs and execute end-to-end reversing, security audits, and UI reconstruction autonomously.
 
 </details>
 
@@ -548,17 +626,18 @@ RAA enforces a **fail-closed security policy engine**. Potentially hazardous ope
 </details>
 
 <details>
-<summary><strong>6. What are the 7 capability profiles and what tools do they expose?</strong></summary>
+<summary><strong>6. What are the 8 capability profiles and what tools do they expose?</strong></summary>
 <br>
 
 RAA uses capability profiles to tailor tool exposure to specific agents and contexts:
 - <code>minimal</code> (12 tools): Essential triage and summary tools for lightweight models.
-- <code>core</code> (135 tools): Static analysis, source inspection, frameworks, and decompilation.
-- <code>dynamic</code> (169 tools): Runtime ADB, Frida instrumentation, and network interception.
-- <code>api</code> (139 tools): API reverse-engineering, spec synthesis, and threat intelligence.
-- <code>ui</code> (140 tools): View hierarchy extraction, visual grounding, and UI code generation.
-- <code>admin</code> (19 tools): Cryptographic audit verification, doctor, SBOM, and licensing.
-- <code>full</code> (244 tools): Complete, unrestricted tool catalog for frontier models.
+- <code>core</code> (180 tools): Static analysis, source inspection, frameworks, decompilation & offensive triage.
+- <code>dynamic</code> (218 tools): Runtime ADB, Frida instrumentation, computer-use GUI & live network interception.
+- <code>api</code> (180 tools): API reverse-engineering, spec synthesis, and threat intelligence.
+- <code>ui</code> (180 tools): View hierarchy extraction, visual grounding, Compose/React reconstruction & shaders.
+- <code>admin</code> (42 tools): Cryptographic audit verification, doctor, SBOM, ZTNA gateways & tamper seals.
+- <code>swarm</code> (150 tools): Multi-agent swarm governance, token budgeting, blackboard & SOP execution.
+- <code>full</code> (322 tools): Complete, unrestricted tool catalog for frontier models.
 
 </details>
 
@@ -583,34 +662,63 @@ RAA extracts runtime view hierarchies via ADB or Chrome DevTools Protocol (CDP),
 
 ---
 
-## Verification & Quality Gates
+## 🧪 Verification & Quality Gates
 
-RAA maintains 100% test pass rates and strict zero-lint compliance:
+RAA maintains a strict 100% test pass rate and zero-lint compliance across all releases:
 
 ```powershell
-# Run the complete test suite (437 tests)
+# Run the complete test suite (526 tests across all 20 phases)
 python -m pytest -v
 
-# Run linting and style checks
+# Run linting and code style checks
 python -m ruff check src tests
 python -m ruff format --check src tests
+
+# Run static type verification
+python -m mypy src
 ```
 
 ---
 
-## License & Legal Disclaimer
+## 📚 Documentation & Specifications
+
+All in-depth architectural guides, full capability matrices, CLI references, and operational deployment documentation are maintained in the **[Documentation Hub](docs/README.md)**:
+
+| Category | Document | Description |
+| :--- | :--- | :--- |
+| 📖 **Portal** | **[Documentation Hub](docs/README.md)** | Central navigation portal for the entire RAA knowledge base. |
+| 💻 **CLI** | **[Complete CLI Reference Guide](docs/CLI_REFERENCE.md)** | Exhaustive reference of all **311 CLI commands** across 33 subcommand groups. |
+| 🛠️ **Tools** | **[Tools Integration & Test Scenarios](docs/TOOLS_INTEGRATION_AND_TEST_SCENARIOS.md)** | Complete matrix of all **322 tools**, profiles, requirements, and test scenarios. |
+| 📦 **Releases** | **[Release History & Changelog](RELEASES.md)** | Comprehensive release notes and version progression through **v3.0.0 Production**. |
+| 📋 **Milestone** | **[v3.0.0 Production Notes](releases/RELEASE_v3.0.0.md)** | Announcement of offensive capabilities, computer-use GUI, and CycloneDX 1.5 seal. |
+| 🏛️ **Architecture** | **[System Architecture](docs/ARCHITECTURE.md)** | Subsystem topology, single-core runtime flow, and multi-platform adapters. |
+| 🎨 **Design** | **[System Design & Specification](docs/DESIGN.md)** | Evidence-first truth hierarchy, domain entities, 8pt UI system, and MCP contracts. |
+| 🤖 **Agents** | **[Specialized Agents & Skills](docs/AGENTS_AND_SKILLS.md)** | Multi-agent swarm orchestration, 41 agent roles, and 36 skills. |
+| 🚀 **Roadmap** | **[Strategic Roadmap](docs/ROADMAP.md)** | Future roadmap and capability progression milestones. |
+| 🏢 **Deployment** | **[Enterprise Deployment Guide](docs/DEPLOYMENT.md)** | Production hardening, Docker sandboxing, multi-tenancy quotas, and air-gapped setups. |
+| 🔒 **Security** | **[Security Architecture & Threat Model](docs/SECURITY.md)** | STRIDE threat modeling, fail-closed policy engine, and SHA-256 audit trails. |
+| 🚀 **Setup** | **[Setup & Installation Guide](docs/SETUP_GUIDE.md)** | Step-by-step setup guide for MCP clients and analysis engines. |
+| ⚙️ **DevOps** | **[CI/CD Architecture](docs/devops/CI_CD_ARCHITECTURE.md)** | Automated testing, linting, and quality pipeline. |
+| 🛡️ **SAST** | **[Security Scanning & SAST](docs/devops/SECURITY_SCANNING.md)** | Semgrep, CodeQL, and dependency vulnerability scanning. |
+| 🔄 **Workflow** | **[Contribution Workflow](docs/devops/CONTRIBUTION_WORKFLOW.md)** | Git flow, branch protection, and PR guidelines. |
+
+---
+
+## ⚖️ License & Legal Disclaimer
 
 ### Limitation of Liability & User Responsibility
 
-> [!WARNING]
-> **IMPORTANT LEGAL NOTICE: USER ASSUMES ALL LIABILITY**
+> [!CAUTION]
+> **LEGAL DISCLAIMER & LIMITATION OF LIABILITY — PLEASE READ BEFORE USE**
 >
-> 1. **No Developer Responsibility:** The authors, maintainers, and contributors of **RAA (Reverse Android Anything)** provide this software "AS IS" without warranty of any kind. Under no circumstances shall the developers be held liable for any direct, indirect, incidental, special, exemplary, or consequential damages, or any legal liabilities, civil claims, regulatory penalties, or criminal prosecutions arising from the use or misuse of this software.
-> 2. **Sole End-User Liability:** **The user bears 100% sole legal liability and responsibility** for all reverse-engineering, dynamic instrumentation, traffic analysis, decompilation, and testing activities conducted using RAA. Users must independently ensure that all actions comply strictly with all applicable local, national, and international laws, regulations, intellectual property protections, contracts, and software licenses (such as the DMCA, CFAA, and EU Computer Misuse directives).
-> 3. **Authorized Use Only:** RAA is intended exclusively for authorized security audits, academic research, and defensive evaluation of applications owned by the user or where explicit, written authorization has been granted by the rightful owner.
+> **The developers, creators, maintainers, and contributors of RAA accept NO legal responsibility or liability of any kind for any damages, legal actions, criminal or civil liabilities, service disruptions, or copyright/intellectual property infringements resulting from the use or misuse of this software.**
+>
+> **The end-user is exclusively liable and bears 100% legal responsibility for all actions performed with RAA. You must independently verify and ensure full compliance with all applicable local, national, and international laws, regulations, terms of service, and authorization requirements before inspecting, decompiling, analyzing, modifying, or intercepting any application or device.**
 >
 > For full security and compliance policies, refer to [SECURITY.md](docs/SECURITY.md).
 
 ### License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for complete details.
+
+---

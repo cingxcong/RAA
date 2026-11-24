@@ -7,6 +7,7 @@ detects Compose and Fragment usage, and builds static candidate screen models.
 from __future__ import annotations
 
 import contextlib
+import logging
 import re
 import xml.etree.ElementTree as ET
 import zipfile
@@ -28,6 +29,8 @@ from raa.domain.ui import (
     UIRegionBounds,
 )
 from raa.services.android.axml import XmlElement, parse_binary_xml
+
+logger = logging.getLogger(__name__)
 
 # Common Android View class mapping to UI roles
 VIEW_ROLE_MAP: dict[str, str] = {
@@ -118,18 +121,14 @@ def extract_ui_assets(
 def parse_layout_regions(data: bytes, layout_name: str = "") -> list[UIRegion]:
     """Parse binary or plain XML layout into semantic UIRegions."""
     if data.startswith(b"\x03\x00"):
-        try:
+        with contextlib.suppress(Exception):
             doc = parse_binary_xml(data)
             return _parse_axml_regions(doc.root, layout_name)
-        except Exception:  # noqa: S110
-            pass
 
-    try:
+    with contextlib.suppress(Exception):
         text = data.decode("utf-8", errors="replace")
         root = ET.fromstring(text)  # noqa: S314
         return _parse_xml_regions(root, layout_name)
-    except Exception:  # noqa: S110
-        pass
 
     return []
 
@@ -269,8 +268,8 @@ def parse_navigation_graph(data: bytes, source_screen_id: str = "") -> list[Scre
 
             _walk_axml(doc.root, source_screen_id)
             return transitions
-        except Exception:  # noqa: S110
-            pass
+        except Exception as err:
+            logger.debug("Binary AXML navigation graph parse fallback: %s", err)
 
     try:
         text = data.decode("utf-8", errors="replace")
@@ -291,8 +290,8 @@ def parse_navigation_graph(data: bytes, source_screen_id: str = "") -> list[Scre
                 _walk_xml(child, new_dest)
 
         _walk_xml(root, source_screen_id)
-    except Exception:  # noqa: S110
-        pass
+    except Exception as err:
+        logger.debug("Plain XML navigation graph parse failed: %s", err)
 
     return transitions
 
@@ -352,8 +351,8 @@ def discover_static_screens(
                     elif lower.startswith("res/navigation") and lower.endswith(".xml"):
                         with contextlib.suppress(Exception):
                             nav_data_list.append(zf.read(n))
-        except Exception:  # noqa: S110
-            pass
+        except Exception as err:
+            logger.debug("Failed reading zip archive for UI layout: %s", err)
 
     # Parse transitions from navigation graphs
     for nav_data in nav_data_list:

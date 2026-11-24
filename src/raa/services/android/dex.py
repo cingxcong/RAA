@@ -25,7 +25,6 @@ from raa.domain.dex import (
     ReferenceKind,
 )
 from raa.errors import InvalidArtifactError, LimitExceededError, UnsupportedError
-from raa.services.inspection import read_archive_member
 
 _HEADER_SIZE = 0x70
 _ENDIAN_CONSTANT = 0x12345678
@@ -394,8 +393,10 @@ def decode_dex_index(
     index = DexIndex(
         limitations=[
             "DEX indexing is metadata-only; method bodies are not disassembled.",
-            "Only root-level classes*.dex files are indexed; split or nested DEX "
-            "files are not merged.",
+            (
+                "Only root-level classes*.dex files are indexed; split or nested DEX "
+                "files are not merged."
+            ),
         ]
     )
     with zipfile.ZipFile(path) as archive:
@@ -407,6 +408,8 @@ def decode_dex_index(
         index.limitations.append("No root-level classes.dex file was found.")
     for name in names:
         try:
+            from raa.services.inspection import read_archive_member
+
             data = read_archive_member(path, name, max_bytes=max_bytes)
             index.files.append(
                 parse_dex(
@@ -753,7 +756,7 @@ def _parse_protos(
     descriptors: list[str] = []
     for index in range(count):
         base = offset + index * 12
-        _shorty_index = struct.unpack_from("<I", data, base)[0]
+        _ = struct.unpack_from("<I", data, base)[0]
         return_index = struct.unpack_from("<I", data, base + 4)[0]
         parameters_off = struct.unpack_from("<I", data, base + 8)[0]
         if return_index >= len(types):
@@ -1013,7 +1016,7 @@ def _parse_class_data(
                     "DEX field index is out of range.",
                     details={"file": name, "index": field_index},
                 )
-            _class_descriptor, field_name, field_type = field_ids[field_index]
+            _, field_name, field_type = field_ids[field_index]
             fields.append(
                 ParsedField(
                     name=field_name,
@@ -1034,7 +1037,7 @@ def _parse_class_data(
                     "DEX method index is out of range.",
                     details={"file": name, "index": method_index},
                 )
-            _class_descriptor, method_name, descriptor = method_ids[method_index]
+            _, method_name, descriptor = method_ids[method_index]
             methods.append(
                 ParsedMethod(
                     name=method_name,
@@ -1108,9 +1111,7 @@ def _parse_code_references(
 ) -> list[ParsedReference]:
     if offset + 16 > file_size:
         raise InvalidArtifactError("DEX code item is outside the file.")
-    _registers, _ins, _outs, _tries, _debug, insns_size = struct.unpack_from(
-        "<HHHHII", data, offset
-    )
+    insns_size = struct.unpack_from("<I", data, offset + 12)[0]
     if insns_size == 0:
         return []
     if insns_size > max_instruction_units:

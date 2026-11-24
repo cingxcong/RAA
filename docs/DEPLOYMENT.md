@@ -5,9 +5,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Current_Release-v2.0.0_Production-success?style=flat-square" alt="Current Release: v2.0.0 Production">
-  <img src="https://img.shields.io/badge/Total_Tools-244_Implemented-blue?style=flat-square" alt="Total Tools: 244 Implemented">
-  <img src="https://img.shields.io/badge/Tests-437_Passing-brightgreen?style=flat-square" alt="Tests: 437 Passing">
+  <img src="https://img.shields.io/badge/Current_Release-v3.0.0_Production-success?style=flat-square" alt="Current Release: v2.0.0 Production">
+  <img src="https://img.shields.io/badge/Total_Tools-322_Implemented-blue?style=flat-square" alt="Total Tools: 244 Implemented">
+  <img src="https://img.shields.io/badge/Tests-526_Passing-brightgreen?style=flat-square" alt="Tests: 437 Passing">
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/Protocol-2026--07--28-informational?style=flat-square" alt="Protocol: 2026-07-28">
@@ -28,12 +28,19 @@ RAA is built as a unified single-engine core exposed across four interoperable s
 
 ```mermaid
 flowchart TD
-    Client["Client / Agent Surface\n(MCP / CLI / REST / SDK)"] -->|HTTP / Stdio| Proxy["Reverse Proxy / TLS Terminator\n(NGINX / Envoy / Traefik)"]
-    Proxy -->|Bearer Auth & Quotas| API["RAA Core Engine\n(FastAPI / FastMCP Runtime)"]
-    API --> Services["Domain Services & Registries\n(244 Implemented Tools)"]
-    Services --> DB[("SQLite Database\n(WAL Mode & Foreign Keys)")]
-    Services --> Storage[("Local Artifact Storage &\nHash-Chained Audit Trail")]
-    Services --> Engines["Native Reversing Engines\n(JADX, Ghidra, Rizin, Frida, PRoot)"]
+    classDef client fill:#0D47A1,stroke:#1E88E5,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef proxy fill:#004D40,stroke:#00897B,stroke-width:2px,color:#FFFFFF;
+    classDef core fill:#1A237E,stroke:#3F51B5,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef serv fill:#4A148C,stroke:#8E24AA,stroke-width:2px,color:#FFFFFF;
+    classDef db fill:#263238,stroke:#546E7A,stroke-width:2px,color:#FFFFFF;
+    classDef eng fill:#BF360C,stroke:#F4511E,stroke-width:2px,color:#FFFFFF;
+
+    Client["Client / AI Agent Surface<br/>(MCP stdio & HTTP / CLI / REST / SDK)"]:::client -->|HTTP / Stdio| Proxy["Reverse Proxy / TLS Terminator<br/>(NGINX / Envoy / Traefik / ZTNA)"]:::proxy
+    Proxy -->|Bearer Token & Quota Gate| API["RAA Core Engine Server<br/>(FastAPI / FastMCP Runtime v3.0)"]:::core
+    API --> Services["Domain Services & Capability Registries<br/>(322 Implemented Tools • 8 Profiles)"]:::serv
+    Services --> DB[("SQLite Database<br/>WAL Mode & Foreign Keys")]:::db
+    Services --> Storage[("Local Artifact Storage &<br/>Hash-Chained Audit Trail")]:::db
+    Services --> Engines["Reversing Engines & Sandboxes<br/>(JADX, Ghidra, RetDec, Kuna, Frida, PRoot)"]:::eng
 ```
 
 ---

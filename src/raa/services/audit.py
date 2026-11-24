@@ -39,7 +39,7 @@ class AuditService:
                 except Exception:  # noqa: S112
                     continue
         except OSError:
-            pass
+            return GENESIS_HASH
         return GENESIS_HASH
 
     @staticmethod
