@@ -39,10 +39,6 @@
   <a href="#-documentation--specifications"><strong>Documentation</strong></a>
 </p>
 
-<p align="center">
-  <a href="releases/RELEASE_v3.0.0.md"><img src="images/RAA_v3.0.0_release.png" alt="RAA v3.0.0 Production Release Banner" width="100%"></a>
-</p>
-
 ---
 
 ## 🌟 Overview
