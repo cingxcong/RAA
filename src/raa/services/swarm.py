@@ -115,8 +115,6 @@ class SwarmService:
     def _save_blackboard(self, project_id: str) -> None:
         p = self._blackboard_file(project_id)
         entries = [e.model_dump() for e in self.blackboards[project_id]]
-        import json
-
         p.write_text(json.dumps(entries, indent=2), encoding="utf-8")
 
     def _load_blackboard(self, project_id: str) -> None:
@@ -262,7 +260,7 @@ class SwarmService:
         target_entity: str,
         params: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        params = params or {}
+        pipeline_params = params or {}
         # Predefined SOP templates: "framework_audit", "api_key_extraction", "ui_reconstruction"
         sop_stages: list[dict[str, Any]] = []
 
@@ -301,6 +299,7 @@ class SwarmService:
             "project_id": project_id,
             "sop_name": sop_name,
             "target_entity": target_entity,
+            "params": pipeline_params,
             "total_stages": len(sop_stages),
             "stages": sop_stages,
             "status": "completed",

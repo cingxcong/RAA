@@ -77,7 +77,7 @@ async def test_github_playwright_and_apify_mcp(runtime: Runtime) -> None:
         profile="admin",
     )
     assert pr_res.data["pr_number"] == 42
-    assert "github.com" in pr_res.data["pr_url"]
+    assert pr_res.data["pr_url"].startswith("https://github.com/")
     assert pr_res.data["commits_pushed"] >= 1
 
     # 2. Playwright in-app WebView & OAuth interception
