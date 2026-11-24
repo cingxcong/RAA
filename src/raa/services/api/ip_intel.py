@@ -6,6 +6,7 @@ cloud / datacenter infrastructure attribution, bogon validation, and threat risk
 
 from __future__ import annotations
 
+import contextlib
 import ipaddress
 from typing import Any
 
@@ -46,7 +47,7 @@ def analyze_ip_intelligence(
 
     parsed_networks = []
     for cidr, asn, org, p_type, cc, city in KNOWN_CLOUD_NETWORKS:
-        with contextlib_suppress():
+        with contextlib.suppress(Exception):
             parsed_networks.append((ipaddress.ip_network(cidr), asn, org, p_type, cc, city))
 
     results: list[dict[str, Any]] = []
@@ -159,10 +160,3 @@ def analyze_ip_intelligence(
         "threat_threshold": threat_threshold,
         "intel_records": results,
     }
-
-
-def contextlib_suppress():
-    """Helper to suppress exceptions when building networks."""
-    import contextlib
-
-    return contextlib.suppress(Exception)

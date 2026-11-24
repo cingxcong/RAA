@@ -229,7 +229,7 @@ def test_deobfuscator_string_decrypt() -> None:
         strategy="string_decrypt",
     )
     assert result.transformed is True
-    assert "https://api.private.com" in (result.transformed_code or "")
+    assert (result.transformed_code or "").find("https://api.private.com") != -1
     assert result.provenance_warning is not None
 
 
@@ -257,7 +257,7 @@ def test_deobfuscator_simplify_pipeline() -> None:
         strategy="simplify",
     )
     assert result.transformed is True
-    assert "https://endpoint.com" in (result.transformed_code or "")
+    assert (result.transformed_code or "").find("https://endpoint.com") != -1
     assert "API.call" in (result.transformed_code or "")
     assert result.provenance_warning is not None
 
@@ -399,7 +399,7 @@ async def test_runtime_unpacking_tools_integration(runtime: Runtime, tmp_path: P
         },
     )
     assert deob_res.data["transformed"] is True
-    assert "https://bank.com" in deob_res.data["transformed_code"]
+    assert str(deob_res.data["transformed_code"]).find("https://bank.com") != -1
 
     # 6. retrace
     mapping_file = tmp_path / "runtime_mapping.txt"

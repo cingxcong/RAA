@@ -236,7 +236,7 @@ class DeviceManager:
         device = self.get_device(device_id)
 
         # Stop any running apps and instrumentation on the device
-        for (dev_id, _pkg), state in list(self._app_states.items()):
+        for (dev_id, _), state in list(self._app_states.items()):
             if dev_id == device_id:
                 state.running = False
 

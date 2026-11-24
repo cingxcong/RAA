@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 from pydantic import Field
 
 from raa.domain.models import AnalysisReport, Project
@@ -21,4 +23,4 @@ def project_of(ctx: ToolContext) -> Project:
 
 
 def report_of(ctx: ToolContext, project_id: str, job_id: str) -> AnalysisReport:
-    return ctx.runtime.analysis.get_report(project_id, job_id)
+    return cast(AnalysisReport, ctx.runtime.analysis.get_report(project_id, job_id))

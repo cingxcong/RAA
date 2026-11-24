@@ -120,8 +120,8 @@ async def test_endpoint_and_storage_discovery_in_report(runtime: Runtime, apk_pa
     assert "storage" in data
 
     endpoints = data["endpoints"]
-    assert "https://api.example.com/v1" in endpoints["urls"]
-    assert "https://example.com/app" in endpoints["deep_links"]
+    assert any(u == "https://api.example.com/v1" for u in endpoints["urls"])
+    assert any(dl == "https://example.com/app" for dl in endpoints["deep_links"])
     assert "https" in endpoints["schemes"]
 
     storage = data["storage"]

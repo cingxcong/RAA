@@ -132,7 +132,7 @@ def generate_403_bypass_mutations(
         )
         mutation_id += 1
 
-    breakdown = {}
+    breakdown: dict[str, int] = {}
     for m in mutations:
         cat = m["category"]
         breakdown[cat] = breakdown.get(cat, 0) + 1

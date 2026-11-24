@@ -356,7 +356,7 @@ def test_malware_yara_capa_quark_and_iocs(tmp_path: Path) -> None:
     ioc_values = {item.value for item in iocs}
     assert "198.51.100.77" in ioc_values
     assert "malicious-payload-drop.top" in ioc_values
-    assert "http://malicious-payload-drop.top/c2/gate.php" in ioc_values
+    assert any(v == "http://malicious-payload-drop.top/c2/gate.php" for v in ioc_values)
 
     # 5. IOC export: JSON
     json_iocs = export_iocs(iocs, "json")

@@ -1,89 +1,295 @@
-# RAA Setup & Prerequisites Guide: MCP Tools & Analysis Engines
+# RAA Setup & Prerequisites Guide: MCP Tools, Clients & Analysis Engines
 
-This guide details the complete prerequisites, system environment variables, binary dependencies, hardware configurations, and verification procedures required before running full end-to-end testing across all **244 RAA Model Context Protocol (MCP) tools** and underlying reverse engineering engines.
+<p align="center">
+  <img src="../images/raa.png" width="120" alt="RAA Logo">
+</p>
+
+<p align="center">
+  <strong>Comprehensive Installation, Client Integration (Claude, Cursor, Antigravity, VS Code), and Engine Configuration for RAA v3.0.0</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Current_Release-v3.0.0_Production-success?style=flat-square" alt="Current Release: v3.0.0 Production">
+  <img src="https://img.shields.io/badge/Total_Tools-322_Implemented-blue?style=flat-square" alt="Total Tools: 322 Implemented">
+  <img src="https://img.shields.io/badge/CLI_Commands-311_Commands-orange?style=flat-square" alt="CLI Commands: 311 Commands">
+  <img src="https://img.shields.io/badge/Tests-526_Passing-brightgreen?style=flat-square" alt="Tests: 526 Passing">
+  <img src="https://img.shields.io/badge/Protocol-2026--07--28-informational?style=flat-square" alt="Protocol: 2026-07-28">
+</p>
 
 ---
 
-## 1. Architecture & Execution Modes
+## 1. System Architecture & Setup Topology
 
-RAA operates across two execution boundaries:
+RAA (Reverse Android Anything) serves as an agent-native application intelligence core. It exposes **322 tools** across **8 capability profiles** simultaneously via the Model Context Protocol (MCP stdio and Streamable HTTP), a high-performance REST surface, and a unified 311-command CLI.
 
-1. **Pure-Python Native Mode (`RAA_ENGINE_EXECUTION_ENABLED=false`)**:
-   - Zero-external-dependency indexing, DEX/AXML/ARSC parsing, manifest extraction, code structure mapping, RFC 5652 PKCS#7 v1/v2/v3 APK signing, and string localization/patching.
-   - Requires only Python 3.11+ and project dependencies.
-2. **External Engine Mode (`RAA_ENGINE_EXECUTION_ENABLED=true`)**:
-   - Spawns external decompilers, disassemblers, native binary analyzers, instrumentation bridges (Frida, ADB, Scrcpy), and security linters.
-   - Requires external binaries in the system `PATH` and dedicated environment variables.
+```mermaid
+flowchart TD
+    classDef client fill:#0D47A1,stroke:#1E88E5,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef conn fill:#004D40,stroke:#00897B,stroke-width:2px,color:#FFFFFF;
+    classDef core fill:#1A237E,stroke:#3F51B5,stroke-width:3px,color:#FFFFFF,font-weight:bold;
+    classDef profiles fill:#4A148C,stroke:#8E24AA,stroke-width:2px,color:#FFFFFF;
+    classDef engines fill:#BF360C,stroke:#F4511E,stroke-width:2px,color:#FFFFFF;
+    classDef targets fill:#263238,stroke:#546E7A,stroke-width:2px,color:#FFFFFF;
+
+    subgraph Clients["1. AI Agent & Analyst Clients"]
+        C1["Claude Code & Desktop"]:::client
+        C2["Cursor IDE"]:::client
+        C3["Google Antigravity / Gemini CLI"]:::client
+        C4["VS Code / Windsurf / Codex"]:::client
+        C5["Terminal CLI & Automation Scripts"]:::client
+    end
+
+    subgraph Connection["2. Transport Protocol"]
+        T1["Stdio Pipes (FastMCP)"]:::conn
+        T2["Streamable HTTP / SSE (FastAPI :8000)"]:::conn
+        T3["Subprocess Direct CLI (Typer / Rich)"]:::conn
+    end
+
+    subgraph CorePlatform["3. RAA Core Platform v3.0"]
+        Runtime["Runtime Engine & Registry (322 Tools)"]:::core
+        Policy["Fail-Closed Policy Engine (Scopes)"]:::core
+        Audit["Cryptographic SHA-256 Audit Trail"]:::core
+        Tenancy["Tenancy & Token Budget Manager"]:::core
+    end
+
+    subgraph ProfileMatrix["4. Active Capability Profiles"]
+        P1["minimal (12 tools)"]:::profiles
+        P2["core (180 tools)"]:::profiles
+        P3["dynamic (218 tools)"]:::profiles
+        P4["api (180 tools)"]:::profiles
+        P5["ui (180 tools)"]:::profiles
+        P6["admin (42 tools)"]:::profiles
+        P7["swarm (150 tools)"]:::profiles
+        P8["full (322 tools)"]:::profiles
+    end
+
+    subgraph Engines["5. Reversing Engines & Sandboxes"]
+        E1["JADX, Apktool, AAPT2, Apksigner"]:::engines
+        E2["Frida, ADB Fleet, Wireless WireGuard"]:::engines
+        E3["Ghidra, Rizin, Kuna Rust, RetDec LLVM"]:::engines
+        E4["Google Stitch M3, Apple HIG, Liquid Glass"]:::engines
+        E5["PRoot Linux & Computer-Use Desktop GUI"]:::engines
+    end
+
+    Clients --> Connection
+    Connection --> CorePlatform
+    CorePlatform --> ProfileMatrix
+    ProfileMatrix --> Engines
+```
 
 ---
 
-## 2. System Environment Variables Reference
+## 2. Quickstart Installation
 
-Configure these environment variables in your operating system profile (`~/.bashrc`, `~/.zshrc`, or Windows System Properties -> Environment Variables):
+### Prerequisites
+- **Python:** Version `3.11` or higher (`3.11`, `3.12`, `3.13`, `3.14` supported).
+- **Package Manager:** `uv` (recommended) or standard `pip`.
+- **Git:** For cloning and subagent skill repositories.
+
+### One-Line Installation with `uv`
+```bash
+# Clone the repository
+git clone https://github.com/uditrajput/RAA.git
+cd RAA
+
+# Create virtual environment and install all dependencies
+uv venv .venv
+source .venv/bin/activate  # On Windows: .\.venv\Scripts\activate
+uv pip install -e .
+```
+
+### Alternatively with Standard `pip`
+```bash
+python -m venv .venv
+# On Linux/macOS:
+source .venv/bin/activate
+# On Windows:
+.\.venv\Scripts\activate
+
+pip install --upgrade pip
+pip install -e .
+```
+
+---
+
+## 3. Environment Variables Reference
+
+Create a `.env` file in the project root or configure your system environment variables:
 
 | Environment Variable | Recommended Value | Description |
 | :--- | :--- | :--- |
-| `RAA_PROFILE` | `full` | Active tool profile (`minimal`, `core`, `full`, `dynamic`, `api`, `ui`, `admin`). |
-| `RAA_ENGINE_EXECUTION_ENABLED` | `true` | Enables invocation of host binaries (JADX, Apktool, Frida, etc.). |
-| `RAA_ALLOWED_INPUT_ROOTS` | `["/path/to/apks", "C:\\apks"]` | JSON list of trusted filesystem directories allowed for `artifact_ingest`. |
-| `RAA_WORKSPACE` | `.raa-workspace` | Directory for SQLite databases, decompiled caches, and rebuilt APK artifacts. |
-| `RAA_MAX_INPUT_BYTES` | `2147483648` (2 GB) | Maximum accepted upload file size. |
-| `RAA_ANALYSIS_TIMEOUT_SECONDS`| `300.0` | Timeout for deep AST and decompilation routines. |
-| `RAA_ENGINE_TIMEOUT_SECONDS`  | `180.0` | Process execution timeout for external CLI commands. |
-| `ANDROID_HOME` / `ANDROID_SDK_ROOT` | `/path/to/android-sdk` | Base directory of the Android SDK. |
-| `JAVA_HOME` | `/path/to/jdk-17` | Required by JADX, Apktool, and Gradle (JDK 17 or 21 recommended). |
+| **`RAA_PROFILE`** | `full` | Active tool capability profile (`minimal`, `core`, `dynamic`, `api`, `ui`, `admin`, `swarm`, `full`). |
+| **`RAA_ENGINE_EXECUTION_ENABLED`** | `true` | Allows RAA to spawn external binaries (JADX, Ghidra, Apktool, Frida, etc.). |
+| **`RAA_WORKSPACE`** | `.raa-workspace` | Directory for SQLite databases, decompiled caches, and rebuilt APK artifacts. |
+| **`RAA_ALLOWED_INPUT_ROOTS`** | `["E:\\apks", "/home/user/apks"]` | Whitelisted filesystem roots allowed for `artifact_ingest`. |
+| **`RAA_MAX_INPUT_BYTES`** | `2147483648` (2 GB) | Maximum accepted archive / APK upload file size. |
+| **`RAA_ANALYSIS_TIMEOUT_SECONDS`** | `300.0` | Timeout in seconds for deep AST and decompilation routines. |
+| **`RAA_ENGINE_TIMEOUT_SECONDS`** | `180.0` | Process execution timeout for external CLI commands. |
+| **`JAVA_HOME`** | `/path/to/jdk-17` | Required by JADX, Apktool, and aapt2 (JDK 17 or 21 recommended). |
+| **`ANDROID_HOME`** | `/path/to/android-sdk` | Base directory containing `platform-tools` and `build-tools`. |
 
 ---
 
-## 3. Required System `PATH` Directories
+## 4. MCP Client Integration Guide
 
-Ensure the following directories are present in your system `PATH` variable:
+RAA is built specifically for AI coding agents and MCP clients. Use the configuration snippets below to instantly connect RAA to your favorite environment.
 
-### Linux / macOS
-```bash
-# Android SDK
-export ANDROID_HOME="$HOME/Android/Sdk"
-export PATH="$PATH:$ANDROID_HOME/platform-tools"
-export PATH="$PATH:$ANDROID_HOME/build-tools/34.0.0"
-export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
+### 4.1 Claude Code & Claude Desktop
 
-# Java JDK 17+
-export JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
-export PATH="$PATH:$JAVA_HOME/bin"
+#### Claude Desktop Configuration (`claude_desktop_config.json`)
+- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+- **Linux:** `~/.config/Claude/claude_desktop_config.json`
 
-# Decompilers & Tools
-export PATH="$PATH:/usr/local/bin"
-export PATH="$PATH:$HOME/.local/bin"
+```json
+{
+  "mcpServers": {
+    "raa": {
+      "command": "python",
+      "args": [
+        "-m",
+        "raa.cli.main",
+        "--profile",
+        "full",
+        "serve",
+        "mcp"
+      ],
+      "env": {
+        "RAA_ENGINE_EXECUTION_ENABLED": "true",
+        "RAA_WORKSPACE": ".raa-workspace"
+      }
+    }
+  }
+}
 ```
 
-### Windows (PowerShell)
-Add the following folders to your User or System `Path`:
-- `C:\Program Files\Java\jdk-17\bin`
-- `%LOCALAPPDATA%\Android\Sdk\platform-tools` (contains `adb.exe`)
-- `%LOCALAPPDATA%\Android\Sdk\build-tools\34.0.0` (contains `aapt2.exe`, `apksigner.bat`, `zipalign.exe`)
-- `C:\Tools\jadx\bin` (contains `jadx.bat`)
-- `C:\Tools\apktool` (contains `apktool.bat`)
+#### Claude Code (CLI)
+```bash
+claude mcp add raa python -- -m raa.cli.main --profile full serve mcp
+```
 
 ---
 
-## 4. Engine Installation Matrix
+### 4.2 Cursor IDE
 
-RAA integrates with 24 specialized reversing, decompilation, and security engines categorized by tier:
+Add RAA to Cursor via **Cursor Settings** -> **Features** -> **MCP Servers** -> **Add New MCP Server**, or configure `.cursor/mcp.json` in your workspace root:
+
+```json
+{
+  "mcpServers": {
+    "raa": {
+      "command": "python",
+      "args": ["-m", "raa.cli.main", "--profile", "full", "serve", "mcp"],
+      "env": {
+        "RAA_ENGINE_EXECUTION_ENABLED": "true"
+      }
+    }
+  }
+}
+```
+
+---
+
+### 4.3 Google Antigravity & Gemini CLI
+
+In Antigravity or Gemini CLI, configure the MCP server in your workspace configuration or `~/.gemini/antigravity/mcp_servers.json`:
+
+```json
+{
+  "mcpServers": {
+    "raa": {
+      "command": "python",
+      "args": ["-m", "raa.cli.main", "--profile", "swarm", "serve", "mcp"],
+      "env": {
+        "RAA_PROFILE": "swarm",
+        "RAA_ENGINE_EXECUTION_ENABLED": "true"
+      }
+    }
+  }
+}
+```
+
+---
+
+### 4.4 VS Code & Windsurf
+
+In `.vscode/settings.json` (or Windsurf MCP settings):
+
+```json
+{
+  "mcp.servers": {
+    "raa": {
+      "command": "python",
+      "args": ["-m", "raa.cli.main", "--profile", "full", "serve", "mcp"]
+    }
+  }
+}
+```
+
+---
+
+### 4.5 HTTP / SSE Streamable Surface (Remote / Team Servers)
+
+To serve RAA as a standalone microservice over HTTP with Server-Sent Events (SSE) streaming:
+
+```bash
+# Start Streamable FastMCP server on port 8000
+python -m raa.cli.main serve mcp --transport sse --port 8000
+
+# Start high-throughput FastAPI REST server on port 8080
+python -m raa.cli.main serve api --port 8080
+```
+
+Clients can then connect using:
+```json
+{
+  "mcpServers": {
+    "raa_remote": {
+      "url": "http://localhost:8000/sse"
+    }
+  }
+}
+```
+
+---
+
+## 5. Capability Profiles Matrix (8 Profiles)
+
+RAA allows clients to filter tool exposure based on task context and LLM context window capacity.
+
+| Profile Name | Tool Count | Optimal For | Highlights & Tools |
+| :--- | :---: | :--- | :--- |
+| **`minimal`** | **12** | Local / Small LLMs | `capabilities_get`, `project_create`, `artifact_ingest`, `manifest_get`, `doctor`. |
+| **`core`** | **180** | Default Static Analysis | All minimal tools + DEX disassembler, AST recoverer, WASM decompiler, string decryptor, call graph tracer. |
+| **`dynamic`** | **218** | Live Target Testing | Core tools + Wireless ADB fleet manager, Frida script injector, BLE GATT peripheral sniffer, virtual display crawler. |
+| **`api`** | **180** | Backend Reversing | Core tools + API endpoint crawler, semantic WAF mutator (403 bypass), OpenAPI 3.1 synthesizer, Postman exporter. |
+| **`ui`** | **180** | Living Canvas UI | Core tools + View hierarchy extractor, Google Stitch M3 Compose generator, Apple HIG doctor, liquid glass shaders. |
+| **`admin`** | **42** | DevOps & Forensics | Engine diagnostic runner, digital signature validator, audit hash-chain verifier, project backup & restore. |
+| **`swarm`** | **150** | Multi-Agent Meshes | Multi-agent paperclip governance, token budget meter, blackboard federated memory, MetaGPT SOP pipeline. |
+| **`full`** | **322** | Complete Platform | **All 322 tools** across all operational domains simultaneously. |
+
+To launch with a specific profile, use the `--profile` CLI option or set `RAA_PROFILE=<profile>`.
+
+---
+
+## 6. External Engine Installation Matrix
+
+While RAA includes pure-Python implementations for DEX, AXML, ARSC, RFC signing, and ELF parsing, external engines enable deep deobfuscation and dynamic instrumentation.
 
 ### Tier 1 — Core Mobile Reverse Engineering (High Priority)
-| Engine ID | Binary / Command | Installation Command | Purpose |
+| Engine ID | Binary / Command | Installation Source | Purpose |
 | :--- | :--- | :--- | :--- |
-| **`adb`** | `adb` | Android SDK `platform-tools` | Device communication, shell commands, and package management |
-| **`jadx`** | `jadx`, `jadx-gui` | `brew install jadx` or download release | Java/Kotlin source code decompilation from DEX |
-| **`apktool`** | `apktool` | `apt install apktool` or download JAR | Disassembling resources, decoding binary XML, and rebuilding Smali |
+| **`adb`** | `adb` | Android SDK `platform-tools` | Device communication, shell commands, package management |
+| **`jadx`** | `jadx`, `jadx-gui` | `brew install jadx` or [Releases](https://github.com/skylot/jadx) | Java/Kotlin source code decompilation from Dalvik DEX |
+| **`apktool`** | `apktool` | `apt install apktool` or [Releases](https://apktool.org/) | Resource disassembling, binary XML decoding, Smali reconstruction |
 | **`aapt2`** | `aapt2` | Android SDK `build-tools` | Compiling, inspecting, and dumping Android resources |
-| **`apksigner`**| `apksigner` | Android SDK `build-tools` | Validating APK v1/v2/v3/v4 signatures |
-| **`frida`** | `frida`, `frida-ps` | `pip install frida-tools` | Dynamic instrumentation, hook tracing, and script injection |
-| **`apkid`** | `apkid` | `pip install apkid` | Packer, protector, compiler, and anti-debug detector |
+| **`apksigner`**| `apksigner` | Android SDK `build-tools` | Validating external APK v1/v2/v3/v4 signatures |
+| **`frida`** | `frida`, `frida-ps` | `pip install frida-tools` | Dynamic instrumentation, hook tracing, script injection |
+| **`apkid`** | `apkid` | `pip install apkid` | Commercial packer, protector, and anti-debug detector |
 | **`androguard`** | `androguard` | `pip install androguard` | Pythonic DEX and manifest structure analysis |
 | **`mitmproxy`** | `mitmproxy`, `mitmdump`| `pip install mitmproxy` | Traffic interception and TLS inspection proxy |
 
-### Tier 2 — Native, Cross-Platform & Hybrid Frameworks
+### Tier 2 — Native, Hybrid & Apple Reverse Engineering
 | Engine ID | Binary / Command | Installation Source | Purpose |
 | :--- | :--- | :--- | :--- |
 | **`ghidra`** | `analyzeHeadless` | [Ghidra Releases](https://ghidra-sre.org/) | Native `.so` binary decompilation and disassembly (NSA Ghidra) |
@@ -91,101 +297,63 @@ RAA integrates with 24 specialized reversing, decompilation, and security engine
 | **`blutter`** | `blutter` | `git clone https://github.com/worawit/blutter` | Flutter Dart AOT snapshot reversing and class reconstruction |
 | **`il2cppdumper`**| `Il2CppDumper` | [Il2CppDumper Releases](https://github.com/Perfare/Il2CppDumper) | Unity IL2CPP game binary and metadata unpacker |
 | **`hbctool`** | `hbctool` | `pip install hbctool` | React Native Hermes bytecode disassembly and assembler |
-| **`ilspycmd`** | `ilspycmd` | `dotnet tool install -g ilspycmd` | Xamarin/.NET decompilation for cross-platform Android apps |
+| **`ilspycmd`** | `ilspycmd` | `dotnet tool install -g ilspycmd` | Xamarin/.NET decompilation for cross-platform apps |
 
-### Tier 3 — AppSec, Vulnerabilities & SBOM Verification
+### Tier 3 — AppSec, Threat Detection & Compliance
 | Engine ID | Binary / Command | Installation Source | Purpose |
 | :--- | :--- | :--- | :--- |
-| **`semgrep`** | `semgrep` | `pip install semgrep` | Static analysis security scans for injected scripts and source |
-| **`syft`** | `syft` | `curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh \| sh` | Software Bill of Materials (SBOM) generator |
-| **`grype`** | `grype` | `curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh \| sh` | Vulnerability scanning for third-party libraries |
+| **`semgrep`** | `semgrep` | `pip install semgrep` | SAST static analysis security scans and OWASP rulesets |
+| **`syft`** | `syft` | [Anchore Syft](https://github.com/anchore/syft) | CycloneDX and SPDX Software Bill of Materials (SBOM) generator |
+| **`grype`** | `grype` | [Anchore Grype](https://github.com/anchore/grype) | Vulnerability scanner for third-party mobile dependencies |
 | **`quark`** | `quark` | `pip install quark-engine` | Android malware behavioral heuristics and rule engine |
 | **`schemathesis`**| `schemathesis` | `pip install schemathesis` | Autonomous API property-based contract testing |
 
 ---
 
-## 5. Physical Mobile Device Testing Setup
+## 7. Pre-Flight Health Check & Verification
 
-When validating dynamic tools (`dynamic_instrument_frida`, `apk_install`, `runtime_screen_capture`, `rasp_bypass`):
-
-1. **Enable Developer Options on Device**:
-   - Navigate to `Settings` -> `About Device` -> Tap `Build Number` 7 times.
-   - Enter `Developer Options` -> Toggle **USB Debugging** on.
-   - Toggle **Install via USB** on (crucial for automated signing tests).
-   - Toggle **Disable Permission Monitoring** on (if available on ColorOS/Oppo/Xiaomi).
-2. **Authorize Host Machine**:
-   ```bash
-   adb devices
-   # Accept the "Always allow from this computer" prompt on the device screen
-   ```
-3. **Root / Frida Server (For Dynamic Hooking)**:
-   - For rooted devices: push `frida-server` matching device architecture (`adb shell getprop ro.product.cpu.abi`):
-     ```bash
-     adb push frida-server /data/local/tmp/
-     adb shell "chmod 755 /data/local/tmp/frida-server"
-     adb shell "/data/local/tmp/frida-server &"
-     ```
-   - For non-rooted devices: use RAA's built-in gadget injector tool:
-     ```bash
-     # RAA injects Frida gadget automatically into the target APK:
-     apk_patch(operation="inject_frida_gadget", parameters={"gadget_version": "16.1.4"})
-     ```
-
----
-
-## 6. Pre-Flight Health Check
-
-Before initiating automated MCP tests, run the RAA Doctor command to verify that all databases, workspace permissions, and installed engines are detected:
-
-### Using the CLI
-```bash
-raa admin doctor
-```
-
-### Using the MCP Tool
-Invoke the MCP tool:
-```json
-{
-  "name": "raa.admin_doctor",
-  "arguments": {}
-}
-```
-
-**Expected Healthy Response**:
-```json
-{
-  "ok": true,
-  "profile": "full",
-  "workspace_writable": true,
-  "database_ok": true,
-  "mcp_sdk": "1.3.0",
-  "engines": {
-    "catalogued": 24,
-    "installed": 12
-  },
-  "implemented_tools": 244
-}
-```
-
----
-
-## 7. Quick Smoke Test Sequence
-
-Run this short sequence to confirm that workspace ingestion, static analysis, patching, RFC signing, and physical deployment operate without error:
+Before running production workflows, run the built-in diagnostic doctor:
 
 ```bash
-# 1. Ingest sample APK
-raa artifact ingest --path sample.apk
+# Run RAA Doctor via CLI
+python -m raa.cli.main doctor
+```
 
-# 2. Inspect manifest and permissions
-raa source search --query "android.permission.INTERNET"
+**Expected Healthy Output**:
+```
+                         RAA doctor                         
+┌────────────────────┬─────────────────────────────────────┐
+│ Check              │ Value                               │
+├────────────────────┼─────────────────────────────────────┤
+│ ok                 │ True                                │
+│ python             │ 3.11+ / 3.14.0                      │
+│ platform           │ Windows / Linux / macOS             │
+│ profile            │ core / full                         │
+│ workspace          │ Workspace\RAA\.raa-workspace        │
+│ workspace_writable │ True                                │
+│ database_ok        │ True                                │
+│ mcp_sdk            │ 2.3.0                               │
+│ implemented_tools  │ 322                                 │
+│ engines            │ Catalogued & Detected               │
+└────────────────────┴─────────────────────────────────────┘
+```
 
-# 3. Patch APK for network inspection and set debuggable
-raa apk patch --operation network_security_bypass --input sample.apk
+### Automated Smoke Test Sequence
+Verify that static analysis, live patching, RFC signing, and CLI invocation operate cleanly:
 
-# 4. Sign rebuilt container (Applies pure-native v1, v2, and v3 RFC 5652 signatures)
-raa apk sign --input patched_sample.apk
+```bash
+# 1. Check version constants
+python -m raa.cli.main version
 
-# 5. Install and verify on physical Android target
-adb install -r signed_sample.apk
+# 2. List tools in the active profile
+python -m raa.cli.main tools list
+
+# 3. Create a verification project
+python -m raa.cli.main project create --name "Verify-v3" --desc "Smoke Test"
+
+# 4. Verify Swarm governance subcommands
+python -m raa.cli.main swarm org-govern --project-id "proj_verify"
+
+# 5. Run full test suite
+pytest -q
 ```

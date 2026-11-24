@@ -8,15 +8,12 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from pydantic import BaseModel, Field, ValidationError
 
 from raa.errors import InvalidArgumentsError, NotFoundError
 from raa.registry.models import ToolContext, ToolInput
-
-if TYPE_CHECKING:
-    from raa.runtime import Runtime
 
 
 class TriageArguments(ToolInput):
@@ -116,7 +113,7 @@ class RecipeService:
 
     async def run(
         self,
-        runtime: Runtime,
+        runtime: Any,
         ctx: ToolContext,
         recipe_id: str,
         arguments: dict[str, Any],
@@ -159,7 +156,7 @@ class RecipeService:
 
     async def _triage(
         self,
-        runtime: Runtime,
+        runtime: Any,
         ctx: ToolContext,
         parsed: BaseModel,
     ) -> dict[str, Any]:
@@ -232,7 +229,7 @@ class RecipeService:
 
     async def _project_overview(
         self,
-        runtime: Runtime,
+        runtime: Any,
         ctx: ToolContext,
         parsed: BaseModel,
     ) -> dict[str, Any]:

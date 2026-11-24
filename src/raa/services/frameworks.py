@@ -9,13 +9,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from fnmatch import fnmatchcase
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from raa.domain.models import Confidence, FrameworkFinding, PackerFinding
 
 if TYPE_CHECKING:
     from raa.domain.manifest import ManifestInfo
-    from raa.services.android.dex import DexIndex
 
 
 @dataclass(frozen=True, slots=True)
@@ -145,7 +144,7 @@ _DEX_FRAMEWORK_MARKERS: dict[str, tuple[str, ...]] = {
 def detect_frameworks(
     names: list[str],
     manifest: ManifestInfo | None = None,
-    dex_index: DexIndex | None = None,
+    dex_index: Any | None = None,
 ) -> list[FrameworkFinding]:
     lowered = [name.lower().replace("\\", "/") for name in names]
     findings: list[FrameworkFinding] = []

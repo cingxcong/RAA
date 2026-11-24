@@ -25,7 +25,7 @@ def render_architecture_diagram(
     sig = hashlib.sha256(f"{project_id}:{apk_path}:{timestamp}".encode()).hexdigest()[:8]
     diagram_id = f"arch-diag-{sig}"
 
-    nodes = [
+    nodes: list[dict[str, Any]] = [
         {
             "id": "act_main",
             "name": "MainActivity",

@@ -39,7 +39,7 @@ def inspect_ai_model(file_bytes: bytes, file_name: str = "model.tflite") -> dict
         model_format = "mediapipe"
 
     # Scan strings inside model for known operators, metadata, and layers
-    ascii_strings: list[str] = re.findall(rb"[\x20-\x7E]{4,}", file_bytes)
+    ascii_strings: list[bytes] = re.findall(rb"[\x20-\x7E]{4,}", file_bytes)
     decoded_strings = [s.decode("latin1") for s in ascii_strings]
 
     known_ops = {

@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import re
 from typing import Any
+from urllib.parse import urlsplit
 
 # Signatures for IoT service types and vendors
 MDNS_SERVICES = {
@@ -22,9 +23,149 @@ MDNS_SERVICES = {
     "_http._tcp": ("Embedded Web Server", "Local Management Interface"),
 }
 
+# Standard & Automotive / Companion BLE Service & Characteristic UUID signatures
+KNOWN_BLE_SERVICES: dict[str, tuple[str, str]] = {
+    "00001800-0000-1000-8000-00805f9b34fb": ("Generic Access", "Core Device Info"),
+    "00001801-0000-1000-8000-00805f9b34fb": ("Generic Attribute", "GATT Service"),
+    "0000180a-0000-1000-8000-00805f9b34fb": ("Device Information", "Hardware & Firmware Metadata"),
+    "0000180f-0000-1000-8000-00805f9b34fb": ("Battery Service", "BMS & Battery Level"),
+    "0000180d-0000-1000-8000-00805f9b34fb": ("Heart Rate", "Biometric Sensor"),
+    "00001819-0000-1000-8000-00805f9b34fb": ("Location and Navigation", "GNSS / Telemetry"),
+    "6e400001-b5a3-f393-e0a9-e50e24dcca9e": (
+        "Nordic UART Service (NUS)",
+        "Bidirectional Serial Bridge",
+    ),
+    "0000fee0-0000-1000-8000-00805f9b34fb": ("Anhui Huami / Zepp", "Wearable Companion Protocol"),
+    "0000fee1-0000-1000-8000-00805f9b34fb": ("Xiaomi Smart Band", "Fitness & Biometrics"),
+    "0000fe95-0000-1000-8000-00805f9b34fb": ("Xiaomi Mijia / BLE Mesh", "Smart Home Automation"),
+}
+
+KNOWN_BLE_CHARACTERISTICS: dict[str, tuple[str, str]] = {
+    "00002a00-0000-1000-8000-00805f9b34fb": ("Device Name", "String"),
+    "00002a19-0000-1000-8000-00805f9b34fb": ("Battery Level", "Percentage (uint8)"),
+    "00002a24-0000-1000-8000-00805f9b34fb": ("Model Number String", "String"),
+    "00002a26-0000-1000-8000-00805f9b34fb": ("Firmware Revision String", "String"),
+    "00002a28-0000-1000-8000-00805f9b34fb": ("Software Revision String", "String"),
+    "6e400002-b5a3-f393-e0a9-e50e24dcca9e": ("NUS TX Characteristic", "Raw Byte Stream (Write)"),
+    "6e400003-b5a3-f393-e0a9-e50e24dcca9e": ("NUS RX Characteristic", "Raw Byte Stream (Notify)"),
+}
+
+
+def dissect_ble_peripheral(
+    raw_services_or_uuids: list[Any] | dict[str, Any] | str,
+    device_name: str = "Unknown BLE Peripheral",
+) -> dict[str, Any]:
+    """Analyze Bluetooth Low Energy (BLE) GATT services, characteristics, and telemetry channels.
+
+    Identifies standard Bluetooth SIG services, proprietary companion app serial bridges
+    (e.g., Nordic UART, BMS / Battery Management, TCU telemetry), and flags insecure
+    unencrypted write characteristics or missing bonding requirements.
+    """
+    input_uuids: list[str] = []
+    if isinstance(raw_services_or_uuids, str):
+        # Extract UUID-like strings (128-bit or 16-bit)
+        matches = re.findall(
+            r"\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b",
+            raw_services_or_uuids,
+        )
+        input_uuids = matches if matches else [raw_services_or_uuids.strip()]
+    elif isinstance(raw_services_or_uuids, list):
+        for item in raw_services_or_uuids:
+            if isinstance(item, str):
+                input_uuids.append(item.strip())
+            elif isinstance(item, dict) and "uuid" in item:
+                input_uuids.append(str(item["uuid"]).strip())
+    elif isinstance(raw_services_or_uuids, dict):
+        if "services" in raw_services_or_uuids and isinstance(
+            raw_services_or_uuids["services"], list
+        ):
+            for s in raw_services_or_uuids["services"]:
+                u = s.get("uuid") if isinstance(s, dict) else str(s)
+                if u:
+                    input_uuids.append(u.strip())
+        elif "uuid" in raw_services_or_uuids:
+            input_uuids.append(str(raw_services_or_uuids["uuid"]).strip())
+
+    analyzed_services: list[dict[str, Any]] = []
+    identified_telemetry: list[str] = []
+    ble_alerts: list[dict[str, Any]] = []
+
+    for uuid_raw in input_uuids:
+        uuid_lower = uuid_raw.lower()
+        # Canonicalize 16-bit to 128-bit if applicable
+        if len(uuid_lower) == 4 or (len(uuid_lower) == 6 and uuid_lower.startswith("0x")):
+            clean_16 = uuid_lower.replace("0x", "").zfill(8)
+            uuid_canonical = f"{clean_16}-0000-1000-8000-00805f9b34fb"
+        else:
+            uuid_canonical = uuid_lower
+
+        service_info = KNOWN_BLE_SERVICES.get(uuid_canonical)
+        char_info = KNOWN_BLE_CHARACTERISTICS.get(uuid_canonical)
+
+        if service_info:
+            s_name, s_role = service_info
+            analyzed_services.append(
+                {
+                    "uuid": uuid_raw,
+                    "canonical_uuid": uuid_canonical,
+                    "kind": "service",
+                    "name": s_name,
+                    "role": s_role,
+                    "is_standard_sig": uuid_canonical.endswith("-0000-1000-8000-00805f9b34fb"),
+                }
+            )
+            identified_telemetry.append(s_name)
+            if "UART" in s_name or "Serial" in s_role:
+                ble_alerts.append(
+                    {
+                        "severity": "HIGH",
+                        "title": "Proprietary BLE Serial Bridge Exposed",
+                        "description": (
+                            f"Service '{s_name}' ({uuid_raw}) operates as a raw serial bridge. "
+                            "May accept unauthenticated binary telemetry or command frames."
+                        ),
+                    }
+                )
+        elif char_info:
+            c_name, c_type = char_info
+            analyzed_services.append(
+                {
+                    "uuid": uuid_raw,
+                    "canonical_uuid": uuid_canonical,
+                    "kind": "characteristic",
+                    "name": c_name,
+                    "data_type": c_type,
+                    "is_standard_sig": True,
+                }
+            )
+            identified_telemetry.append(c_name)
+        else:
+            # Proprietary / vendor custom UUID
+            analyzed_services.append(
+                {
+                    "uuid": uuid_raw,
+                    "canonical_uuid": uuid_canonical,
+                    "kind": "proprietary",
+                    "name": "Custom / Proprietary Vendor UUID",
+                    "role": "Vehicle TCU / BMS / Smart Peripheral Channel",
+                    "is_standard_sig": False,
+                }
+            )
+            identified_telemetry.append(f"Proprietary ({uuid_raw[:8]}...)")
+
+    return {
+        "device_name": device_name,
+        "total_uuids_analyzed": len(input_uuids),
+        "services_identified_count": len(analyzed_services),
+        "services": analyzed_services,
+        "telemetry_channels": sorted(set(identified_telemetry)),
+        "security_alerts_count": len(ble_alerts),
+        "security_alerts": ble_alerts,
+    }
+
 
 def dissect_iot_traffic(
-    traffic_input: str | list[dict[str, Any]],
+    traffic_input: str | list[Any],
     subnet_filter: str | None = None,
 ) -> dict[str, Any]:
     """Parse local multicast/broadcast IoT traffic, extract devices and vulnerabilities."""
@@ -43,8 +184,6 @@ def dissect_iot_traffic(
                 lines.append(json.dumps(item))
             else:
                 lines.append(str(item))
-    else:
-        lines = []
 
     for line in lines:
         line_clean = line.strip()
@@ -104,7 +243,7 @@ def dissect_iot_traffic(
             exposed_endpoints.append(loc_url)
 
             # Check for cleartext XML or unencrypted control
-            if loc_url.startswith("http://"):
+            if urlsplit(loc_url).scheme.lower() == "http":
                 security_alerts.append(
                     {
                         "severity": "MEDIUM",
@@ -164,6 +303,30 @@ def dissect_iot_traffic(
                     "description": "Device broadcasts plaintext beacons over local UDP subnet.",
                 }
             )
+
+        # 5. BLE GATT / UUID strings in traffic or log dumps
+        ble_matches = re.findall(
+            r"\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b",
+            line_clean,
+        )
+        if ble_matches or any(k in line_clean.lower() for k in ("gatt", "ble", "bluetooth")):
+            protocols_detected.add("BLE_GATT")
+            if ble_matches:
+                ble_res = dissect_ble_peripheral(
+                    ble_matches, device_name="Discovered BLE Companion"
+                )
+                for srv in ble_res["services"]:
+                    discovered_devices.append(
+                        {
+                            "protocol": "BLE_GATT",
+                            "vendor": srv.get("name", "BLE Service"),
+                            "device_type": srv.get("role", "BLE Peripheral Channel"),
+                            "service": srv.get("uuid"),
+                            "ip": "00:00:00:00:00:00 (BLE)",
+                            "details": f"{srv.get('name')} [{srv.get('uuid')}]",
+                        }
+                    )
+                security_alerts.extend(ble_res["security_alerts"])
 
     # Deduplicate devices by IP + service
     unique_devices = []

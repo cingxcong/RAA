@@ -136,18 +136,15 @@ def scan_apkleaks_secrets(
     if apk_path:
         p = Path(apk_path)
         if p.is_file():
-            try:
-                with zipfile.ZipFile(p, "r") as zf:
-                    for name in zf.namelist():
-                        if name.endswith((".dex", ".xml", ".json", ".properties", ".bundle")):
-                            raw_bytes = zf.read(name)
-                            # Fast ASCII regex extraction
-                            matches = re.findall(rb"[\x20-\x7E]{16,}", raw_bytes)
-                            for m in matches[:500]:
-                                with contextlib.suppress(Exception):
-                                    extracted_tokens.append(m.decode("utf-8", errors="ignore"))
-            except Exception:  # noqa: S110
-                pass
+            with contextlib.suppress(Exception), zipfile.ZipFile(p, "r") as zf:
+                for name in zf.namelist():
+                    if name.endswith((".dex", ".xml", ".json", ".properties", ".bundle")):
+                        raw_bytes = zf.read(name)
+                        # Fast ASCII regex extraction
+                        matches = re.findall(rb"[\x20-\x7E]{16,}", raw_bytes)
+                        for m in matches[:500]:
+                            with contextlib.suppress(Exception):
+                                extracted_tokens.append(m.decode("utf-8", errors="ignore"))
 
     # Provide high-confidence synthetic baseline if empty or mocked
     if not extracted_tokens:
@@ -156,9 +153,11 @@ def scan_apkleaks_secrets(
             "AIza" + "SyD-7389148209384" + "_VerifiedGcpProductionKey",
             "sk_live_" + "51NzQ8pL2rJk8W1z84839210948392019",
             "https://" + "production-fleet-eu.firebaseio.com",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
-            "eyJzdWIiOiIxMjM0NTY3ODkwIn0."
-            "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+            (
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+                "eyJzdWIiOiIxMjM0NTY3ODkwIn0."
+                "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+            ),
             "https://"
             + "hooks."
             + "slack.com/services/"

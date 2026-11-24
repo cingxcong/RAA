@@ -69,25 +69,6 @@ _PACKER_RULES: list[dict[str, Any]] = [
     },
 ]
 
-# Obfuscator detection heuristics
-_OBFUSCATOR_RULES: list[dict[str, Any]] = [
-    {
-        "name": "ProGuard / R8",
-        "category": "obfuscator",
-        "package_patterns": ("a.a", "b.a", "c.a", "a.b.c"),
-    },
-    {
-        "name": "Allatori",
-        "category": "obfuscator",
-        "package_patterns": ("ALLATORIxDEMO",),
-    },
-    {
-        "name": "Stringer",
-        "category": "obfuscator",
-        "package_patterns": ("stringer",),
-    },
-]
-
 # Anti-analysis string indicators
 _ANTI_ANALYSIS_PATTERNS: list[tuple[AntiAnalysisKind, str, str, str]] = [
     (

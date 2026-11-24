@@ -7,7 +7,7 @@ import plistlib
 import struct
 import zipfile
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,9 @@ def parse_embedded_mobileprovision(prov_bytes: bytes) -> dict[str, Any]:
     if start_idx != -1 and end_idx != -1:
         xml_slice = prov_bytes[start_idx : end_idx + len(end_tag)]
         try:
-            return plistlib.loads(xml_slice)
+            res = plistlib.loads(xml_slice)
+            if isinstance(res, dict):
+                return cast(dict[str, Any], res)
         except Exception as err:
             logger.debug("Failed parsing mobileprovision plist: %s", err)
 
@@ -92,7 +94,7 @@ def disassemble_macho(
         raise ValueError(f"Unrecognized Mach-O magic: 0x{magic:08X}")
 
     fmt_prefix = "<" if is_little else ">"
-    cputype, _cpusubtype, _filetype, ncmds, _sizeofcmds, _flags = struct.unpack(
+    cputype, _, _, ncmds, _, _ = struct.unpack(
         f"{fmt_prefix}IIIIII",
         raw_data[4:28],
     )

@@ -84,10 +84,8 @@ def generate_python_client(
         "",
     ]
 
-    method_count = 0
     for path, methods in spec.paths.items():
         for method, op_def in methods.items():
-            method_count += 1
             op_id = op_def.get("operationId", "")
             func_name = _make_method_name(method, path)
             params = op_def.get("parameters", [])

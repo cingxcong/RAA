@@ -13,7 +13,7 @@ from typing import Literal
 from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-ProfileName = Literal["minimal", "core", "full", "dynamic", "api", "ui", "admin"]
+ProfileName = Literal["minimal", "core", "full", "dynamic", "api", "ui", "admin", "swarm"]
 
 DEFAULT_PROFILE: ProfileName = "core"
 

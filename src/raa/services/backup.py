@@ -124,14 +124,14 @@ class BackupService:
             except Exception as exc:
                 raise RAAError(
                     "Invalid or corrupt backup bundle: manifest.json is missing or unreadable.",
-                    code="corrupt_backup",
+                    details={"code": "corrupt_backup"},
                 ) from exc
 
             # Verify bundle format
             if manifest.get("format") != "raa.bundle.v1":
                 raise RAAError(
                     f"Unsupported backup format: {manifest.get('format')}",
-                    code="unsupported_backup_format",
+                    details={"code": "unsupported_backup_format"},
                 )
 
             # Create restored project

@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 import re
 import struct
 
 from raa.domain.native import ElfHeaderInfo, NativeSymbol, NativeSymbolsSummary
+
+logger = logging.getLogger(__name__)
 
 ELF_MAGIC = b"\x7fELF"
 
@@ -59,7 +62,6 @@ _SYMBOL_TYPES: dict[int, str] = {
 }
 
 _JNI_PREFIX = "Java_"
-_JNI_PATTERN = re.compile(r"^Java_([a-zA-Z0-9_]+)$")
 
 
 def demangle_jni(name: str) -> str:
@@ -174,12 +176,12 @@ def extract_elf_symbols(
             for i in range(min(e_shnum, 128)):
                 offset = e_shoff + i * e_shentsize
                 if is_64:
-                    sh_name, sh_type, _sh_flags, _sh_addr, sh_offset, sh_size, sh_link = (
-                        struct.unpack_from(f"{endian_prefix}IIQQQQI", data, offset)
+                    sh_name, sh_type, _, _, sh_offset, sh_size, sh_link = struct.unpack_from(
+                        f"{endian_prefix}IIQQQQI", data, offset
                     )
                 else:
-                    sh_name, sh_type, _sh_flags, _sh_addr, sh_offset, sh_size, sh_link = (
-                        struct.unpack_from(f"{endian_prefix}IIIIIII", data, offset)
+                    sh_name, sh_type, _, _, sh_offset, sh_size, sh_link = struct.unpack_from(
+                        f"{endian_prefix}IIIIIII", data, offset
                     )
                 sh_entries.append(
                     {
@@ -220,12 +222,12 @@ def extract_elf_symbols(
                     for s in range(min(sym_count, max_symbols)):
                         s_pos = sym_offset + s * (24 if is_64 else 16)
                         if is_64:
-                            st_name, st_info, _st_other, st_shndx, st_value, _st_size = (
-                                struct.unpack_from(f"{endian_prefix}IBBHQQ", data, s_pos)
+                            st_name, st_info, _, st_shndx, st_value, _ = struct.unpack_from(
+                                f"{endian_prefix}IBBHQQ", data, s_pos
                             )
                         else:
-                            st_name, st_value, _st_size, st_info, _st_other, st_shndx = (
-                                struct.unpack_from(f"{endian_prefix}IIIBBH", data, s_pos)
+                            st_name, st_value, _, st_info, _, st_shndx = struct.unpack_from(
+                                f"{endian_prefix}IIIBBH", data, s_pos
                             )
 
                         if st_name == 0 or st_name >= len(strtab_data):
@@ -266,8 +268,8 @@ def extract_elf_symbols(
                             exported.append(native_sym)
                         else:
                             imported.append(native_sym)
-    except Exception:  # noqa: S110
-        pass
+    except Exception as err:
+        logger.debug("Section header symbol parsing fallback: %s", err)
 
     # Fallback heuristic: If section headers were stripped or empty, scan strings for JNI symbols
     if not exported and not jni_symbols:

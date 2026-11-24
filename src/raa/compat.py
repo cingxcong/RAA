@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+from typing import Any
 
 
 class _DummyLoopbackSocket:
@@ -57,14 +58,14 @@ def ensure_sandbox_compatibility() -> None:
     import asyncio.proactor_events as pe
     import socket
 
-    def _safe_make_self_pipe(self: pe.BaseProactorEventLoop) -> None:
-        self._ssock = _DummyLoopbackSocket()  # type: ignore[assignment]
-        self._csock = _DummyLoopbackSocket()  # type: ignore[assignment]
+    def _safe_make_self_pipe(self: Any) -> None:
+        self._ssock = _DummyLoopbackSocket()
+        self._csock = _DummyLoopbackSocket()
         self._internal_fds += 1
 
-    pe.BaseProactorEventLoop._make_self_pipe = _safe_make_self_pipe  # type: ignore[method-assign]
-    pe.BaseProactorEventLoop._loop_self_reading = lambda self, f=None: None  # type: ignore[method-assign]
-    pe.BaseProactorEventLoop._write_to_self = lambda self: None  # type: ignore[method-assign]
+    setattr(pe.BaseProactorEventLoop, "_make_self_pipe", _safe_make_self_pipe)  # noqa: B010
+    setattr(pe.BaseProactorEventLoop, "_loop_self_reading", lambda self, f=None: None)  # noqa: B010
+    setattr(pe.BaseProactorEventLoop, "_write_to_self", lambda self: None)  # noqa: B010
 
     def _safe_socketpair(
         family: int = socket.AF_INET,

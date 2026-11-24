@@ -7,10 +7,13 @@ and certificate pinning policies.
 
 from __future__ import annotations
 
+import logging
 import xml.etree.ElementTree as ET
 from typing import Any
 
 from raa.services.android.axml import XmlElement, parse_binary_xml
+
+logger = logging.getLogger(__name__)
 
 
 def decode_network_security_config(data: bytes) -> dict[str, Any]:
@@ -19,8 +22,8 @@ def decode_network_security_config(data: bytes) -> dict[str, Any]:
         try:
             doc = parse_binary_xml(data)
             return _parse_axml_tree(doc.root)
-        except Exception:  # noqa: S110
-            pass
+        except Exception as err:
+            logger.debug("Binary AXML parse attempt failed: %s", err)
 
     # Try plain text XML
     try:

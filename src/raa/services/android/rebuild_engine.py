@@ -151,15 +151,12 @@ def patch_dex_bytes_strings(dex_bytes: bytes, replacements: dict[str, str]) -> b
     modified = False
     for i, off in enumerate(string_offsets):
         p = off
-        utf16_len = 0
-        shift = 0
+        # Advance past ULEB128 string length prefix
         while p < len(dex):
             b = dex[p]
             p += 1
-            utf16_len |= (b & 0x7F) << shift
             if not (b & 0x80):
                 break
-            shift += 7
         end = dex.find(b"\x00", p)
         if end < 0:
             continue

@@ -38,6 +38,7 @@ env/
 nosetests.xml
 coverage.xml
 htmlcov/
+reports/
 
 # --- RAA Runtime State & Local Databases ---
 .raa-workspace/
@@ -99,6 +100,12 @@ node_modules/
 .yarn/
 
 # --- Reference Applications & Benchmarks ---
+Refrence app/
+Reference app/
+Refrence\ app/
+Reference\ app/
+[Rr]ef*app/
+[Rr]ef*apps/
 docs/Refrence application/
 docs/Reference Application/
 docs/Refrence\ application/

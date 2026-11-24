@@ -80,10 +80,11 @@ class SbomService:
         components: list[dict[str, Any]] = []
 
         # 1. Python runtime packages
-        for dist in sorted(importlib.metadata.distributions(), key=lambda d: d.metadata["Name"]):
-            name = dist.metadata.get("Name", "unknown")
-            version = dist.metadata.get("Version", "unknown")
-            license_val = dist.metadata.get("License", "Unknown")
+        for dist in sorted(importlib.metadata.distributions(), key=lambda d: d.name):
+            meta: Any = dist.metadata
+            name = meta.get("Name", "unknown")
+            version = meta.get("Version", "unknown")
+            license_val = meta.get("License", "Unknown")
             components.append(
                 {
                     "type": "library",

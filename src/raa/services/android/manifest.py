@@ -383,10 +383,14 @@ def _deep_links(components: list[ComponentInfo]) -> list[DeepLinkInfo]:
 
 def _limitations(manifest: ManifestInfo) -> list[str]:
     limitations = [
-        "Manifest values are decoded from the shipped binary XML; resource "
-        "references are not resolved in this build.",
-        "Exported flags and intent filters describe declarations, not runtime "
-        "reachability or actual access control.",
+        (
+            "Manifest values are decoded from the shipped binary XML; resource "
+            "references are not resolved in this build."
+        ),
+        (
+            "Exported flags and intent filters describe declarations, not runtime "
+            "reachability or actual access control."
+        ),
         'Exported counts exclude components declared with android:enabled="false".',
         "Only the outer APK manifest is decoded; split manifests are not merged.",
     ]

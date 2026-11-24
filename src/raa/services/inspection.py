@@ -388,8 +388,10 @@ def _limitations(artifact_type: str) -> list[str]:
     limitations = [
         "Binary AndroidManifest.xml is inventoried but not parsed in this build.",
         "No code, resource, API or UI analysis is performed by the built-in scanner.",
-        "Framework and packer detection uses filename markers and can miss "
-        "renamed or encrypted assets.",
+        (
+            "Framework and packer detection uses filename markers and can miss "
+            "renamed or encrypted assets."
+        ),
         "No runtime observation or device execution was performed.",
         "Signatures are not cryptographically verified in this build.",
     ]

@@ -198,7 +198,8 @@ def inspect_harmony_hap(hap_path: str | Path) -> dict[str, Any]:
             version_code = version_sec.get("code")
             version_name = version_sec.get("name")
 
-        device_types = manifest_data.get("deviceConfig", {}).keys()  # type: ignore[assignment]
+        device_config = manifest_data.get("deviceConfig", {})
+        device_types = list(device_config.keys()) if isinstance(device_config, dict) else []
         module_sec = manifest_data.get("module", {})
         raw_abilities = module_sec.get("abilities", [])
         if isinstance(raw_abilities, list):

@@ -58,11 +58,11 @@ def inspect_elf_alignment(elf_bytes: bytes) -> dict[str, Any]:
             break
 
         if is_64bit:
-            p_type, _p_flags, p_offset, p_vaddr, _, p_filesz, p_memsz, p_align = struct.unpack(
+            p_type, _, p_offset, p_vaddr, _, p_filesz, p_memsz, p_align = struct.unpack(
                 f"{endian}IIQQQQQQ", elf_bytes[off : off + 56]
             )
         else:
-            p_type, p_offset, p_vaddr, _, p_filesz, p_memsz, _p_flags, p_align = struct.unpack(
+            p_type, p_offset, p_vaddr, _, p_filesz, p_memsz, _, p_align = struct.unpack(
                 f"{endian}IIIIIIII", elf_bytes[off : off + 32]
             )
 

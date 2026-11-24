@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import pytest
 from typer.testing import CliRunner
@@ -62,7 +63,7 @@ def test_service_bypass_403() -> None:
     assert "METHOD_TAMPERING" in res["categories_breakdown"]
     sample = res["mutations"][0]
     assert "curl_command" in sample
-    assert "https://api.example.com" in sample["url"]
+    assert urlsplit(sample["url"]).netloc == "api.example.com"
 
 
 def test_service_adb_fleet() -> None:
@@ -84,7 +85,7 @@ def test_service_ztna_gateway() -> None:
     )
     assert res["status"] == "ZTNA_GATEWAY_CONFIGURED"
     assert res["listen_port"] == 9443
-    assert "https://127.0.0.1:9443/mcp" in res["gateway_url"]
+    assert res["gateway_url"] == "https://127.0.0.1:9443/mcp"
     assert "raa_ztna_" in res["auth_token"]
     assert "cursor_mcp_config" in res
     assert "claude_code_command" in res

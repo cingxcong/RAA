@@ -5,9 +5,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Current_Release-v2.0.0_Production-success?style=flat-square" alt="Current Release: v2.0.0 Production">
-  <img src="https://img.shields.io/badge/Total_Tools-244_Implemented-blue?style=flat-square" alt="Total Tools: 244 Implemented">
-  <img src="https://img.shields.io/badge/Tests-437_Passing-brightgreen?style=flat-square" alt="Tests: 437 Passing">
+  <img src="https://img.shields.io/badge/Current_Release-v3.0.0_Production-success?style=flat-square" alt="Current Release: v2.0.0 Production">
+  <img src="https://img.shields.io/badge/Total_Tools-322_Implemented-blue?style=flat-square" alt="Total Tools: 244 Implemented">
+  <img src="https://img.shields.io/badge/Tests-526_Passing-brightgreen?style=flat-square" alt="Tests: 437 Passing">
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/Protocol-2026--07--28-informational?style=flat-square" alt="Protocol: 2026-07-28">
@@ -24,13 +24,19 @@ RAA operates as an evidence-first, security-hardened intelligence engine. Its de
 
 ```mermaid
 flowchart LR
-    Caller["Agent / Client"] --> Auth{"Auth & Profile Check"}
-    Auth -->|Valid| Policy{"Scope & Policy Evaluation"}
-    Auth -->|Invalid| Deny401["401 Unauthorized / Profile Denied"]
-    Policy -->|Granted| Executor["Tool Execution Core\n(244 Tools)"]
-    Policy -->|Denied| Deny403["Policy Denied (Missing Scopes)"]
-    Executor --> Audit["Cryptographic Hash-Chained Audit Trail"]
-    Executor --> DB[("SQLite Database (WAL Mode)")]
+    classDef caller fill:#0D47A1,stroke:#1E88E5,stroke-width:2px,color:#FFFFFF;
+    classDef gate fill:#E65100,stroke:#FB8C00,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef deny fill:#B71C1C,stroke:#E53935,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef exec fill:#1B5E20,stroke:#43A047,stroke-width:2px,color:#FFFFFF,font-weight:bold;
+    classDef audit fill:#263238,stroke:#546E7A,stroke-width:2px,color:#FFFFFF;
+
+    Caller["🤖 Agent / Client Request"]:::caller --> Auth{"🔑 Auth & Profile Check"}:::gate
+    Auth -->|Valid Profile| Policy{"🛡️ Scope & Policy Evaluation"}:::gate
+    Auth -->|Unauthorized| Deny401["❌ 401 Unauthorized / Profile Denied"]:::deny
+    Policy -->|Scope Granted| Executor["⚡ Tool Execution Core<br/>(322 Tools • Fail-Closed)"]:::exec
+    Policy -->|Scope Missing| Deny403["🚫 403 Policy Denied (Missing Scopes)"]:::deny
+    Executor --> Audit["🔒 Cryptographic SHA-256 Audit Trail"]:::audit
+    Executor --> DB[("💾 SQLite Database (WAL Mode)")]:::audit
 ```
 
 ### Threat Vectors & Mitigations
